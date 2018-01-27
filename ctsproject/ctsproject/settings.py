@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-
+from .db_secret import get_host, get_name, get_password, get_port, get_user
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -75,8 +75,12 @@ WSGI_APPLICATION = 'ctsproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': get_name(),
+        'USER': get_user(),
+        'HOST': get_host(),
+        'PORT': get_port(),
+        'PASSWORD': get_password(),
     }
 }
 
