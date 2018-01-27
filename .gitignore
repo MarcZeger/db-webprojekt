@@ -101,4 +101,4 @@ ENV/
 .mypy_cache/
 
 # Datenbank Datei
-db-secret.py
+db_secret.py
