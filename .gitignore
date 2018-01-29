@@ -102,3 +102,7 @@ ENV/
 
 # Datenbank Datei
 db_secret.py
+
+#PyCharm Ordner
+.idea/
+.idea/workspace.xml
