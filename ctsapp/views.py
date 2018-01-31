@@ -11,15 +11,18 @@ def zahl(request, zahl):
     return(render(request,'ctsapp/index.html', zahl))
 
 def login_custom(request):
-    if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return(redirect("index"))
-        else:
-            fehler = {'fehler':"Login-Daten nicht korrekt!"}
-            return(render(request,'registration/login.html', fehler))
+    if request.user.is_authenticated:
+        return redirect('index')
     else:
-        return(render(request,'registration/login.html'))
+        if request.method == "POST":
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return(redirect("index"))
+            else:
+                fehler = {'fehler':"Login-Daten nicht korrekt!"}
+                return(render(request,'registration/login.html', fehler))
+        else:
+            return(render(request,'registration/login.html'))
