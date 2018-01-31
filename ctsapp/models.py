@@ -56,14 +56,14 @@ class Schwierigkeit(models.Model):
 
 
 class Spieler(AbstractUser):
-    REQUIRED_FIELDS = ['vorname','nachname','email']
+    REQUIRED_FIELDS = ['vorname','nachname','email','ort_id']
     spieler_id = models.AutoField(primary_key=True)
     nachname = models.CharField(max_length=45)
     vorname = models.CharField(max_length=45)
     punktzahl = models.IntegerField(blank=True, null=True)
     team_id = models.ForeignKey('Team',on_delete=models.CASCADE, null=True)
     email = models.CharField(max_length=254)
-    ort_id = models.ForeignKey('Ort',on_delete=models.CASCADE, null=True)
+    ort_id = models.ForeignKey('Ort',on_delete=models.CASCADE)
 
 
     class Meta:
