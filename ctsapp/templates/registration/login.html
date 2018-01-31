@@ -2,12 +2,27 @@
 {% block title %}CTS - Login{% endblock %}
 {% block content %}
 <div class="container">
-    <div class="text-center">Login</div>
+    <div class="text-center">
+        <h1>Login</h1>
+        {% if fehler %}
+         <div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            {{ fehler }}
+         </div>
+    {% endif %}
+    </div>
+    <div 
     <form method="POST" action="{% url 'login_custom' %}">
         {% csrf_token %}
-        <label>Benutzername</label><input type="text" name="username">
-        <label>Passwort</label><input type="password" name="password">
-        <input type="submit">
+        <div class="form-group">
+            <label>Benutzername</label>
+            <input type="text" name="username" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Passwort</label>
+            <input type="password" name="password" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-default">Login</button>
     </form>
     <a href="/password_reset/">Passwort zurücksetzen</a>
 </div>
