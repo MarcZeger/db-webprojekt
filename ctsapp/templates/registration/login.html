@@ -1,4 +1,5 @@
 {% extends 'ctsapp/main.html' %}
+{% load static %}
 {% block title %}CTS - Login{% endblock %}
 {% block content %}
 <div class="container">
@@ -11,7 +12,10 @@
          </div>
     {% endif %}
     </div>
-    <div 
+    <div class="col-sm-6">
+        <img src="{% static 'Bilder/login.jpg' %}" alt="Bild" id="pic-login">
+    </div>
+    <div class="col-sm-6">
     <form method="POST" action="{% url 'login_custom' %}">
         {% csrf_token %}
         <div class="form-group">
@@ -25,5 +29,6 @@
         <button type="submit" class="btn btn-default">Login</button>
     </form>
     <a href="/password_reset/">Passwort zurücksetzen</a>
+    </div>
 </div>
 {% endblock %}
