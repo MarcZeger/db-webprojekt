@@ -8,5 +8,5 @@ urlpatterns = [
     url('^', include('django.contrib.auth.urls')),
     path('login-fehler/', views.login_custom, name='login_custom'),
     #path('logout/', views.logout, name="logout"),
-    #path('register/', views.register)
+    path('registrierung/', views.registrierung, name='registrierung')
 ]

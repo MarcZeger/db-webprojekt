@@ -1,0 +1,72 @@
+{% extends 'ctsapp/main.html' %}
+{% block title %}CTS - Registrierung{% endblock %}
+{% block content %}
+{% load static %}
+    <div class="container">
+        <div class="text-center">
+            <h1>Registrierung</h1>
+        </div>
+        {% if message %}
+            <div class="alert alert-success alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            {{ message }}
+         </div>
+         <a href="/login">Zum Login</a>
+        {% else %}
+    <form action="{% url 'registrierung' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Benutzername</label>
+            <input type="text" name="username" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>E-Mail</label>
+            <input type="email" name="email" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Vorname</label>
+            <input type="text" name="first_name" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Nachname</label>
+            <input type="text" name="last_name" class="form-control">
+        </div>
+         <div class="form-group">
+            <label>Heimatort</label>
+            <input type="text" name="ort" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>Postleitzahl</label>
+            <input type="text" name="plz" class="form-control">
+        </div>
+         <div class="form-group">
+            <label>Passwort</label>
+            <input type="password" name="password" class="form-control" id="passwort1">
+        </div>
+         <div class="form-group">
+            <label>Passwort bestätigen</label>
+            <input type="password" name="password_2" class="form-control" id="passwort2">
+        </div>
+        <div id="meldung"></div>
+        <input type="submit">
+    </form>
+    </div>
+{% endblock %}
+{% block script %}
+<script>
+var passwort1 = document.getElementById('passwort1').value;
+var passwort2 = document.getElementById('passwort2').value;
+var text;
+
+var checkPasswordValidity = function() {
+    if (passwort1.value != passwort2.value) {
+        text = "Die Passwörter stimmen nicht überein";
+    } else {
+        text = '';
+    }
+    Document.getElementbyId('meldung').innerHTML = text;
+};
+
+</script>
+{% endif %}
+{% endblock %}

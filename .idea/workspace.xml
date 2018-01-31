@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="58b43151-b10f-412d-8500-78bc4f7b848f" name="Default" comment="">
+      <change beforePath="" afterPath="$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung.html" />
+      <change beforePath="$PROJECT_DIR$/.idea/db-webprojekt.iml" afterPath="$PROJECT_DIR$/.idea/db-webprojekt.iml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/ctsapp/urls.py" afterPath="$PROJECT_DIR$/ctsapp/urls.py" />
+      <change beforePath="$PROJECT_DIR$/ctsapp/views.py" afterPath="$PROJECT_DIR$/ctsapp/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -13,54 +17,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html">
+      <file leaf-file-name="registrierung.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="660">
-              <caret line="44" column="20" lean-forward="false" selection-start-line="44" selection-start-column="20" selection-end-line="44" selection-end-column="20" />
-              <folding />
+            <state relative-caret-position="323">
+              <caret line="43" column="49" lean-forward="false" selection-start-line="43" selection-start-column="49" selection-end-line="43" selection-end-column="49" />
+              <folding>
+                <element signature="e#401#408#1#HTML" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ctsapp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="6" column="47" lean-forward="false" selection-start-line="6" selection-start-column="47" selection-end-line="6" selection-end-column="47" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/index.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="229" column="0" lean-forward="false" selection-start-line="229" selection-start-column="0" selection-end-line="229" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="logged_out.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ctsapp/templates/registration/logged_out.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="9" selection-end-column="14" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="login.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ctsapp/templates/registration/login.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="14" lean-forward="false" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="14" />
+            <state relative-caret-position="385">
+              <caret line="45" column="29" lean-forward="false" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="29" />
               <folding>
-                <element signature="e#353#360#1" expanded="true" />
-                <element signature="e#601#608#1" expanded="true" />
+                <element signature="e#0#59#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -69,8 +44,8 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ctsapp/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+            <state relative-caret-position="150">
+              <caret line="10" column="67" lean-forward="false" selection-start-line="10" selection-start-column="67" selection-end-line="10" selection-end-column="67" />
               <folding>
                 <element signature="e#0#37#0" expanded="true" />
               </folding>
@@ -78,12 +53,27 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="stylesheet.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ctsapp/static/cts/stylesheet.css">
+      <file leaf-file-name="models.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ctsapp/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2220">
-              <caret line="148" column="0" lean-forward="false" selection-start-line="148" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="131">
+              <caret line="57" column="28" lean-forward="false" selection-start-line="57" selection-start-column="28" selection-end-line="57" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="login.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ctsapp/templates/registration/login.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="11" column="15" lean-forward="true" selection-start-line="8" selection-start-column="9" selection-end-line="11" selection-end-column="15" />
+              <folding>
+                <element signature="e#353#360#1" expanded="true" />
+                <element signature="e#601#608#1" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -120,7 +110,6 @@
         <option value="$PROJECT_DIR$/ctsproject/db_secret.py" />
         <option value="$PROJECT_DIR$/ctsapp/admin.py" />
         <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/login.html" />
-        <option value="$PROJECT_DIR$/ctsapp/urls.py" />
         <option value="$PROJECT_DIR$/ctsapp/templates/registration/logged_out.html" />
         <option value="$PROJECT_DIR$/ctsapp/templates/registration/password_reset_form.html" />
         <option value="$PROJECT_DIR$/ctsapp/static/cts/stylesheet.css" />
@@ -131,8 +120,10 @@
         <option value="$PROJECT_DIR$/ctsapp/templates/registration/password_reset_complete.html" />
         <option value="$PROJECT_DIR$/ctsapp/templates/registration/login.html" />
         <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/index.html" />
-        <option value="$PROJECT_DIR$/ctsapp/views.py" />
         <option value="$PROJECT_DIR$/ctsapp/models.py" />
+        <option value="$PROJECT_DIR$/ctsapp/urls.py" />
+        <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung.html" />
+        <option value="$PROJECT_DIR$/ctsapp/views.py" />
       </list>
     </option>
   </component>
@@ -207,7 +198,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="terminal" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.templateLanguages.PyTemplateLanguageModulesConfigurable" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -253,13 +244,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3269494" sideWeight="0.5028612" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29262394" sideWeight="0.49713877" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29262394" sideWeight="0.49713877" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22174536" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -279,6 +271,32 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
@@ -287,13 +305,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ctsproject/db_secret.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="16" lean-forward="false" selection-start-line="4" selection-start-column="16" selection-end-line="4" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ctsproject/settings.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1725">
@@ -313,6 +324,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="855">
           <caret line="58" column="43" lean-forward="false" selection-start-line="58" selection-start-column="43" selection-end-line="58" selection-end-column="43" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -358,6 +372,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -403,6 +420,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1005">
           <caret line="69" column="27" lean-forward="true" selection-start-line="69" selection-start-column="27" selection-end-line="69" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -442,6 +462,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1050">
           <caret line="71" column="0" lean-forward="true" selection-start-line="71" selection-start-column="0" selection-end-line="71" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -560,10 +583,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="17" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="2" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="92" column="0" lean-forward="true" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ctsapp/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="57" column="28" lean-forward="false" selection-start-line="57" selection-start-column="28" selection-end-line="57" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ctsapp/templates/registration/login.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="14" lean-forward="false" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="14" />
+        <state relative-caret-position="165">
+          <caret line="11" column="15" lean-forward="true" selection-start-line="8" selection-start-column="9" selection-end-line="11" selection-end-column="15" />
           <folding>
             <element signature="e#353#360#1" expanded="true" />
             <element signature="e#601#608#1" expanded="true" />
@@ -571,44 +620,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="44" column="20" lean-forward="false" selection-start-line="44" selection-start-column="20" selection-end-line="44" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ctsapp/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="6" column="47" lean-forward="false" selection-start-line="6" selection-start-column="47" selection-end-line="6" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ctsapp/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="57" column="28" lean-forward="false" selection-start-line="57" selection-start-column="28" selection-end-line="57" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ctsapp/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+        <state relative-caret-position="150">
+          <caret line="10" column="67" lean-forward="false" selection-start-line="10" selection-start-column="67" selection-end-line="10" selection-end-column="67" />
           <folding>
             <element signature="e#0#37#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/index.html">
+    <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="229" column="0" lean-forward="false" selection-start-line="229" selection-start-column="0" selection-end-line="229" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="323">
+          <caret line="43" column="49" lean-forward="false" selection-start-line="43" selection-start-column="49" selection-end-line="43" selection-end-column="49" />
+          <folding>
+            <element signature="e#401#408#1#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ctsapp/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="385">
+          <caret line="45" column="29" lean-forward="false" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="29" />
+          <folding>
+            <element signature="e#0#59#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
