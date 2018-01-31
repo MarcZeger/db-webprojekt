@@ -12,6 +12,12 @@
          </div>
     {% endif %}
     </div>
+    {% if user.is_authenticated %}
+    <div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <p>Sie sind bereits angemeldet!</p>
+         </div>
+    {% else %}
     <div class="col-sm-6">
         <img src="{% static 'Bilder/login.jpg' %}" alt="Bild" id="pic-login">
     </div>
@@ -31,4 +37,5 @@
     <a href="/password_reset/">Passwort zurücksetzen</a>
     </div>
 </div>
+{% endif %}
 {% endblock %}
