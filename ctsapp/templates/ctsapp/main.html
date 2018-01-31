@@ -27,24 +27,23 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/">HOME</a></li>
+        <li><a href="/">START</a></li>
         <li><a href="/show">SPOTS</a></li>
+        <li><a href="/kontakt">KONTAKT</a></li>
+        <li><a href="/impressum">IMPRESSUM</a></li>
+
+          {% if user.is_authenticated %}
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">WEITERES
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{user.first_name}}
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="/kontakt">KONTAKT</a></li>
-            <li><a href="/impressum">IMPRESSUM</a></li>
+            <li><a href="/profil">PROFIL</a></li>
+            <li><a href="/team">TEAM</a></li>
+            <li><a href="/logged_out">LOGOUT</a></li>
           </ul>
         </li>
-          {% if user.is_authenticated %}
-        <li><a href="/logout">PROFIL</a></li>
-        <li><a href="/logout">TEAM</a></li>
-        <li><a href="/logout"><strong>LOGOUT</strong></a></li>
-
           {% else %}
         <li><a href="/login"><strong>LOGIN</strong></a></li>
-        <li><a href="/registration"><strong>REGISTRATION</strong></a></li>
           {% endif %}
       </ul>
     </div>
@@ -58,7 +57,7 @@
   <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
     <span class="glyphicon glyphicon-chevron-up"></span>
   </a>
-  <p>--Footer--</p>
+  <p>Daws ist ein Test. LOOOREM IPUSUUUUSUMSMSMMS</p>
 </footer>
 {% block script %}{% endblock %}
 <script>
