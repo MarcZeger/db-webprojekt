@@ -1,0 +1,14 @@
+{% extends 'ctsapp/main.html' %}
+{% block title %}CTS - Login{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="text-center">Login</div>
+    <form method="POST" action="{% url 'login_custom' %}">
+        {% csrf_token %}
+        <label>Benutzername</label><input type="text" name="username">
+        <label>Passwort</label><input type="password" name="password">
+        <input type="submit">
+    </form>
+    <a href="/password_reset/">Passwort zurücksetzen</a>
+</div>
+{% endblock %}
