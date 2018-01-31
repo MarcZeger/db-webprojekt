@@ -58,8 +58,6 @@ class Schwierigkeit(models.Model):
 class Spieler(AbstractUser):
     REQUIRED_FIELDS = ['vorname','nachname','email','ort_id']
     spieler_id = models.AutoField(primary_key=True)
-    nachname = models.CharField(max_length=45)
-    vorname = models.CharField(max_length=45)
     punktzahl = models.IntegerField(blank=True, null=True)
     team_id = models.ForeignKey('Team',on_delete=models.CASCADE, null=True)
     email = models.CharField(max_length=254)
@@ -72,9 +70,9 @@ class Spieler(AbstractUser):
 
 
 class SpielerBewertetSpot(models.Model):
-    spieler_id = models.ForeignKey('Spieler',on_delete=models.CASCADE)
+    spieler_id = models.ForeignKey('Spieler',on_delete=models.CASCADE, primary_key=True)
     bewertung = models.IntegerField()
-    spot_id = models.ForeignKey('Spot',on_delete=models.CASCADE)
+    spot_id = models.ForeignKey('Spot',on_delete=models.CASCADE, primary_key=True)
     datum = models.DateTimeField()
 
     class Meta:
@@ -84,8 +82,8 @@ class SpielerBewertetSpot(models.Model):
 
 
 class SpielerEntdecktSpot(models.Model):
-    spieler_id = models.ForeignKey('Spieler',on_delete=models.CASCADE)
-    spot_id = models.ForeignKey('Spot',on_delete=models.CASCADE)
+    spieler_id = models.ForeignKey('Spieler',on_delete=models.CASCADE, primary_key=True)
+    spot_id = models.ForeignKey('Spot',on_delete=models.CASCADE, primary_key=True)
     datum = models.DateTimeField()
 
     class Meta:
