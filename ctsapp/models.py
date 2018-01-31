@@ -56,7 +56,7 @@ class Schwierigkeit(models.Model):
 
 
 class Spieler(AbstractUser):
-    REQUIRED_FIELDS = ['vorname','nachname','email','ort_id']
+    REQUIRED_FIELDS = ['email','ort_id']
     spieler_id = models.AutoField(primary_key=True)
     punktzahl = models.IntegerField(blank=True, null=True)
     team_id = models.ForeignKey('Team',on_delete=models.CASCADE, null=True)
