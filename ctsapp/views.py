@@ -1,6 +1,8 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+
+import math
 from .functions import *
 from .models import *
 from django.core.exceptions import ObjectDoesNotExist
@@ -15,6 +17,21 @@ def kontakt(request):
 def zahl(request, zahl):
     zahl = {'zahl':zahl}
     return(render(request,'ctsapp/index.html', zahl))
+
+def profil(request):
+    punktzahl = request.user.punktzahl
+    punktzahl = float(punktzahl)
+    level = math.floor( math.log10(punktzahl) / math.log10(1.25) - math.log10(20) / math.log10(1.25) )
+    levelUG = 20 * 1.25 ** level
+    OG = math.ceil(punktzahl - levelUG)
+    levelOG = 20 * 1.25 ** (level+1)
+    UG = math.ceil(levelOG - punktzahl)
+    ges = OG + UG
+    ProUG = UG/ges *100
+    ProOG = OG/ges *100
+    liste = {'level': level, 'UG': UG, 'OG': OG, 'levelUG':levelUG, 'levelOG':levelOG, 'ProOG':ProOG, 'ProUG':ProUG}
+
+    return(render(request,'ctsapp/profil.html',liste))
 
 def login_custom(request):
     if request.user.is_authenticated:
