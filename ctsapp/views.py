@@ -137,3 +137,5 @@ def spot_detail(request, spot_id):
                 bild.first = ""
         liste = {'spot':spots, 'bilder':bilder}
         return render(request,'ctsapp/spot_detail.html', liste)
+    else:
+        return (redirect('/login'))
