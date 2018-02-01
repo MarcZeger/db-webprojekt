@@ -5,7 +5,11 @@ from django.contrib.auth import authenticate, login, logout
 import math
 from .functions import *
 from .models import *
+
+from .teams import *
+
 from django.core.exceptions import ObjectDoesNotExist
+
 
 # Create your views here.
 def index(request):
@@ -79,6 +83,18 @@ def registrierung(request):
     else:
         return(render(request,"ctsapp/registrierung.html"))
 
+
+def teams(request):
+    if (request.user.is_authenticated):
+        if (request.user.team_id):
+            get_team_members(request.user.team_id.team_id)
+            return (render(request, 'ctsapp/teams.html'))
+
+        else:
+            return(render(request,'ctsapp/team_erstellen.html'))
+    else:
+        return redirect('index')
+
 def spot_suche(request):
     ort = request.GET['ort']
     spots = ""
@@ -105,3 +121,4 @@ def spot_detail(request, spot_id):
     spots = Spot.objects.get(spot_id=spot_id)
     spots = {'spot':spots}
     return render(request,'ctsapp/spot_detail.html', spots)
+
