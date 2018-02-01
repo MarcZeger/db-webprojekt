@@ -38,10 +38,22 @@ def registrierung(request):
         ort = request.POST['ort']
         email = request.POST['email']
 
-        user = Spieler(username=username, first_name=first_name, last_name=last_name, ort_id=Ort(ort_id=1), email = email)
-        user.set_password(password)
-        user.save()
-        message = {'message':"Sie haben sich erfolgreich registriert!"}
+        spieler_name = Spieler.objects.filter(username=username)
+        spieler_email = Spieler.objects.filter(email=email)
+        print(spieler_email)
+        print(spieler_name)
+        if Spieler.objects.filter(username=username).exists():
+            message = {'message': "Benutzername bereits vergeben!",'flag':'wrong'}
+        else:
+            if Spieler.objects.filter(email=email).exists():
+                message = {'message': "E-Mail Addresse bereits hinterlegt!",'flag':'wrong'}
+            else:
+                user = Spieler(username=username, first_name=first_name, last_name=last_name, ort_id=Ort(ort_id=1), email = email)
+                user.set_password(password)
+                user.save()
+                message = {'message':"Sie haben sich erfolgreich registriert!"}
+
+
         #Eventuell direkter login von User?
         #login(request, user)
         return(render(request,'ctsapp/registrierung.html',message))
