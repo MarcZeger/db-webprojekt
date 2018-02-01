@@ -4,6 +4,9 @@
 {% load static %}
 <div class="container">
     <div class="text-center"><h1>{{ spot.bezeichnung }}</h1></div>
+     {% for  bild in bilder%}
+            <img src="{{ bild.link }}" style="width: 30%;height: 300px;" alt="asd">
+        {% endfor %}
     <div class="row">
         <div class="col-sm-6">Beschreibung</div><div class="col-sm-6">{{ spot.beschreibung }}</div>
     </div>
