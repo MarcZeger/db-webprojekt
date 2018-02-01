@@ -9,4 +9,5 @@ urlpatterns = [
     path('login-fehler/', views.login_custom, name='login_custom'),
     #path('logout/', views.logout, name="logout"),
     #path('register/', views.register)
+    path('profil/', views.profil, name='profil'),
 ]
