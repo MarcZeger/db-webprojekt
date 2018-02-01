@@ -1,7 +1,9 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+from .functions import *
 from .models import *
+from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 def index(request):
@@ -38,10 +40,6 @@ def registrierung(request):
         ort = request.POST['ort']
         email = request.POST['email']
 
-        spieler_name = Spieler.objects.filter(username=username)
-        spieler_email = Spieler.objects.filter(email=email)
-        print(spieler_email)
-        print(spieler_name)
         if Spieler.objects.filter(username=username).exists():
             message = {'message': "Benutzername bereits vergeben!",'flag':'wrong'}
         else:
@@ -60,3 +58,30 @@ def registrierung(request):
 
     else:
         return(render(request,"ctsapp/registrierung.html"))
+
+def spot_suche(request):
+    ort = request.GET['ort']
+    spots = ""
+    message = ""
+    if ort != "":
+        ort_id = get_ort_id(ort)
+        if type(ort_id) == int:
+            spots = Spot.objects.filter(ort_id=ort_id)
+        else:
+            message = ort_id
+            print(message)
+    else:
+        spots = Spot.objects.all()
+    spot_list = []
+    if spots != None and spots != []:
+        for spot in spots:
+            spot.bewertung = range(int(spot.bewertung))
+            spot_list.append(spot)
+        print(spot_list)
+    liste = {'spots':spot_list,'message':message}
+    return render(request,'ctsapp/spot_suche.html',liste)
+
+def spot_detail(request, spot_id):
+    spots = Spot.objects.get(spot_id=spot_id)
+    spots = {'spot':spots}
+    return render(request,'ctsapp/spot_detail.html', spots)
