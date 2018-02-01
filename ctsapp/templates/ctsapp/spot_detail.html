@@ -1,0 +1,35 @@
+{% extends 'ctsapp/main.html' %}
+{% block title %}CTS - Spot {{ spot.bezeichnung }}{% endblock %}
+{% block content %}
+{% load static %}
+<div class="container">
+    <div class="text-center"><h1>{{ spot.bezeichnung }}</h1></div>
+    <div class="row">
+        <div class="col-sm-6">Beschreibung</div><div class="col-sm-6">{{ spot.beschreibung }}</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">Schwierigkeit</div><div class="col-sm-6">{{ spot.schwierigkeit_id.beschreibung }}</div>
+    </div>
+    <div id="map"></div>
+    <h3>Bewertungen</h3>
+
+</div>
+{% endblock %}
+{% block script %}
+<script>
+      function initMap() {
+        var uluru = {lat: {{spot.breitengrad}}, lng: {{spot.laengengrad}}};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 15,
+          center: uluru
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          map: map
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt2fnvdE4Za0wT6b129B4yxN48SbxFXYE&callback=initMap">
+    </script>
+{% endblock %}

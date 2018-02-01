@@ -1,8 +1,15 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
+
+import math
+from .functions import *
 from .models import *
+
 from .teams import *
+
+from django.core.exceptions import ObjectDoesNotExist
+
 
 # Create your views here.
 def index(request):
@@ -14,6 +21,21 @@ def kontakt(request):
 def zahl(request, zahl):
     zahl = {'zahl':zahl}
     return(render(request,'ctsapp/index.html', zahl))
+
+def profil(request):
+    punktzahl = request.user.punktzahl
+    punktzahl = float(punktzahl)
+    level = math.floor( math.log10(punktzahl) / math.log10(1.25) - math.log10(20) / math.log10(1.25) )
+    levelUG = 20 * 1.25 ** level
+    OG = math.ceil(punktzahl - levelUG)
+    levelOG = 20 * 1.25 ** (level+1)
+    UG = math.ceil(levelOG - punktzahl)
+    ges = OG + UG
+    ProUG = UG/ges *100
+    ProOG = OG/ges *100
+    liste = {'level': level, 'UG': UG, 'OG': OG, 'levelUG':levelUG, 'levelOG':levelOG, 'ProOG':ProOG, 'ProUG':ProUG}
+
+    return(render(request,'ctsapp/profil.html',liste))
 
 def login_custom(request):
     if request.user.is_authenticated:
@@ -42,10 +64,6 @@ def registrierung(request):
         ort = request.POST['ort']
         email = request.POST['email']
 
-        spieler_name = Spieler.objects.filter(username=username)
-        spieler_email = Spieler.objects.filter(email=email)
-        print(spieler_email)
-        print(spieler_name)
         if Spieler.objects.filter(username=username).exists():
             message = {'message': "Benutzername bereits vergeben!",'flag':'wrong'}
         else:
@@ -65,6 +83,7 @@ def registrierung(request):
     else:
         return(render(request,"ctsapp/registrierung.html"))
 
+
 def teams(request):
     if (request.user.is_authenticated):
         if (request.user.team_id):
@@ -75,3 +94,31 @@ def teams(request):
             return(render(request,'ctsapp/team_erstellen.html'))
     else:
         return redirect('index')
+
+def spot_suche(request):
+    ort = request.GET['ort']
+    spots = ""
+    message = ""
+    if ort != "":
+        ort_id = get_ort_id(ort)
+        if type(ort_id) == int:
+            spots = Spot.objects.filter(ort_id=ort_id)
+        else:
+            message = ort_id
+            print(message)
+    else:
+        spots = Spot.objects.all()
+    spot_list = []
+    if spots != None and spots != []:
+        for spot in spots:
+            spot.bewertung = range(int(spot.bewertung))
+            spot_list.append(spot)
+        print(spot_list)
+    liste = {'spots':spot_list,'message':message}
+    return render(request,'ctsapp/spot_suche.html',liste)
+
+def spot_detail(request, spot_id):
+    spots = Spot.objects.get(spot_id=spot_id)
+    spots = {'spot':spots}
+    return render(request,'ctsapp/spot_detail.html', spots)
+

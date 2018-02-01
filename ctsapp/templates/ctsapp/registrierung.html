@@ -7,8 +7,11 @@
             <h1>Registrierung</h1>
         </div>
         {% if message %}
+            {% if flag %}
+            <div class="alert alert-danger alert-dismissable">
+            {% else %}
             <div class="alert alert-success alert-dismissable">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            {% endif %}
             {{ message }}
          </div>
          <a href="/login">Zum Login</a>
