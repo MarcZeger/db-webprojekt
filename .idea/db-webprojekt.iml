@@ -6,6 +6,9 @@
         <option name="rootFolder" value="$MODULE_DIR$/ctsproject" />
         <option name="settingsModule" value="settings.py" />
         <option name="manageScript" value="$MODULE_DIR$/manage.py" />
+        <option name="rootFolder" value="$USER_HOME$/Desktop/Studium/3. Semester/Webprojekt/GitHub/ctsproject" />
+        <option name="settingsModule" value="ctsproject/settings.py" />
+        <option name="manageScript" value="manage.py" />
         <option name="environment" value="&lt;map/&gt;" />
         <option name="doNotUseTestRunner" value="false" />
       </configuration>
@@ -15,7 +18,7 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.6" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.5 (db-webprojekt)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TemplatesService">
