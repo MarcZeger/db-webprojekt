@@ -1,0 +1,31 @@
+{% extends 'ctsapp/main.html' %}
+{% block content %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'cts/profil.css' %}" />
+<div class="container">
+
+    <div class="row">
+        <div class="col-sm-5" style="background: green;">
+            <img class="rund" src={% static 'Bilder/goat.png' %} alt="Testbild" width="70%"/>
+        </div>
+        <div class="col-sm-7">
+            <h3>Name: {{ user.username }} </h3>
+            <h3>
+                Punktzahl: {{ user.punktzahl }}
+            </h3>
+            <h3>
+                Level: {{ level }}
+            </h3>
+            <div class="progress">
+                <div class="progress-bar progress-bar-info" role="progressbar" style="width: {{ ProUG }}%">
+                    {{ UG }} Punkte
+                </div>
+                <div class="progress-bar progress-bar-warning" role="progressbar" style="width: {{ ProOG }}%">
+                    {{ OG }} Punkte
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
