@@ -87,6 +87,5 @@ def spot_suche(request):
 def spot_detail(request, spot_id):
     spots = Spot.objects.get(spot_id=spot_id)
     bilder = Medium.objects.filter(spot_id=spot_id)
-    print(bilder)
     liste = {'spot':spots, 'bilder':bilder}
     return render(request,'ctsapp/spot_detail.html', liste)
