@@ -97,9 +97,13 @@ def teams(request):
 
 def spot_suche(request):
     if request.user.is_authenticated:
-        ort = request.GET['ort']
         spots = ""
         message = ""
+        ort = ""
+        try:
+            ort = request.GET['ort']
+        except:
+            return(render(request,'ctsapp/spot_suche.html'))
         if ort != "":
             ort_id = get_ort_id(ort)
             if type(ort_id) == int:

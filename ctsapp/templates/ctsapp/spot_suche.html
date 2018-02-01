@@ -16,14 +16,15 @@
         </div>
     </form>
     </div>
-    <h3>Suchergebnisse</h3>
     {% if message %}
+        <h3>Suchergebnisse</h3>
             <div class="alert alert-danger alert-dismissable">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <p>{{ message }}</p>
             </div>
         {% endif %}
     {% if spots %}
+        <h3>Suchergebnisse</h3>
     <div class="table-responsive">
     <table class="table" id="ergebnis">
         <tr>
