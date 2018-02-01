@@ -1,0 +1,76 @@
+{% extends 'ctsapp/main.html' %}
+{% block title %}CTS - Registrierung{% endblock %}
+{% block content %}
+{% load static %}
+    <div class="container">
+        <div class="text-center">
+            <h1>Registrierung</h1>
+        </div>
+        {% if message %}
+            <div class="alert alert-success alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            {{ message }}
+         </div>
+         <a href="/login">Zum Login</a>
+        {% else %}
+    <form action="{% url 'registrierung' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Benutzername</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>E-Mail</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Vorname</label>
+            <input type="text" name="first_name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Nachname</label>
+            <input type="text" name="last_name" class="form-control" required>
+        </div>
+         <div class="form-group">
+            <label>Heimatort</label>
+            <input type="text" name="ort" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Postleitzahl</label>
+            <input type="text" name="plz" class="form-control" required>
+        </div>
+         <div class="form-group">
+            <label>Passwort</label>
+            <input type="password" name="password" class="form-control" id="passwort1" required>
+        </div>
+         <div class="form-group">
+            <label>Passwort bestätigen</label>
+            <input type="password" name="password_2" class="form-control" id="passwort2" onchange="validatePassword()" required>
+        </div>
+        <div class="alert alert-danger alert-dismissable" style="display: none" id="warnung">
+            <div id="meldung"></div>
+         </div>
+        <button type="submit" id="button-submit" disabled>Registrieren</button>
+    </div>
+{% endif %}
+{% endblock %}
+{% block script %}
+<script>
+function validatePassword() {
+    var x, text;
+
+    // Get the value of the input field with id="numb"
+    passwort1 = document.getElementById("passwort1").value;
+    passwort2 = document.getElementById("passwort2").value;
+
+    if (passwort1 != passwort2) {
+        document.getElementById("button-submit").disabled = true;
+        document.getElementById("meldung").innerHTML = "Die Passwörter stimmen nicht überein!";
+        document.getElementById("warnung").style.display = "block";
+    } else {
+        document.getElementById("button-submit").disabled = false;
+        document.getElementById("warnung").style.display = "none";
+    }
+}
+</script>
+{% endblock %}
