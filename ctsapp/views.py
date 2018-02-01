@@ -136,7 +136,8 @@ def spot_detail(request, spot_id):
                 counter += 1
             else:
                 bild.first = ""
-        liste = {'spot':spots, 'bilder':bilder}
+        bewertungen = get_bewertungen(spot_id)
+        liste = {'spot':spots, 'bilder':bilder, 'bewertungen':bewertungen}
         return render(request,'ctsapp/spot_detail.html', liste)
     else:
         return (redirect('/login'))
