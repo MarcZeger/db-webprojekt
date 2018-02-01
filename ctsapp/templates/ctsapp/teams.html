@@ -1,0 +1,24 @@
+{% extends 'ctsapp/main.html' %}
+{% load static %}
+{% block title %}CTS - Login{% endblock %}
+{% block content %}
+
+<!-- Container (Contact Section) -->
+<div class="container">
+    <h3>
+        {{ user.team_id.name }}
+    </h3>
+    <hr>
+    <div class="punkte"><h3>Punkte:</h3></div>
+    <div class="mitglieder">
+        <h3>Mitglieder</h3>
+        <ul>
+            <li></li>
+        </ul>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

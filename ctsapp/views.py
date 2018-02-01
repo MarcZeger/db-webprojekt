@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from .models import *
+from .teams import *
 
 # Create your views here.
 def index(request):
@@ -63,3 +64,14 @@ def registrierung(request):
 
     else:
         return(render(request,"ctsapp/registrierung.html"))
+
+def teams(request):
+    if (request.user.is_authenticated):
+        if (request.user.team_id):
+            get_team_members(request.user.team_id.team_id)
+            return (render(request, 'ctsapp/teams.html'))
+
+        else:
+            return(render(request,'ctsapp/team_erstellen.html'))
+    else:
+        return redirect('index')
