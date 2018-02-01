@@ -1,0 +1,259 @@
+{% extends 'ctsapp/main.html' %}
+{% block title %}CTS - Spot Suche{% endblock %}
+{% block content %}
+{% load static %}
+
+<div class="container">
+    <div class="text-center">
+        <h1>Suche</h1>
+    </div>
+    <div class="row">
+    <form method="GET">
+        <div class="form-group">
+            <p>{% lorem %}</p>
+            <input type="text" name="ort" class="col-sm-10" style="height: 42px" placeholder="Ort">
+            <button type="submit" class="btn btn-default col-sm-2">Suchen</button>
+        </div>
+    </form>
+    </div>
+    <h3>Suchergebnisse</h3>
+    {% if message %}
+            <div class="alert alert-danger alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <p>{{ message }}</p>
+            </div>
+        {% endif %}
+    {% if spots %}
+    <div class="table-responsive">
+    <table class="table" id="ergebnis">
+        <tr>
+            <th>Bild</th>
+            <th>Bezeichnung</th>
+            <th>Ort<button onclick="sortORT_auf()">⬆</button><button onclick="sortORT_ab()">⬇</button></th>
+            <th>Schwierigkeit<button onclick="sortSchwierigkeit_auf()">⬆</button><button onclick="sortSchwierigkeit_ab()">⬇</button></th>
+            <th>Bewertung<button onclick="sortBewertung_auf()">⬆</button><button onclick="sortBewertung_ab()">⬇</button></th>
+        </tr>
+        {% for spot in spots %}
+        <tr>
+            <td>Bild</td>
+            <td><a href="/spot/{{ spot.spot_id }}">{{ spot.bezeichnung }}</a></td>
+            <td>{{ spot.ort_id.name }}</td>
+            <td>{{ spot.schwierigkeit_id.beschreibung }}</td>
+            <td style="display: none">{{ spot.schwierigkeit_id.punkte }}</td>
+            <td>{% for i in spot.bewertung %}★{% endfor %}</td>
+        </tr>
+        {% endfor %}
+    </table>
+        </div>
+
+    {% endif %}
+</div>
+{% endblock %}
+{% block script %}
+<script>
+function sortORT_auf() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("ergebnis");
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[2];
+      y = rows[i + 1].getElementsByTagName("TD")[2];
+      //check if the two rows should switch place:
+      if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch= true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+function sortSchwierigkeit_auf() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("ergebnis");
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[4];
+      y = rows[i + 1].getElementsByTagName("TD")[4];
+      //check if the two rows should switch place:
+      if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch= true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+function sortBewertung_auf() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("ergebnis");
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[5];
+      y = rows[i + 1].getElementsByTagName("TD")[5];
+      //check if the two rows should switch place:
+      if (x.innerHTML > y.innerHTML) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch= true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+function sortORT_ab() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("ergebnis");
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[2];
+      y = rows[i + 1].getElementsByTagName("TD")[2];
+      //check if the two rows should switch place:
+      if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch= true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+function sortSchwierigkeit_ab() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("ergebnis");
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[4];
+      y = rows[i + 1].getElementsByTagName("TD")[4];
+      //check if the two rows should switch place:
+      if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch= true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+function sortBewertung_ab() {
+  var table, rows, switching, i, x, y, shouldSwitch;
+  table = document.getElementById("ergebnis");
+  switching = true;
+  /*Make a loop that will continue until
+  no switching has been done:*/
+  while (switching) {
+    //start by saying: no switching is done:
+    switching = false;
+    rows = table.getElementsByTagName("TR");
+    /*Loop through all table rows (except the
+    first, which contains table headers):*/
+    for (i = 1; i < (rows.length - 1); i++) {
+      //start by saying there should be no switching:
+      shouldSwitch = false;
+      /*Get the two elements you want to compare,
+      one from current row and one from the next:*/
+      x = rows[i].getElementsByTagName("TD")[5];
+      y = rows[i + 1].getElementsByTagName("TD")[5];
+      //check if the two rows should switch place:
+      if (x.innerHTML < y.innerHTML) {
+        //if so, mark as a switch and break the loop:
+        shouldSwitch= true;
+        break;
+      }
+    }
+    if (shouldSwitch) {
+      /*If a switch has been marked, make the switch
+      and mark that a switch has been done:*/
+      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+      switching = true;
+    }
+  }
+}
+</script>
+{% endblock %}
