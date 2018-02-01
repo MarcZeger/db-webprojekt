@@ -49,7 +49,7 @@ def registrierung(request):
             if Spieler.objects.filter(email=email).exists():
                 message = {'message': "E-Mail Addresse bereits hinterlegt!",'flag':'wrong'}
             else:
-                user = Spieler(username=username, first_name=first_name, last_name=last_name, ort_id=Ort(ort_id=1), email = email)
+                user = Spieler(username=username, first_name=first_name, last_name=last_name, ort_id=Ort(ort_id=1), email = email, punktzahl=0)
                 user.set_password(password)
                 user.save()
                 message = {'message':"Sie haben sich erfolgreich registriert!"}
@@ -63,29 +63,40 @@ def registrierung(request):
         return(render(request,"ctsapp/registrierung.html"))
 
 def spot_suche(request):
-    ort = request.GET['ort']
-    spots = ""
-    message = ""
-    if ort != "":
-        ort_id = get_ort_id(ort)
-        if type(ort_id) == int:
-            spots = Spot.objects.filter(ort_id=ort_id)
+    if request.user.is_authenticated:
+        ort = request.GET['ort']
+        spots = ""
+        message = ""
+        if ort != "":
+            ort_id = get_ort_id(ort)
+            if type(ort_id) == int:
+                spots = Spot.objects.filter(ort_id=ort_id)
+            else:
+                message = ort_id
+                print(message)
         else:
-            message = ort_id
-            print(message)
+            spots = Spot.objects.all()
+        spot_list = []
+        if spots != None and spots != []:
+            for spot in spots:
+                spot.bewertung = range(int(spot.bewertung))
+                spot_list.append(spot)
+            print(spot_list)
+        liste = {'spots':spot_list,'message':message}
+        return render(request,'ctsapp/spot_suche.html',liste)
     else:
-        spots = Spot.objects.all()
-    spot_list = []
-    if spots != None and spots != []:
-        for spot in spots:
-            spot.bewertung = range(int(spot.bewertung))
-            spot_list.append(spot)
-        print(spot_list)
-    liste = {'spots':spot_list,'message':message}
-    return render(request,'ctsapp/spot_suche.html',liste)
+        return(redirect('/login'))
 
 def spot_detail(request, spot_id):
-    spots = Spot.objects.get(spot_id=spot_id)
-    bilder = Medium.objects.filter(spot_id=spot_id)
-    liste = {'spot':spots, 'bilder':bilder}
-    return render(request,'ctsapp/spot_detail.html', liste)
+    if request.user.is_authenticated:
+        spots = Spot.objects.get(spot_id=spot_id)
+        bilder = Medium.objects.filter(spot_id=spot_id)
+        counter = 0
+        for bild in bilder:
+            if counter == 0:
+                bild.first = "active"
+                counter += 1
+            else:
+                bild.first = ""
+        liste = {'spot':spots, 'bilder':bilder}
+        return render(request,'ctsapp/spot_detail.html', liste)
