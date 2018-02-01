@@ -10,4 +10,8 @@ urlpatterns = [
     #path('logout/', views.logout, name="logout"),
     #path('register/', views.register)
     path('profil/', views.profil, name='profil'),
+    path('registrierung/', views.registrierung, name='registrierung'),
+    path('suche/', views.spot_suche, name="suche"),
+    path('spot/<int:spot_id>', views.spot_detail, name='spot_detail')
+    path('kontakt/', views.kontakt, name='kontakt')
 ]

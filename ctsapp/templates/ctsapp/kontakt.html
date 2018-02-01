@@ -1,0 +1,35 @@
+{% extends 'ctsapp/main.html' %}
+{% load static %}
+{% block title %}CTS - Login{% endblock %}
+{% block content %}
+
+<!-- Container (Contact Section) -->
+<div id="contact" class="container">
+  <h3 class="text-center">Kontakt</h3>
+  <div class="row">
+    <div class="col-md-4">
+        <p>Du hast Fragen, Anregungen, Lob oder Kritik? Hinterlasse eine Nachricht!</p>
+        <p>Du erhältst eine Anwort so bald wie möglich.</p>
+    </div>
+    <div class="col-md-8">
+      <div class="row">
+        <div class="col-sm-6 form-group">
+          <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
+        </div>
+        <div class="col-sm-6 form-group">
+          <input class="form-control" id="email" name="email" placeholder="E-Mail" type="email" required>
+        </div>
+      </div>
+      <textarea class="form-control" id="comments" name="comments" placeholder="Kommentar" rows="5"></textarea>
+      <br>
+      <div class="row">
+        <div class="col-md-12 form-group">
+          <button class="btn pull-right" type="submit">Senden</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<img src="{% static 'Bilder/runner.jpeg' %}" alt="Bild" id="pic-login" style="width:100%">
+</div>
+
+{% endblock %}

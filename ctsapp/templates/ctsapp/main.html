@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
-  <!-- Theme Made By www.w3schools.com - No Copyright -->
   <title>Capture The Spot!{% block title %}{% endblock %}</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,11 +10,13 @@
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  {% load static %}
+  <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 
+  {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'cts/stylesheet.css' %}" />
 </head>
-<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="50">
+
+<body id="myPage"> <!--data-spy="scroll" data-target=".navbar" data-offset="50">-->
 <nav class="navbar navbar-default navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -30,8 +32,6 @@
         <li><a href="/">START</a></li>
         <li><a href="/show">SPOTS</a></li>
         <li><a href="/kontakt">KONTAKT</a></li>
-        <li><a href="/impressum">IMPRESSUM</a></li>
-
           {% if user.is_authenticated %}
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{user.first_name}}
@@ -51,17 +51,32 @@
 </nav>
 {% block content %}{% endblock %}
 
-
 <!-- Footer -->
-<footer class="text-center">
-  <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
-    <span class="glyphicon glyphicon-chevron-up"></span>
-  </a>
-  <p>Daws ist ein Test. LOOOREM IPUSUUUUSUMSMSMMS</p>
+<footer class="footer footer-sticky footer-bottom">
+        <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
+            <span class="glyphicon glyphicon-chevron-up"></span>
+        </a>
+        <a href="/impressum">IMPRESSUM</a>
+
 </footer>
+
 {% block script %}{% endblock %}
 <script>
 $(document).ready(function(){
+  //Footer-Position
+  var body_height = $('body').height()+20; // +20 gives space between div and footer
+  var window_height = $(window).height();
+    if ( body_height + 130 <= window_height ) {
+        $('footer').removeClass('footer-bottom');
+        $('footer').addClass('footer-sticky');
+        $('.up-arrow').css('display', 'none');
+    }else{
+        $('.up-arrow').css('display', 'block')
+        $('footer').removeClass('footer-sticky');
+        $('footer').addClass('footer-bottom');
+    }
+
+
   // Initialize Tooltip
   $('[data-toggle="tooltip"]').tooltip();
 
@@ -90,6 +105,5 @@ $(document).ready(function(){
   });
 })
 </script>
-
 </body>
 </html>
