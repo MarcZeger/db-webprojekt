@@ -7,6 +7,9 @@ from .models import *
 def index(request):
     return(render(request,'ctsapp/index.html'))
 
+def kontakt(request):
+    return(render(request,'ctsapp/kontakt.html'))
+
 def zahl(request, zahl):
     zahl = {'zahl':zahl}
     return(render(request,'ctsapp/index.html', zahl))
