@@ -50,17 +50,31 @@
 {% block content %}{% endblock %}
 
 <!-- Footer -->
-<footer class="text-center">
-  <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
-    <span class="glyphicon glyphicon-chevron-up"></span>
-  </a>
-  <p>Daws ist ein Test. LOOOREM IPUSUUUUSUMSMSMMS</p>
-  <a href="/impressum">IMPRESSUM</a>
+<footer class="footer footer-sticky footer-bottom">
+        <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
+            <span class="glyphicon glyphicon-chevron-up"></span>
+        </a>
+        <a href="/impressum">IMPRESSUM</a>
+
 </footer>
 
 {% block script %}{% endblock %}
 <script>
 $(document).ready(function(){
+  //Footer-Position
+  var body_height = $('body').height()+20; // +20 gives space between div and footer
+  var window_height = $(window).height();
+    if ( body_height + 130 <= window_height ) {
+        $('footer').removeClass('footer-bottom');
+        $('footer').addClass('footer-sticky');
+        $('.up-arrow').css('display', 'none');
+    }else{
+        $('.up-arrow').css('display', 'block')
+        $('footer').removeClass('footer-sticky');
+        $('footer').addClass('footer-bottom');
+    }
+
+
   // Initialize Tooltip
   $('[data-toggle="tooltip"]').tooltip();
 
