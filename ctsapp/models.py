@@ -74,6 +74,7 @@ class SpielerBewertetSpot(models.Model):
     bewertung = models.IntegerField()
     spot_id = models.ForeignKey('Spot',on_delete=models.CASCADE, primary_key=True)
     datum = models.DateTimeField()
+    bewertung_text = models.CharField(max_length=254)
 
     class Meta:
         managed = True
