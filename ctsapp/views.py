@@ -13,7 +13,10 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 def index(request):
-    return(render(request,'ctsapp/index.html'))
+    best_spots = get_best_spots()
+    best_spieler = get_best_spieler()
+    liste = {'spielers':best_spieler, 'spots':best_spots}
+    return(render(request,'ctsapp/index.html', liste))
 
 def kontakt(request):
     return(render(request,'ctsapp/kontakt.html'))
@@ -78,20 +81,21 @@ def registrierung(request):
 
         #Eventuell direkter login von User?
         #login(request, user)
-        return(render(request,'ctsapp/registrierung.html',message))
+        return render(request,'ctsapp/registrierung.html',message)
 
     else:
-        return(render(request,"ctsapp/registrierung.html"))
+        return render(request,"ctsapp/registrierung.html")
 
 
 def teams(request):
     if (request.user.is_authenticated):
         if (request.user.team_id):
-            get_team_members(request.user.team_id.team_id)
-            return (render(request, 'ctsapp/teams.html'))
-
+            mitglieder = get_team_members(request.user.team_id.team_id)
+            members = {'members': mitglieder}
+            return render(request, 'ctsapp/teams.html', members)
+            print(members)
         else:
-            return(render(request,'ctsapp/team_erstellen.html'))
+            return render(request,'ctsapp/team_erstellen.html')
     else:
         return redirect('index')
 
@@ -126,7 +130,7 @@ def spot_suche(request):
 
 def spot_detail(request, spot_id):
     if request.user.is_authenticated:
-        spots = Spot.objects.get(spot_id=spot_id)
+        spot = get_spot(spot_id)
         bilder = Medium.objects.filter(spot_id=spot_id)
         counter = 0
         for bild in bilder:
@@ -135,8 +139,11 @@ def spot_detail(request, spot_id):
                 counter += 1
             else:
                 bild.first = ""
-        liste = {'spot':spots, 'bilder':bilder}
+        bewertungen = get_bewertungen(spot_id)
+        liste = {'spot':spot, 'bilder':bilder, 'bewertungen':bewertungen}
         return render(request,'ctsapp/spot_detail.html', liste)
+    else:
+        return (redirect('/login'))
 
 def impressum(request):
     return(render(request,'ctsapp/impressum.html'))
