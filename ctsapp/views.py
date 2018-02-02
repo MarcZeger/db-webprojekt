@@ -13,7 +13,10 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
 def index(request):
-    return(render(request,'ctsapp/index.html'))
+    best_spots = get_best_spots()
+    best_spieler = get_best_spieler()
+    liste = {'spielers':best_spieler, 'spots':best_spots}
+    return(render(request,'ctsapp/index.html', liste))
 
 def kontakt(request):
     return(render(request,'ctsapp/kontakt.html'))
@@ -127,7 +130,7 @@ def spot_suche(request):
 
 def spot_detail(request, spot_id):
     if request.user.is_authenticated:
-        spots = Spot.objects.get(spot_id=spot_id)
+        spot = get_spot(spot_id)
         bilder = Medium.objects.filter(spot_id=spot_id)
         counter = 0
         for bild in bilder:
@@ -137,8 +140,9 @@ def spot_detail(request, spot_id):
             else:
                 bild.first = ""
         bewertungen = get_bewertungen(spot_id)
-        liste = {'spot':spots, 'bilder':bilder, 'bewertungen':bewertungen}
+        liste = {'spot':spot, 'bilder':bilder, 'bewertungen':bewertungen}
         return render(request,'ctsapp/spot_detail.html', liste)
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 def impressum(request):
@@ -147,3 +151,10 @@ def impressum(request):
     else:
         return (redirect('/login'))
 >>>>>>> master
+=======
+    else:
+        return (redirect('/login'))
+
+def impressum(request):
+    return(render(request,'ctsapp/impressum.html'))
+>>>>>>> 911621917f75940f5a68d434fa5a801894bd529f
