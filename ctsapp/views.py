@@ -144,3 +144,6 @@ def spot_detail(request, spot_id):
         return render(request,'ctsapp/spot_detail.html', liste)
     else:
         return (redirect('/login'))
+
+def impressum(request):
+    return(render(request,'ctsapp/impressum.html'))
