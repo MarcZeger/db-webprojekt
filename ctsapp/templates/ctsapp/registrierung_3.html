@@ -9,39 +9,23 @@
         {% if message %}
             {% if flag %}
             <div class="alert alert-danger alert-dismissable">
+                {{ message }}
+                <a href="/registrierung">Zurück zur Registrierung</a>
+            </div>
             {% else %}
             <div class="alert alert-success alert-dismissable">
+                {{ message }}
+                <a href="/login">Zum Login</a>
+            </div>
             {% endif %}
-            {{ message }}
-         </div>
-         <a href="/login">Zum Login</a>
         {% else %}
+        <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width:100%;height: 30px;line-height: 30px;">
+            Schritt 3 von 3
+        </div>
+        </div>
     <form action="{% url 'registrierung' %}" method="POST">
         {% csrf_token %}
-        <div class="form-group">
-            <label>Benutzername</label>
-            <input type="text" name="username" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label>E-Mail</label>
-            <input type="email" name="email" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label>Vorname</label>
-            <input type="text" name="first_name" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label>Nachname</label>
-            <input type="text" name="last_name" class="form-control" required>
-        </div>
-         <div class="form-group">
-            <label>Heimatort</label>
-            <input type="text" name="ort" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label>Postleitzahl</label>
-            <input type="text" name="plz" class="form-control" required>
-        </div>
          <div class="form-group">
             <label>Passwort</label>
             <input type="password" name="password" class="form-control" id="passwort1" required>
@@ -53,7 +37,14 @@
         <div class="alert alert-danger alert-dismissable" style="display: none" id="warnung">
             <div id="meldung"></div>
          </div>
-        <button type="submit" id="button-submit" disabled>Registrieren</button>
+        <input type="hidden" value="3" name="seite">
+        <input type="hidden" value="{{ ort }}" name="ort">
+        <input type="hidden" value="{{ email }}" name="email">
+        <input type="hidden" name="username" value="{{ username }}">
+        <input type="hidden" name="first_name" value="{{ first_name }}">
+        <input type="hidden" name="last_name" value="{{ last_name }}">
+        <button type="submit" id="button-submit" disabled>Registrierung abschließen</button>
+    </form>
     </div>
 {% endif %}
 {% endblock %}
