@@ -168,19 +168,18 @@ def spot_detail(request, spot_id):
         bewertungen = get_bewertungen(spot_id)
         liste = {'spot':spot, 'bilder':bilder, 'bewertungen':bewertungen}
         return render(request,'ctsapp/spot_detail.html', liste)
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-def impressum(request):
-    return(render(request,'ctsapp/impressum.html'))
-=======
-    else:
-        return (redirect('/login'))
->>>>>>> master
-=======
     else:
         return (redirect('/login'))
 
 def impressum(request):
     return(render(request,'ctsapp/impressum.html'))
->>>>>>> 911621917f75940f5a68d434fa5a801894bd529f
+
+def insert(request):
+    file = open('ctsapp/zuordnung_plz_ort.csv','r')
+    for line in file:
+        line = line.rstrip()
+        wörter = line.split(',')
+        print(str(wörter[1])+str(wörter[2]))
+        ort = Ort.objects.create(name=wörter[1],plz=wörter[2])
+        ort.save()
+    return(HttpResponse(wörter))
