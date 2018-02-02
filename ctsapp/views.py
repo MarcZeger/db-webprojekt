@@ -168,8 +168,19 @@ def spot_detail(request, spot_id):
         bewertungen = get_bewertungen(spot_id)
         liste = {'spot':spot, 'bilder':bilder, 'bewertungen':bewertungen}
         return render(request,'ctsapp/spot_detail.html', liste)
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+def impressum(request):
+    return(render(request,'ctsapp/impressum.html'))
+=======
+    else:
+        return (redirect('/login'))
+>>>>>>> master
+=======
     else:
         return (redirect('/login'))
 
 def impressum(request):
     return(render(request,'ctsapp/impressum.html'))
+>>>>>>> 911621917f75940f5a68d434fa5a801894bd529f
