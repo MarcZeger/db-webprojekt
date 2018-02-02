@@ -21,7 +21,10 @@ def zahl(request, zahl):
 def profil(request):
     punktzahl = request.user.punktzahl
     punktzahl = float(punktzahl)
-    level = math.floor( math.log10(punktzahl) / math.log10(1.25) - math.log10(20) / math.log10(1.25) )
+    if (punktzahl == 0):
+        level = 1
+    else:
+        level = math.floor( math.log10(punktzahl+20) / math.log10(1.25) - math.log10(20) / math.log10(1.25) ) +1
     levelUG = 20 * 1.25 ** level
     OG = math.ceil(punktzahl - levelUG)
     levelOG = 20 * 1.25 ** (level+1)
