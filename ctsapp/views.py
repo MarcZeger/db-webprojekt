@@ -78,20 +78,21 @@ def registrierung(request):
 
         #Eventuell direkter login von User?
         #login(request, user)
-        return(render(request,'ctsapp/registrierung.html',message))
+        return render(request,'ctsapp/registrierung.html',message)
 
     else:
-        return(render(request,"ctsapp/registrierung.html"))
+        return render(request,"ctsapp/registrierung.html")
 
 
 def teams(request):
     if (request.user.is_authenticated):
         if (request.user.team_id):
-            get_team_members(request.user.team_id.team_id)
-            return (render(request, 'ctsapp/teams.html'))
-
+            mitglieder = get_team_members(request.user.team_id.team_id)
+            members = {'members': mitglieder}
+            return render(request, 'ctsapp/teams.html', members)
+            print(members)
         else:
-            return(render(request,'ctsapp/team_erstellen.html'))
+            return render(request,'ctsapp/team_erstellen.html')
     else:
         return redirect('index')
 
@@ -135,8 +136,14 @@ def spot_detail(request, spot_id):
                 counter += 1
             else:
                 bild.first = ""
-        liste = {'spot':spots, 'bilder':bilder}
+        bewertungen = get_bewertungen(spot_id)
+        liste = {'spot':spots, 'bilder':bilder, 'bewertungen':bewertungen}
         return render(request,'ctsapp/spot_detail.html', liste)
+<<<<<<< HEAD
 
 def impressum(request):
     return(render(request,'ctsapp/impressum.html'))
+=======
+    else:
+        return (redirect('/login'))
+>>>>>>> master

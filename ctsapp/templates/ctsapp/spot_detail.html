@@ -21,7 +21,8 @@
       <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
       <span class="sr-only">Next</span>
     </a>
-</div>
+    </div>
+    </div>
 
     <div class="row">
         <div class="col-sm-6">Beschreibung</div><div class="col-sm-6">{{ spot.beschreibung }}</div>
@@ -31,7 +32,20 @@
     </div>
     <div id="map"></div>
     <h3>Bewertungen</h3>
-
+    <div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>Username</th>
+            <th>Bewertung</th>
+        </tr>
+        {% for bewertung in bewertungen %}
+            <tr>
+                <td>{{ bewertung.spieler_id.username }}</td>
+                <td>{% for i in bewertung.bewertung %}★{% endfor %}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
 </div>
 {% endblock %}
 {% block script %}

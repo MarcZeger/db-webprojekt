@@ -8,3 +8,9 @@ def get_ort_id(ortname):
         return(ort)
     else:
         return(ort.ort_id)
+
+def get_bewertungen(spot_id):
+    bewertungen = SpielerBewertetSpot.objects.filter(spot_id=spot_id)
+    for bewertung in bewertungen:
+        bewertung.bewertung = range(int(bewertung.bewertung))
+    return(bewertungen)
