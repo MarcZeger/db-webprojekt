@@ -5,15 +5,67 @@
 <div class="container">
     <div class="text-center"><h1>{{ spot.bezeichnung }}</h1></div>
     <div class="row">
-        <div class="col-sm-6">Beschreibung</div><div class="col-sm-6">{{ spot.beschreibung }}</div>
+    <div class="col-sm-6">
+        <h3>Informationen</h3>
+    <div class="row underline">
+        <div class="col-sm-4"><b>Beschreibung:</b></div><div class="col-sm-8">{{ spot.beschreibung }}</div>
     </div>
-    <div class="row">
-        <div class="col-sm-6">Schwierigkeit</div><div class="col-sm-6">{{ spot.schwierigkeit_id.beschreibung }}</div>
+    <div class="row underline">
+        <div class="col-sm-4"><b>Schwierigkeit:</b></div><div class="col-sm-8">{{ spot.schwierigkeit_id.beschreibung }}</div>
     </div>
+    <div class="row underline">
+        <div class="col-sm-4"><b>Bewertung:</b></div><div class="col-sm-8">{% for i in spot.bewertung %}★{% endfor %}</div>
+    </div>
+    <div class="row underline">
+        <div class="col-sm-4"><b>Ort:</b></div><div class="col-sm-8">{{ spot.ort_id.name }}</div>
+    </div>
+    </div>
+    <div id="myCarousel" class="carousel slide col-sm-6" data-ride="carousel">
+       <div class="carousel-inner" role="listbox">
+    <!-- Wrapper for slides -->
+    {% for  bild in bilder%}
+      <div class="item {{ bild.first }}">
+        <img src="{{ bild.link }}" style="width: 100%;height: 300px;" alt="asd">
+      </div>
+    {% endfor %}
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+    </div>
+    </div>
+    </div>
+    </div>
+    <div class="container spot_detail_container">
+    <h3>Wo findet man den Spot?</h3>
     <div id="map"></div>
+    </div>
+    <div class="container spot_detail_container">
     <h3>Bewertungen</h3>
-
-</div>
+    <div class="table-responsive">
+    <table class="table">
+        <tr>
+            <th>Username</th>
+            <th>Datum</th>
+            <th>Bewertung</th>
+            <th>Text</th>
+        </tr>
+        {% for bewertung in bewertungen %}
+            <tr>
+                <td>{{ bewertung.spieler_id.username }}</td>
+                <td>{{ bewertung.datum|date:"d. M, Y"}}</td>
+                <td>{% for i in bewertung.bewertung %}★{% endfor %}</td>
+                <td>{{ bewertung.bewertung_text }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+    </div>
 {% endblock %}
 {% block script %}
 <script>
