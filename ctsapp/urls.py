@@ -14,5 +14,7 @@ urlpatterns = [
     path('kontakt/', views.kontakt, name='kontakt'),
     path('teams/', views.teams, name='teams'),
     path('suche/', views.spot_suche, name="suche"),
-    path('spot/<int:spot_id>', views.spot_detail, name='spot_detail')
+    path('spot/<int:spot_id>', views.spot_detail, name='spot_detail'),
+    path('kontakt/', views.kontakt, name='kontakt'),
+    path('impressum/', views.impressum, name="impressum")
 ]
