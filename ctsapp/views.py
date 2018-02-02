@@ -173,13 +173,3 @@ def spot_detail(request, spot_id):
 
 def impressum(request):
     return(render(request,'ctsapp/impressum.html'))
-
-def insert(request):
-    file = open('ctsapp/zuordnung_plz_ort.csv','r')
-    for line in file:
-        line = line.rstrip()
-        wörter = line.split(',')
-        print(str(wörter[1])+str(wörter[2]))
-        ort = Ort.objects.create(name=wörter[1],plz=wörter[2])
-        ort.save()
-    return(HttpResponse(wörter))
