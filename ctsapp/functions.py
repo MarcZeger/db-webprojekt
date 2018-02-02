@@ -1,4 +1,5 @@
 from .models import *
+import time
 
 def get_bild_link(spot_id):
     bilder = Medium.objects.filter(spot_id=spot_id)
@@ -55,3 +56,23 @@ def get_best_spieler():
             counter += 1
         else:
             return(liste)
+
+def check_spieler_spot(spot_id, spieler_id):
+    try:
+        check = SpielerEntdecktSpot.objects.get(spot_id=spot_id,spieler_id=spieler_id)
+    except:
+        check = None
+    if check == None:
+        print("False")
+        return(False)
+    else:
+        print(check.datum)
+        return(check.datum)
+
+def set_spieler_spot(spot_id, spieler_id):
+    print("Set spieler spot")
+    wert = SpielerEntdecktSpot.objects.create(spieler_id=spieler_id,spot_id=spot_id, datum=get_time())
+    wert.save()
+
+def get_time():
+    return(time.strftime("%Y-%m-%d %H:%M:%S"))

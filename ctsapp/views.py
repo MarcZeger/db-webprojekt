@@ -104,30 +104,53 @@ def teams(request):
 
 def spot_suche(request):
     if request.user.is_authenticated:
-        spots = ""
-        message = ""
-        ort = ""
-        try:
-            ort = request.GET['ort']
-        except:
-            return(render(request,'ctsapp/spot_suche.html'))
-        if ort != "":
-            ort_id = get_ort_id(ort)
-            if type(ort_id) == int:
-                spots = Spot.objects.filter(ort_id=ort_id)
+        if request.method == "POST":
+            code = request.POST['code']
+            try:
+                spot = Spot.objects.get(code=code)
+            except:
+                spot = None
+
+            if spot != None:
+                warda = check_spieler_spot(spot.spot_id,request.user.spieler_id)
+                if  warda == False:
+                    spot_punktzahl = spot.schwierigkeit_id.punkte
+                    spieler = Spieler.objects.get(spieler_id = request.user.spieler_id)
+                    spieler.punktzahl += spot_punktzahl
+                    spieler.save()
+                    set_spieler_spot(spot_id=spot,spieler_id=spieler)
+                    meldung = {'message_code':'Eingabe des Codes war erfolgreich!','flag':'success','punktzahl':spot_punktzahl}
+                else:
+                    meldung = {'message_code':'Der Code wurde bereits von dir eingegeben!', 'datum':warda,'flag':'danger'}
             else:
-                message = ort_id
-                print(message)
+                meldung = {'message_code': 'Der eingegebene Code ist leider falsch!','flag':'danger'}
+            return (render(request, "ctsapp/spot_suche.html", meldung))
+
         else:
-            spots = Spot.objects.all()
-        spot_list = []
-        if spots != None and spots != []:
-            for spot in spots:
-                spot.bewertung = range(int(spot.bewertung))
-                spot_list.append(spot)
-            print(spot_list)
-        liste = {'spots':spot_list,'message':message}
-        return render(request,'ctsapp/spot_suche.html',liste)
+            spots = ""
+            message = ""
+            ort = ""
+            try:
+                ort = request.GET['ort']
+            except:
+                return(render(request,'ctsapp/spot_suche.html'))
+            if ort != "":
+                ort_id = get_ort_id(ort)
+                if type(ort_id) == int:
+                    spots = Spot.objects.filter(ort_id=ort_id)
+                else:
+                    message = ort_id
+                    print(message)
+            else:
+                spots = Spot.objects.all()
+            spot_list = []
+            if spots != None and spots != []:
+                for spot in spots:
+                    spot.bewertung = range(int(spot.bewertung))
+                    spot_list.append(spot)
+                print(spot_list)
+            liste = {'spots':spot_list,'message':message}
+            return render(request,'ctsapp/spot_suche.html',liste)
     else:
         return(redirect('/login'))
 

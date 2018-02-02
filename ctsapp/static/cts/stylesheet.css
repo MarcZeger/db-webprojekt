@@ -184,3 +184,5 @@
   #contact {padding-top: 15px;}
 
   .best-spot-picture {width: 210px; height: 140px}
+  .slider-picture {max-height: 500px !important;}
+  #spot-search {padding-top: 0px;}
