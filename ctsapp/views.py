@@ -62,32 +62,93 @@ def login_custom(request):
 
 def registrierung(request):
     if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        first_name = request.POST['first_name']
-        last_name = request.POST['last_name']
-        ort_plz = request.POST['plz']
-        ort = request.POST['ort']
-        email = request.POST['email']
-
-        if Spieler.objects.filter(username=username).exists():
-            message = {'message': "Benutzername bereits vergeben!",'flag':'wrong'}
-        else:
-            if Spieler.objects.filter(email=email).exists():
-                message = {'message': "E-Mail Addresse bereits hinterlegt!",'flag':'wrong'}
+        if request.POST['seite'] == "1":
+            username = request.POST['username']
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            email = request.POST['email']
+            ort_plz = request.POST['plz']
+            orte = get_ort_liste(ort_plz)
+            werte = {'username':username,'first_name':first_name,'last_name':last_name,'orte':orte,'email':email,'plz':ort_plz}
+            if Spieler.objects.filter(username=username).exists():
+                message = {'message': "Benutzername bereits vergeben!", 'flag': 'wrong'}
+                werte.update(message)
             else:
-                user = Spieler(username=username, first_name=first_name, last_name=last_name, ort_id=Ort(ort_id=1), email = email, punktzahl=0)
-                user.set_password(password)
-                user.save()
-                message = {'message':"Sie haben sich erfolgreich registriert!"}
+                if Spieler.objects.filter(email=email).exists():
+                    message = {'message': "E-Mail Addresse bereits hinterlegt!", 'flag': 'wrong'}
+                    werte.update(message)
+            return(render(request,'ctsapp/registrierung_2.html',werte))
 
+        elif request.POST['seite'] == "2":
+            username = request.POST['username']
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            ort_id = request.POST['ort']
+            email = request.POST['email']
+            werte = {'username': username, 'first_name': first_name, 'last_name': last_name, 'ort': ort_id,'email':email}
+            return(render(request,'ctsapp/registrierung_3.html',werte))
 
-        #Eventuell direkter login von User?
-        #login(request, user)
-        return render(request,'ctsapp/registrierung.html',message)
+        elif request.POST['seite'] == "3":
+            print("schritt 3")
+            username = request.POST['username']
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            ort_id = request.POST['ort']
+            email = request.POST['email']
+            password = request.POST['password']
+            werte = {}
+            if Spieler.objects.filter(username=username).exists():
+                print("Benutzername bereits vergeben")
+                message = {'message': "Benutzername bereits vergeben!", 'flag': 'wrong'}
+                werte.update(message)
+            else:
+                print("Benutzername nicht vergeben")
+                if Spieler.objects.filter(email=email).exists():
+                    print("Email vergeben!")
+                    message = {'message': "E-Mail Addresse bereits hinterlegt!", 'flag': 'wrong'}
+                    werte.update(message)
+                else:
+                    print("Benutzer wird angelegt")
+                    user = Spieler(username=username, first_name=first_name, last_name=last_name, ort_id=Ort(ort_id=ort_id),
+                                   email=email, punktzahl=0)
+                    user.set_password(password)
+                    user.save()
+                    message = {'message': "Sie haben sich erfolgreich registriert!"}
+                    # Eventuell direkter login von User?
+                    # login(request, user)
+                    return render(request, 'ctsapp/registrierung_1.html', message)
+            return(render(request,'ctsapp/registrierung_1.html'))
+
+        #Seite neuer Ort anzeigen und Werte uebergeben
+        elif request.POST['seite'] == "4":
+            username = request.POST['username']
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            email = request.POST['email']
+            plz = request.POST['plz']
+            werte = {'username': username, 'first_name': first_name, 'last_name': last_name, 'plz': plz,'email': email}
+            return(render(request,'ctsapp/registrierung_neuer_ort.html',werte))
+
+        #Neuer Ort Formular erhalten, neuen Ort anlegen und weiterleiten
+        elif request.POST['seite'] == "5":
+            username = request.POST['username']
+            first_name = request.POST['first_name']
+            last_name = request.POST['last_name']
+            email = request.POST['email']
+            ort_plz = request.POST['ort_plz']
+            ort_name = request.POST['ort_name']
+            ort_id = new_ort(ort_plz,ort_name)
+            werte = {'username': username, 'first_name': first_name, 'last_name': last_name, 'ort': ort_id, 'email': email}
+            return (render(request, 'ctsapp/registrierung_3.html', werte))
 
     else:
-        return render(request,"ctsapp/registrierung.html")
+        return render(request, "ctsapp/registrierung_1.html")
+
+
+
+
+
+
 
 
 def teams(request):

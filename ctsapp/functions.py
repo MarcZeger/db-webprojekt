@@ -76,3 +76,12 @@ def set_spieler_spot(spot_id, spieler_id):
 
 def get_time():
     return(time.strftime("%Y-%m-%d %H:%M:%S"))
+
+def get_ort_liste(plz):
+    orte = Ort.objects.filter(plz=plz)
+    return(orte)
+
+def new_ort(plz,name):
+    ort = Ort.objects.create(name=name,plz=plz)
+    ort.save()
+    return(ort.ort_id)
