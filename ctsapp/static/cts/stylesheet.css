@@ -184,6 +184,26 @@
   .container-small-padding {padding-top: 15px;}
 
   .best-spot-picture {width: 210px; height: 140px}
+
   .slider-picture {max-height: 500px !important;}
+
   #spot-search {padding-top: 0px;}
+
   .progress {height: 30px;}
+
+  .sort-buttons {
+      cursor: pointer;
+      padding: 0px 3px;
+      float: left;
+  }
+
+  .table-header {
+      float: left;
+      margin-right: 5px;
+  }
+
+  .search-picture {
+      height: 50px;
+      width: 100px;
+      margin: auto;
+  }

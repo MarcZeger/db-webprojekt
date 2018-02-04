@@ -56,7 +56,7 @@
 <div class="container container-small-padding text-center">
     <h3>Beste Spots</h3>
   <div class="row">
-    {% for spot in spots %}
+    {% for spot in best_spots %}
     <div class="col-sm-4">
       <p class="text-center"><strong>{{ spot.bezeichnung }}</strong></p><br>
       <a href="#demo{{ spot.spot_id }}" data-toggle="collapse">
@@ -92,7 +92,44 @@
       {% endfor %}
   </div>
   </div>
+  <div class="container container-small-padding">
+    <h3>Alle markierten Spots</h3>
+    <div id="map"></div>
+  </div>
 
 <!-- Add Google Maps -->
 <div id="googleMap"></div>
+{% endblock %}
+{% block script %}
+<script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 3,
+          center: new google.maps.LatLng({{ center }}),
+          mapTypeId: 'terrain'
+        });
+
+
+        var features = [
+            {% for spot in spots %}
+                {
+                position: new google.maps.LatLng({{ spot.breitengrad }}, {{ spot.laengengrad }}),
+                },
+            {% endfor %}
+            ];
+
+        // Create markers.
+        features.forEach(function(feature) {
+          var marker = new google.maps.Marker({
+            position: feature.position,
+            map: map
+          });
+        });
+
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt2fnvdE4Za0wT6b129B4yxN48SbxFXYE&callback=initMap">
+    </script>
 {% endblock %}

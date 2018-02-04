@@ -3,6 +3,12 @@
 {% block content %}
 {% load static %}
 <div class="container">
+    {% if meldung %}
+        <div class="alert alert-success alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            {{ meldung }}
+        </div>
+    {% endif %}
     <div class="text-center"><h1>{{ spot.bezeichnung }}</h1></div>
     <div class="row">
     <div class="col-sm-6">
@@ -44,6 +50,17 @@
     <div class="container spot_detail_container">
     <h3>Wo findet man den Spot?</h3>
     <div id="map"></div>
+    </div>
+    <div class="container spot_detail_container">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Medium hochladen</label>
+                <input type="file" name="file" accept="image/jpg, image/jpeg">
+            </div>
+            <input type="hidden" name="spot" value="{{ spot.spot_id }}">
+            <button type="submit">Hochladen</button>
+        </form>
     </div>
     <div class="container spot_detail_container">
     <h3>Bewertungen</h3>
