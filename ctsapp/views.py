@@ -15,7 +15,9 @@ from django.core.exceptions import ObjectDoesNotExist
 def index(request):
     best_spots = get_best_spots()
     best_spieler = get_best_spieler()
-    liste = {'spielers':best_spieler, 'spots':best_spots}
+    all_spots = Spot.objects.all()
+    center = get_map_center(all_spots)
+    liste = {'spielers':best_spieler, 'best_spots':best_spots,'spots':all_spots,'center':center}
     return(render(request,'ctsapp/index.html', liste))
 
 def kontakt(request):
@@ -146,11 +148,6 @@ def registrierung(request):
 
 
 
-
-
-
-
-
 def teams(request):
     if (request.user.is_authenticated):
         if (request.user.team_id):
@@ -165,6 +162,7 @@ def teams(request):
 
 def spot_suche(request):
     if request.user.is_authenticated:
+        #Code wurde eingegeben - Keine Suche
         if request.method == "POST":
             code = request.POST['code']
             try:
@@ -196,20 +194,22 @@ def spot_suche(request):
             except:
                 return(render(request,'ctsapp/spot_suche.html'))
             if ort != "":
-                ort_id = get_ort_id(ort)
-                if type(ort_id) == int:
-                    spots = Spot.objects.filter(ort_id=ort_id)
+                spots = get_spot_list(ort)
+                if type(spots) == str:
+                    message = spots
                 else:
-                    message = ort_id
-                    print(message)
+                    spots = add_img_url(spots)
+
             else:
-                spots = Spot.objects.all()
+                spots = add_img_url(Spot.objects.all())
             spot_list = []
-            if spots != None and spots != []:
+            if spots != None and spots != [] and type(spots) != str:
                 for spot in spots:
                     spot.bewertung = range(int(spot.bewertung))
                     spot_list.append(spot)
                 print(spot_list)
+            else:
+                message = spots
             liste = {'spots':spot_list,'message':message}
             return render(request,'ctsapp/spot_suche.html',liste)
     else:
@@ -217,18 +217,25 @@ def spot_suche(request):
 
 def spot_detail(request, spot_id):
     if request.user.is_authenticated:
-        spot = get_spot(spot_id)
-        bilder = Medium.objects.filter(spot_id=spot_id)
-        counter = 0
-        for bild in bilder:
-            if counter == 0:
-                bild.first = "active"
-                counter += 1
-            else:
-                bild.first = ""
-        bewertungen = get_bewertungen(spot_id)
-        liste = {'spot':spot, 'bilder':bilder, 'bewertungen':bewertungen}
-        return render(request,'ctsapp/spot_detail.html', liste)
+        if request.method == "GET":
+            spot = get_spot(spot_id)
+            bilder = get_bilder(spot_id)
+            bewertungen = get_bewertungen(spot_id)
+            liste = {'spot':spot, 'bilder':bilder, 'bewertungen':bewertungen}
+
+        else:
+            #Bild speichern
+            spot_id = request.POST['spot']
+            file = request.FILES['file']
+            type = "bild"
+            path = save_file(file,spot_id,request.user.spieler_id)
+            create_medium(path,request.user.spieler_id,spot_id,type)
+            #Webseite zurückgeben
+            spot = get_spot(spot_id)
+            bilder = get_bilder(spot_id)
+            bewertungen = get_bewertungen(spot_id)
+            liste = {'spot': spot, 'bilder': bilder, 'bewertungen': bewertungen,'meldung':"Bild wurde erfolgreich hochgeladen!"}
+        return render(request, 'ctsapp/spot_detail.html', liste)
     else:
         return (redirect('/login'))
 
