@@ -215,3 +215,9 @@
   .spot-anlegen-code label {
       float: left;
   }
+
+  .header-logo {
+      height: 27px;
+      margin-top: -3px;
+      margin-right: -4px;
+  }

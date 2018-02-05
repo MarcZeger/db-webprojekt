@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="58b43151-b10f-412d-8500-78bc4f7b848f" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/ctsapp/templates/ctsapp/administration.html" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/ctsapp/functions.py" afterPath="$PROJECT_DIR$/ctsapp/functions.py" />
       <change beforePath="$PROJECT_DIR$/ctsapp/static/cts/stylesheet.css" afterPath="$PROJECT_DIR$/ctsapp/static/cts/stylesheet.css" />
       <change beforePath="$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html" afterPath="$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html" />
-      <change beforePath="$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung_1.html" afterPath="$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung_1.html" />
-      <change beforePath="$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung_2.html" afterPath="$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung_2.html" />
-      <change beforePath="$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung_3.html" afterPath="$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung_3.html" />
-      <change beforePath="$PROJECT_DIR$/ctsapp/urls.py" afterPath="$PROJECT_DIR$/ctsapp/urls.py" />
-      <change beforePath="$PROJECT_DIR$/ctsapp/views.py" afterPath="$PROJECT_DIR$/ctsapp/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -25,11 +17,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ctsapp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="387">
-              <caret line="268" column="4" lean-forward="false" selection-start-line="268" selection-start-column="4" selection-end-line="268" selection-end-column="4" />
+            <state relative-caret-position="1444">
+              <caret line="286" column="4" lean-forward="false" selection-start-line="286" selection-start-column="4" selection-end-line="286" selection-end-column="4" />
               <folding>
                 <element signature="e#0#78#0" expanded="true" />
               </folding>
@@ -40,18 +32,18 @@
       <file leaf-file-name="administration.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/administration.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="99" column="77" lean-forward="false" selection-start-line="99" selection-start-column="77" selection-end-line="99" selection-end-column="77" />
+            <state relative-caret-position="300">
+              <caret line="20" column="32" lean-forward="false" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="99" lean-forward="false" selection-start-line="7" selection-start-column="99" selection-end-line="7" selection-end-column="99" />
+            <state relative-caret-position="240">
+              <caret line="43" column="52" lean-forward="false" selection-start-line="43" selection-start-column="52" selection-end-line="43" selection-end-column="52" />
               <folding />
             </state>
           </provider>
@@ -61,7 +53,7 @@
         <entry file="file://$PROJECT_DIR$/ctsapp/urls.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
-              <caret line="20" column="65" lean-forward="false" selection-start-line="20" selection-start-column="65" selection-end-line="20" selection-end-column="65" />
+              <caret line="21" column="65" lean-forward="false" selection-start-line="21" selection-start-column="65" selection-end-line="21" selection-end-column="65" />
               <folding />
             </state>
           </provider>
@@ -71,10 +63,9 @@
         <entry file="file://$PROJECT_DIR$/ctsapp/functions.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="964">
-              <caret line="186" column="20" lean-forward="false" selection-start-line="186" selection-start-column="20" selection-end-line="186" selection-end-column="20" />
+              <caret line="209" column="20" lean-forward="false" selection-start-line="209" selection-start-column="20" selection-end-line="209" selection-end-column="20" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
-                <marker date="1517843820609" expanded="true" signature="2483:3802" ph="SELECT * FRO... " />
               </folding>
             </state>
           </provider>
@@ -83,8 +74,8 @@
       <file leaf-file-name="stylesheet.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ctsapp/static/cts/stylesheet.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="212" column="20" lean-forward="false" selection-start-line="212" selection-start-column="20" selection-end-line="212" selection-end-column="20" />
+            <state relative-caret-position="505">
+              <caret line="221" column="25" lean-forward="false" selection-start-line="221" selection-start-column="25" selection-end-line="221" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -135,15 +126,15 @@
         <option value="$PROJECT_DIR$/ctsapp/templates/registration/login.html" />
         <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/spot_detail.html" />
         <option value="$PROJECT_DIR$/ctsapp/urls.py" />
-        <option value="$PROJECT_DIR$/ctsapp/static/cts/stylesheet.css" />
         <option value="$PROJECT_DIR$/ctsapp/functions.py" />
         <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/spot_suche.html" />
         <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung_2.html" />
         <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung_3.html" />
         <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung_1.html" />
-        <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html" />
         <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/administration.html" />
         <option value="$PROJECT_DIR$/ctsapp/views.py" />
+        <option value="$PROJECT_DIR$/ctsapp/static/cts/stylesheet.css" />
+        <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html" />
       </list>
     </option>
   </component>
@@ -611,7 +602,7 @@
     <entry file="file://$PROJECT_DIR$/ctsapp/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="20" column="65" lean-forward="false" selection-start-line="20" selection-start-column="65" selection-end-line="20" selection-end-column="65" />
+          <caret line="21" column="65" lean-forward="false" selection-start-line="21" selection-start-column="65" selection-end-line="21" selection-end-column="65" />
           <folding />
         </state>
       </provider>
@@ -627,10 +618,9 @@
     <entry file="file://$PROJECT_DIR$/ctsapp/functions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="964">
-          <caret line="186" column="20" lean-forward="false" selection-start-line="186" selection-start-column="20" selection-end-line="186" selection-end-column="20" />
+          <caret line="209" column="20" lean-forward="false" selection-start-line="209" selection-start-column="20" selection-end-line="209" selection-end-column="20" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
-            <marker date="1517843820609" expanded="true" signature="2483:3802" ph="SELECT * FRO... " />
           </folding>
         </state>
       </provider>
@@ -667,37 +657,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ctsapp/static/cts/stylesheet.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="212" column="20" lean-forward="false" selection-start-line="212" selection-start-column="20" selection-end-line="212" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="99" lean-forward="false" selection-start-line="7" selection-start-column="99" selection-end-line="7" selection-end-column="99" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/administration.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="99" column="77" lean-forward="false" selection-start-line="99" selection-start-column="77" selection-end-line="99" selection-end-column="77" />
+        <state relative-caret-position="300">
+          <caret line="20" column="32" lean-forward="false" selection-start-line="20" selection-start-column="32" selection-end-line="20" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ctsapp/static/cts/stylesheet.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="505">
+          <caret line="221" column="25" lean-forward="false" selection-start-line="221" selection-start-column="25" selection-end-line="221" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ctsapp/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="268" column="4" lean-forward="false" selection-start-line="268" selection-start-column="4" selection-end-line="268" selection-end-column="4" />
+        <state relative-caret-position="1444">
+          <caret line="286" column="4" lean-forward="false" selection-start-line="286" selection-start-column="4" selection-end-line="286" selection-end-column="4" />
           <folding>
             <element signature="e#0#78#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="43" column="52" lean-forward="false" selection-start-line="43" selection-start-column="52" selection-end-line="43" selection-end-column="52" />
+          <folding />
         </state>
       </provider>
     </entry>
