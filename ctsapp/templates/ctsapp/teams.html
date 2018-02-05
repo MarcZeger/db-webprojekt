@@ -12,22 +12,25 @@
     <div class="punkte"><h3>Punkte:</h3></div>
     <div class="mitglieder">
         <h3>Mitglieder</h3>
-        <table>
-            <th>
-                <td>Name</td>
-                <td>Punkte</td>
-            </th>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Platz</th>
+                    <th>Username</th>
+                    <th>Punkte</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for member in members %}
                 <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ member.username }}</td>
                     <td>{{ member.punktzahl }}</td>
                 </tr>
             {% endfor %}
+            </tbody>
         </table>
-
     </div>
-
-
 </div>
 
 {% endblock %}
