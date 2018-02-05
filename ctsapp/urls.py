@@ -18,4 +18,7 @@ urlpatterns = [
     path('spot/<int:spot_id>', views.spot_detail, name='spot_detail'),
     path('kontakt/', views.kontakt, name='kontakt'),
     path('impressum/', views.impressum, name="impressum"),
+    path('administration/', views.administration, name="administration"),
+    path('api/get-ort/<int:plz>', views.ort_api, name='ort_api'),
+    path('api/get-code/', views.code_api, name='code_api')
 ]

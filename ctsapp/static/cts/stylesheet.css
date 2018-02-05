@@ -206,3 +206,12 @@
       width: 100px;
       margin: auto;
   }
+
+  .spot-anlegen-code p {
+      padding-left: 10px;
+      padding-right: 10px;
+      float: left;
+  }
+  .spot-anlegen-code label {
+      float: left;
+  }

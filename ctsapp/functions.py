@@ -1,6 +1,7 @@
 from .models import *
 import time
 from django.core.files.storage import default_storage
+from random import randint
 
 def get_bild_link(spot_id):
     bilder = Medium.objects.filter(spot_id=spot_id)
@@ -187,3 +188,23 @@ def add_img_url(spot_list):
             spot.bild_url = "https://upload.wikimedia.org/wikipedia/commons/3/39/Simpleicons_Places_map-with-placeholder.svg"
 
     return(spot_list)
+  
+
+def create_spot_code():
+    buchstabe_k = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+    buchstabe_g = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+                   'U', 'V', 'W', 'X', 'Y', 'Z']
+    code = ""
+    for i in range(6):
+        choice = randint(0,2)
+        if choice == 0:
+            code += buchstabe_k[randint(0,23)]
+        elif choice == 1:
+            code += buchstabe_g[randint(0,23)]
+        else:
+            code += str(randint(0,9))
+    #In Datenbank prüfen, ob code bereits verwendet wird
+    if Spot.objects.filter(code = code).exists():
+        create_spot_code()
+    else:
+        return(code)
