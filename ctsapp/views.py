@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from django.core import serializers
 from django.contrib.auth import authenticate, login, logout
 
 import math
@@ -241,3 +242,36 @@ def spot_detail(request, spot_id):
 
 def impressum(request):
     return(render(request,'ctsapp/impressum.html'))
+
+def administration(request):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            bezeichnung = request.POST['bezeichnung']
+            beschreibung = request.POST['beschreibung']
+            laengengrad = request.POST['laengengrad']
+            breitengrad = request.POST['breitengrad']
+            plz = request.POST['plz']
+            ort_id = request.POST['ort_id']
+            schwierigkeit = request.POST['schwierigkeit']
+            code = request.POST['code']
+            ort = Ort.objects.get(ort_id=ort_id)
+            schwierigkeit = Schwierigkeit.objects.get(schwierigkeit_id=schwierigkeit)
+            spot = Spot.objects.create(code=code,bezeichnung=bezeichnung,beschreibung=beschreibung,bewertung=0,ort_id=ort,schwierigkeit_id=schwierigkeit,laengengrad=laengengrad,breitengrad=breitengrad)
+            meldung = {'meldung':True}
+            return(render(request,'ctsapp/administration.html',meldung))
+
+        else:
+            schwierigkeiten = Schwierigkeit.objects.all()
+            schwierigkeiten = {'schwierigkeiten':schwierigkeiten}
+            return(render(request,'ctsapp/administration.html',schwierigkeiten))
+    else:
+        return (redirect('/login'))
+    
+def ort_api(request, plz):
+    orte = get_ort_liste(plz)
+    result_list = list(orte.values('name', 'ort_id'))
+    return(JsonResponse(result_list, safe = False))
+
+def code_api(request):
+    code = create_spot_code()
+    return (JsonResponse({'code':code}, safe=False))
