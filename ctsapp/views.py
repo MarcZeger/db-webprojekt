@@ -156,9 +156,27 @@ def teams(request):
             return render(request, 'ctsapp/teams.html', members)
             print(members)
         else:
-            return render(request,'ctsapp/team_erstellen.html')
+            return redirect('team_erstellen')
     else:
         return redirect('index')
+
+def team_erstellen(request):
+    if (request.user.is_authenticated):
+        if (request.user.team_id):
+            return redirect('teams')
+        else:
+            if request.method == "POST":
+                name = request.POST['name']
+                if Team.objects.filter(name=name).exists():
+                    message = {'message': "Teamname bereits vergeben!", 'flag': 'wrong'}
+                else:
+                    create_new_team(name)
+                    set_teamid_to_user(name, request.user.username)
+                    message = {'message': "Sie haben erfolgreich das Team " + str(name) + " erstellt"}
+                return render(request, 'ctsapp/team_erstellen.html', message)
+            else:
+                return render(request, "ctsapp/team_erstellen.html")
+    return redirect('index')
 
 def spot_suche(request):
     if request.user.is_authenticated:
