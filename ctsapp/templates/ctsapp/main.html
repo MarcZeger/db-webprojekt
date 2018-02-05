@@ -57,8 +57,19 @@
         <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
             <span class="glyphicon glyphicon-chevron-up"></span>
         </a>
-        <a href="/impressum">IMPRESSUM</a>
+        <div class="row">
+            <div class="col-sm-10">
+                <a href="http://www.heidenheim.dhbw.de/startseite.html"><img src="{% static 'Bilder/dhbw_weiss.png' %}" alt="Bild" id="pic-login" style="height: 2em; width: 5em"></a>
+                <a href="http://www.heidenheim.dhbw.de/startseite.html">© 2018 Duale Hochschule Baden-Württemberg</a>
+            </div>
+            <div class="col-sm-1">
+                <a href="https://www.facebook.com/">Folge uns auf</a>
+                <a href="https://www.facebook.com/"><img src="{% static 'Bilder/facebook.png' %}" alt="Bild" id="pic-login" style="height: 2em; width: 2em"></a>
+            </div>
 
+            <div class="col-sm-1">
+                <a href="/impressum" style="font-weight:900">Impressum</a>
+            </div>
 </footer>
 
 {% block script %}{% endblock %}
