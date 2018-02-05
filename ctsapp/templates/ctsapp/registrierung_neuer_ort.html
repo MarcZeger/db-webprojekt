@@ -1,0 +1,29 @@
+{% extends 'ctsapp/main.html' %}
+{% block title %}CTS - Registrierung{% endblock %}
+{% block content %}
+{% load static %}
+    <div class="container">
+        <div class="text-center">
+            <h1>Registrierung - Neuer Ort</h1>
+        </div>
+        <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width:75%;height: 30px;line-height: 30px;">
+            Schritt 3 von 4
+        </div>
+        </div>
+    <form action="{% url 'registrierung' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Ortname</label>
+            <input type="text" name="ort_name" class="form-control" required>
+        </div>
+        <input type="hidden" name="ort_plz" value="{{ plz }}">
+        <input type="hidden" name="username" value="{{ username }}">
+        <input type="hidden" name="first_name" value="{{ first_name }}">
+        <input type="hidden" name="last_name" value="{{ last_name }}">
+        <input type="hidden" name="email" value="{{ email }}">
+        <input type="hidden" value="5" name="seite">
+        <button type="submit" id="button-submit">Weiter zu Schritt 2</button>
+    </form>
+    </div>
+{% endblock %}

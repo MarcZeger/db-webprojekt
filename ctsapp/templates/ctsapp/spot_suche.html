@@ -2,15 +2,39 @@
 {% block title %}CTS - Spot Suche{% endblock %}
 {% block content %}
 {% load static %}
-
 <div class="container">
+    <div class="text-center">
+        <h1>Spot-Code eingeben</h1>
+    </div>
+    <div class="row">
+    <form method="POST">
+        {% csrf_token %}
+        <p>Du bist das erste Mal an einem unserer Spots, dann gib hier den Code des Schlosses vor Ort ein.<br>Bei korrekter Eingabe des Codes, bekommst du die Punkte für diesen Spot gutgeschrieben.</p>
+        <div class="form-group" style="margin-top: 10px;">
+            <input type="text" name="code" class="col-sm-10" style="height: 42px" placeholder="Code">
+            <button type="submit" class="btn btn-default col-sm-2">Bestätigen</button>
+        </div>
+    </form>
+    </div>
+    {% if message_code %}
+    <div class="alert alert-{{ flag }} alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <p>{{ message_code }}</p>
+        {% if datum %}<p>Code eingegeben am: {{ datum|date:"d. M, Y" }}</p>{% endif %}
+        {% if flag == "success" %}
+            <p>Deine neue Punktzahl beträgt: {{ user.punktzahl|add:punktzahl}}</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+<div class="container" id="spot-search">
     <div class="text-center">
         <h1>Suche</h1>
     </div>
     <div class="row">
+        <p>Du bist auf der Suche nach einem Spot, an dem du trainieren kannst?<br>Dann kannst du hier durch Eingabe deines Wunschortes, die dazu bereits registrierten Spots anzeigen lassen. Lässt du das Feld leer, werden dir alle Spots angezeigt.</p>
     <form method="GET">
         <div class="form-group">
-            <p>{% lorem %}</p>
             <input type="text" name="ort" class="col-sm-10" style="height: 42px" placeholder="Ort">
             <button type="submit" class="btn btn-default col-sm-2">Suchen</button>
         </div>
@@ -19,7 +43,6 @@
     {% if message %}
         <h3>Suchergebnisse</h3>
             <div class="alert alert-danger alert-dismissable">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <p>{{ message }}</p>
             </div>
         {% endif %}
@@ -30,13 +53,13 @@
         <tr>
             <th>Bild</th>
             <th>Bezeichnung</th>
-            <th>Ort<button onclick="sortORT_auf()">⬆</button><button onclick="sortORT_ab()">⬇</button></th>
-            <th>Schwierigkeit<button onclick="sortSchwierigkeit_auf()">⬆</button><button onclick="sortSchwierigkeit_ab()">⬇</button></th>
-            <th>Bewertung<button onclick="sortBewertung_auf()">⬆</button><button onclick="sortBewertung_ab()">⬇</button></th>
+            <th><div class="table-header">Ort</div><span><div class="sort-buttons"><i onclick="sortORT_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortORT_ab()" class="fas fa-angle-down"></i></div></span></th>
+            <th><div class="table-header">Schwierigkeit</div><span><div class="sort-buttons"><i onclick="sortSchwierigkeit_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortSchwierigkeit_ab()" class="fas fa-angle-down"></i></div></span></th>
+            <th><div class="table-header">Bewertung</div><span><div class="sort-buttons"><i onclick="sortBewertung_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortBewertung_ab()" class="fas fa-angle-down"></i></div></span></th>
         </tr>
         {% for spot in spots %}
         <tr>
-            <td>Bild</td>
+            <td><img class="search-picture" src="{{ spot.bild_url }}"></td>
             <td><a href="/spot/{{ spot.spot_id }}">{{ spot.bezeichnung }}</a></td>
             <td>{{ spot.ort_id.name }}</td>
             <td>{{ spot.schwierigkeit_id.beschreibung }}</td>

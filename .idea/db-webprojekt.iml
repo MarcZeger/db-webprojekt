@@ -6,9 +6,6 @@
         <option name="rootFolder" value="$MODULE_DIR$/ctsproject" />
         <option name="settingsModule" value="settings.py" />
         <option name="manageScript" value="$MODULE_DIR$/manage.py" />
-        <option name="rootFolder" value="$USER_HOME$/Desktop/Studium/3. Semester/Webprojekt/GitHub/ctsproject" />
-        <option name="settingsModule" value="ctsproject/settings.py" />
-        <option name="manageScript" value="manage.py" />
         <option name="environment" value="&lt;map/&gt;" />
         <option name="doNotUseTestRunner" value="false" />
       </configuration>

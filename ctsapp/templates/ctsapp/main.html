@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
@@ -56,8 +57,19 @@
         <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
             <span class="glyphicon glyphicon-chevron-up"></span>
         </a>
-        <a href="/impressum">IMPRESSUM</a>
+        <div class="row">
+            <div class="col-sm-10">
+                <a href="http://www.heidenheim.dhbw.de/startseite.html"><img src="{% static 'Bilder/dhbw_weiss.png' %}" alt="Bild" id="pic-login" style="height: 2em; width: 5em"></a>
+                <a href="http://www.heidenheim.dhbw.de/startseite.html">© 2018 Duale Hochschule Baden-Württemberg</a>
+            </div>
+            <div class="col-sm-1">
+                <a href="https://www.facebook.com/">Folge uns auf</a>
+                <a href="https://www.facebook.com/"><img src="{% static 'Bilder/facebook.png' %}" alt="Bild" id="pic-login" style="height: 2em; width: 2em"></a>
+            </div>
 
+            <div class="col-sm-1">
+                <a href="/impressum" style="font-weight:900">Impressum</a>
+            </div>
 </footer>
 
 {% block script %}{% endblock %}
