@@ -31,7 +31,7 @@
     <!-- Wrapper for slides -->
     {% for  bild in bilder%}
       <div class="item {{ bild.first }}">
-        <img src="{{ bild.link }}" style="width: 100%;height: 300px;" alt="asd">
+        <img src="{{ bild.link }}" style="width: 100%;height: 300px;" alt="{{ bild.spot_id.bezeichnung }}" class="img-spot-detail">
       </div>
     {% endfor %}
     <!-- Left and right controls -->

@@ -226,3 +226,8 @@
       float: left;
       margin-left: 10px;
   }
+
+  .img-spot-detail {
+      -webkit-filter: None !important;
+      filter: None !important;
+  }
