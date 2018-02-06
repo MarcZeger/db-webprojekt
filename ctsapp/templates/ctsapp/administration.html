@@ -77,9 +77,22 @@
         </h3>
       </div>
       <div id="collapse2" class="panel-collapse collapse">
-        <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+          <div class="panel-body">
+          <p>Im folgenden Bereich kann ein Spot durch Angabe des Ortes und optional dem Name gesucht und danch gelöscht werden.</p>
+            <div class="form-group">
+                <label>Ort</label>
+                <input name="ortname" type="text" required id="ortname">
+            </div>
+            <div class="form-group">
+                <label>Name des Spots</label>
+                <input name="bezeichnung" type="text" id="bezeichnung">
+            </div>
+            <button onclick="get_spot_delete()">Spots anzeigen</button>
+          <form method="POST" action="/spot-loeschen/">
+              {% csrf_token %}
+            <div id="spot_delete"></div>
+          </form>
+        </div>
       </div>
     </div>
     <div class="panel panel-default">
@@ -143,6 +156,41 @@ xmlhttp.onreadystatechange = function() {
     }
 }
 xmlhttp.open("GET", "/api/get-code/" , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
+
+function get_spot_delete() {
+var parameter = "?ort="+ document.getElementById('ortname').value+"&bezeichnung="+document.getElementById('bezeichnung').value;
+var link = "/api/get-spot/" + parameter;
+output = "<div class=\"table-responsive\">\n" +
+    "    <table class=\"table\" id=\"ergebnis\">\n" +
+    "        <tr>\n" +
+    "            <th>Bezeichnung</th>\n" +
+    "            <th><div class=\"table-header\">Ort</div></th>\n" +
+    "            <th><div class=\"table-header\">Schwierigkeit</div></th>\n" +
+    "            <th><div class=\"table-header\"></div></th>\n" +
+    "        </tr>\n";
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        for (x in myObj) {
+            output +=
+                    "<tr>\n"+
+        "            <td><a href=\"/spot/" + myObj[x].spot_id +"\">"+ myObj[x].bezeichnung +"</a></td>\n"+
+        "            <td>"+ myObj[x].ortname +"</td>\n"+
+        "            <td>"+  myObj[x].schwierigkeit  +"</td>\n"+
+        "            <td><button type='submit' value='"+ myObj[x].spot_id +"' name='spotid' class='btn btn-default'>Spot löschen<button</td>\n"+
+        "        </tr>\n";
+        }
+     output +=
+    "    </table>\n" +
+    "        </div>";
+        document.getElementById('spot_delete').innerHTML = output;
+    }
+}
+xmlhttp.open("GET", link , true);
 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 xmlhttp.send(); }
 </script>

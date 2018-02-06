@@ -287,9 +287,41 @@ def administration(request):
     
 def ort_api(request, plz):
     orte = get_ort_liste(plz)
+    print(orte)
     result_list = list(orte.values('name', 'ort_id'))
     return(JsonResponse(result_list, safe = False))
 
 def code_api(request):
     code = create_spot_code()
     return (JsonResponse({'code':code}, safe=False))
+
+def spot_api(request):
+    ortname = request.GET['ort']
+    bezeichnung = request.GET['bezeichnung']
+    spots_vor_bezeichnung = get_spot_list(ortname)
+    if type(spots_vor_bezeichnung) == str:
+        return JsonResponse({'spots':"Keine Ergebnisse"})
+    if bezeichnung != "":
+        spots_nach_bezeichnung = []
+        for spot in spots_vor_bezeichnung:
+            if spot.bezeichnung == bezeichnung:
+                spots_nach_bezeichnung.append(spot)
+    else:
+        spots_nach_bezeichnung = spots_vor_bezeichnung
+    spot_list = []
+    dict = {}
+    for item in spots_nach_bezeichnung:
+        print(item.bezeichnung)
+        dict['spot_id'] = item.spot_id
+        dict['bezeichnung'] = item.bezeichnung
+        dict['ortname'] = ortname
+        dict['schwierigkeit'] = item.schwierigkeit_id.beschreibung
+        spot_list.append(dict)
+        dict = {}
+    return(JsonResponse(spot_list, safe=False))
+
+def spot_loeschen(request):
+    spot_id = request.POST['spotid']
+    spot = Spot.objects.get(spot_id=spot_id)
+    spot.delete()
+    return(render(request,'ctsapp/spot_geloescht.html'))
