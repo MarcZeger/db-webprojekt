@@ -215,3 +215,7 @@ def create_spot_code():
         create_spot_code()
     else:
         return(code)
+
+def get_spielers(username):
+    spielers = Spieler.objects.filter(username__icontains=username)
+    return(spielers)

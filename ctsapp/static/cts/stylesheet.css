@@ -221,3 +221,8 @@
       margin-top: -3px;
       margin-right: -4px;
   }
+
+  .delete-spot * {
+      float: left;
+      margin-left: 10px;
+  }

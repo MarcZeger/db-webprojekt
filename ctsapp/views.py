@@ -308,10 +308,9 @@ def spot_api(request):
     spot_list = []
     dict = {}
     for item in spots_nach_bezeichnung:
-        print(item.bezeichnung)
         dict['spot_id'] = item.spot_id
         dict['bezeichnung'] = item.bezeichnung
-        dict['ortname'] = ortname
+        dict['ortname'] = item.ort_id.name
         dict['schwierigkeit'] = item.schwierigkeit_id.beschreibung
         spot_list.append(dict)
         dict = {}
@@ -322,3 +321,46 @@ def spot_loeschen(request):
     spot = Spot.objects.get(spot_id=spot_id)
     spot.delete()
     return(render(request,'ctsapp/spot_geloescht.html'))
+
+def user_api(request):
+    username = request.GET['username']
+    users = get_spielers(username)
+    users = list(users.values('email','username','first_name','last_name','spieler_id'))
+    return(JsonResponse(users, safe=False))
+
+def team_api(request):
+    teamname = request.GET['teamname']
+    teamid = get_teamid_by_name(teamname)
+    teams = []
+    for id in teamid:
+        teams.append(Team.objects.get(team_id=id))
+    dict={}
+    team_list = []
+    for team in teams:
+        dict['name'] = team.name
+        dict['team_id'] = team.team_id
+        team_list.append(dict)
+        dict = {}
+    return(JsonResponse(team_list,safe=False))
+
+def user_sperren(request):
+    spieler_id = request.POST['spieler_id']
+    spieler = Spieler.objects.get(spieler_id=spieler_id)
+    if spieler.is_active == 0:
+        spieler.is_active = 1
+    else:
+        spieler.is_active = 0
+    spieler.save()
+    return(render(request,'ctsapp/spot_geloescht.html'))
+
+def user_loeschen(request):
+    spieler_id = request.POST['spieler_id']
+    spieler = Spieler.objects.get(spieler_id=spieler_id)
+    spieler.delete()
+    return (render(request, 'ctsapp/spot_geloescht.html'))
+
+def team_loeschen(request):
+    team_id = request.POST['team_id']
+    team = Team.objects.get(team_id=team_id)
+    team.delete()
+    return (render(request, 'ctsapp/spot_geloescht.html'))

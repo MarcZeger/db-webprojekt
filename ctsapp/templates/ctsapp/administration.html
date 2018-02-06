@@ -79,7 +79,8 @@
       <div id="collapse2" class="panel-collapse collapse">
           <div class="panel-body">
           <p>Im folgenden Bereich kann ein Spot durch Angabe des Ortes und optional dem Name gesucht und danch gelöscht werden.</p>
-            <div class="form-group">
+            <div class="row delete-spot">
+              <div class="form-group">
                 <label>Ort</label>
                 <input name="ortname" type="text" required id="ortname">
             </div>
@@ -88,6 +89,7 @@
                 <input name="bezeichnung" type="text" id="bezeichnung">
             </div>
             <button onclick="get_spot_delete()">Spots anzeigen</button>
+            </div>
           <form method="POST" action="/spot-loeschen/">
               {% csrf_token %}
             <div id="spot_delete"></div>
@@ -102,21 +104,31 @@
         </h3>
       </div>
       <div id="collapse3" class="panel-collapse collapse">
-        <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+        <div class="panel-body">
+            <div class="row form-group delete-spot">
+            <label>Username</label>
+            <input id="username">
+            <button onclick="get_user()" class="btn btn-default">User anzeigen</button>
+            </div>
+            <div id="user"></div>
+        </div>
       </div>
     </div>
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Team sperren/löschen</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Team löschen</a>
         </h3>
       </div>
       <div id="collapse4" class="panel-collapse collapse">
-        <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+        <div class="panel-body">
+            <div class="row form-group delete-spot">
+            <label>Teamname</label>
+            <input id="teamname">
+            <button onclick="get_team()" class="btn btn-default">Team anzeigen</button>
+            </div>
+            <div id="team"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -188,6 +200,79 @@ xmlhttp.onreadystatechange = function() {
     "    </table>\n" +
     "        </div>";
         document.getElementById('spot_delete').innerHTML = output;
+    }
+}
+xmlhttp.open("GET", link , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
+
+function get_user() {
+var parameter = "?username="+ document.getElementById('username').value;
+var link = "/api/get-user/" + parameter;
+output = "<div class=\"table-responsive\">\n" +
+    "    <table class=\"table\" id=\"ergebnis\">\n" +
+    "        <tr>\n" +
+    "            <th><div class=\"table-header\">Username</div></th>\n" +
+    "            <th><div class=\"table-header\">Vorname</div></th>\n" +
+    "            <th><div class=\"table-header\">Nachname</div></th>\n" +
+                "<th><div class=\"table-header\">E-Mail</div></th>\n" +
+         "<th><div class=\"table-header\"></div></th>\n" +
+        "<th><div class=\"table-header\"></div></th>\n" +
+    "        </tr>\n";
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        for (x in myObj) {
+            output +=
+                    "<tr>\n"+
+        "            <td>"+ myObj[x].username +"</a></td>\n"+
+        "            <td>"+ myObj[x].first_name +"</td>\n"+
+        "            <td>"+  myObj[x].last_name  +"</td>\n"+
+        "            <td>"+  myObj[x].email  +"</td>\n"+
+        "            <td><form action='/user-sperren/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>User sperren</button></form></td>\n"+
+       "             <td><form action='/user-loeschen/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>User löschen</button></form></td>\n"+
+        "        </tr>\n";
+        }
+     output +=
+    "    </table>\n" +
+    "        </div>";
+        document.getElementById('user').innerHTML = output;
+    }
+}
+xmlhttp.open("GET", link , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
+
+function get_team() {
+var parameter = "?teamname="+ document.getElementById('teamname').value;
+var link = "/api/get-team/" + parameter;
+output = "<div class=\"table-responsive\">\n" +
+    "    <table class=\"table\" id=\"ergebnis\">\n" +
+    "        <tr>\n" +
+    "            <th><div class=\"table-header\">Team ID</div></th>\n" +
+    "            <th><div class=\"table-header\">Team Name</div></th>\n" +
+         "<th><div class=\"table-header\"></div></th>\n" +
+        "<th><div class=\"table-header\"></div></th>\n" +
+    "        </tr>\n";
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        for (x in myObj) {
+            output +=
+                    "<tr>\n"+
+        "            <td>"+ myObj[x].team_id +"</a></td>\n"+
+        "            <td>"+ myObj[x].name +"</td>\n"+
+       "             <td><form action='/team-loeschen/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].team_id +"' name='team_id' class='btn btn-default'>Team löschen</button></form></td>\n"+
+        "        </tr>\n";
+        }
+     output +=
+    "    </table>\n" +
+    "        </div>";
+        document.getElementById('team').innerHTML = output;
     }
 }
 xmlhttp.open("GET", link , true);

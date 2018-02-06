@@ -22,5 +22,10 @@ urlpatterns = [
     path('api/get-ort/<str:plz>', views.ort_api, name='ort_api'),
     path('api/get-code/', views.code_api, name='code_api'),
     path('api/get-spot/',views.spot_api, name='spot_api'),
-    path('spot-loeschen/',views.spot_loeschen, name='spot_loeschen')
+    path('api/get-user/',views.user_api, name='user_api'),
+    path('api/get-team/',views.team_api, name='team_api'),
+    path('spot-loeschen/',views.spot_loeschen, name='spot_loeschen'),
+    path('user-sperren/', views.user_sperren, name='user_sperren'),
+    path('user-loeschen/', views.user_loeschen, name='user_loeschen'),
+    path('team-loeschen/', views.team_loeschen, name='team_loeschen')
 ]
