@@ -20,5 +20,7 @@ urlpatterns = [
     path('impressum/', views.impressum, name="impressum"),
     path('administration/', views.administration, name="administration"),
     path('api/get-ort/<str:plz>', views.ort_api, name='ort_api'),
-    path('api/get-code/', views.code_api, name='code_api')
+    path('api/get-code/', views.code_api, name='code_api'),
+    path('api/get-spot/',views.spot_api, name='spot_api'),
+    path('spot-loeschen/',views.spot_loeschen, name='spot_loeschen')
 ]
