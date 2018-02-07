@@ -19,7 +19,7 @@
                 <a href="/mein_team">Zur Teamseite</a>
             {% endif %}
         {% else %}
-            <p> Du hast noch kein Team, dann kannst du dir hier durch Eingabe eines Teamnamen ein Team erstellen. Auf der Team-Seite kannst du dann weitere Spieler hinzufügen. </p>
+            <p> Du hast noch kein Team, dann kannst du dir hier durch Eingabe eines Teamnamen ein Team erstellen. Auf der Team-Seite kannst du dann weitere Spieler hinzufügen. Alternativ kann dich ein anderer Spieler in ein bestehendes Team einladen. </p>
             <form action="{% url 'team_erstellen' %}" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
