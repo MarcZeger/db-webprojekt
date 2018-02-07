@@ -1,0 +1,59 @@
+{% extends 'ctsapp/main.html' %}
+{% block title %}CTS - Registrierung{% endblock %}
+{% block content %}
+{% load static %}
+    <div class="container">
+        <div class="text-center">
+            <h1>Registrierung</h1>
+        </div>
+        {% if message %}
+            {% if flag %}
+            <div class="alert alert-danger alert-dismissable">
+                {{ message }}
+                <a href="/registrierung">Zurück zur Registrierung</a>
+            </div>
+            {% else %}
+            <div class="alert alert-success alert-dismissable">
+                {{ message }}
+                <a href="/login">Zum Login</a>
+            </div>
+            {% endif %}
+        {% else %}
+        <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width:66%;height: 30px;line-height: 30px;">
+            Schritt 2 von 3
+        </div>
+        </div>
+            <form action="{% url 'registrierung' %}" method="POST" >
+                {% csrf_token %}
+                <input type="hidden" value="4" name="seite">
+                <input type="hidden" value="{{ plz }}" name="plz">
+                <input type="hidden" name="username" value="{{ username }}">
+                <input type="hidden" name="first_name" value="{{ first_name }}">
+                <input type="hidden" name="last_name" value="{{ last_name }}">
+                <input type="hidden" name="email" value="{{ email }}">
+                <button type="submit" id="button-submit">Mein Heimatort ist nicht in der Liste</button>
+            </form>
+        <form action="{% url 'registrierung' %}" method="POST">
+        {% csrf_token %}
+         <div class="form-group">
+            <label>Heimatort</label>
+             {% for ort in orte %}
+            <div class="radio">
+                <label><input type="radio" name="ort" value="{{ ort.ort_id }}">{{ ort.name }}</label>
+            </div>
+             {% endfor %}
+        </div>
+        <input type="hidden" value="2" name="seite">
+        <input type="hidden" name="username" value="{{ username }}">
+        <input type="hidden" name="first_name" value="{{ first_name }}">
+        <input type="hidden" name="last_name" value="{{ last_name }}">
+        <input type="hidden" name="email" value="{{ email }}">
+        <button type="submit" id="button-submit" class="btn btn-default">Weiter zu Schritt 3</button>
+        </form>
+        </div>
+{% endif %}
+{% endblock %}
+{% block script %}
+
+{% endblock %}

@@ -1,0 +1,342 @@
+{% extends 'ctsapp/main.html' %}
+{% load static %}
+{% block title %}CTS - Administration{% endblock %}
+{% block content %}
+{% if meldung %}
+    <div class="container">
+    <div class="text-center">
+        <h2>Sie haben den Spot erfolgreich angelegt!</h2>
+        <a href="/administration">Zurück zur Verwaltung</a>
+    </div>
+    </div>
+{% else %}
+<div class="container">
+    <div class="text-center">
+      <h1 >Administration</h1>
+    </div>
+  <p>Auf dieser Seite kannst du Spots, Spieler und Teams verwalten.</p>
+  <div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" id="first-button">Spot anlegen</a>
+        </h3>
+      </div>
+      <div id="collapse1" class="panel-collapse collapse">
+        <div class="panel-body">
+                <div class="form-group spot-anlegen-code">
+        <label>Code: </label>
+        <p id="code"></p>
+        <button onclick="get_code()" class="btn btn-default">Code generieren</button>
+    </div>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>Spotname</label>
+            <input class="form-control" name="bezeichnung" required>
+        </div>
+        <div class="form-group">
+            <label>Beschreibung</label>
+            <input class="form-control" name="beschreibung" required>
+        </div>
+        <div class="form-group">
+            <label>Schwierigkeitsgrad</label>
+            <div class="radio">
+                {% for i in schwierigkeiten %}
+                <label><input name="schwierigkeit" type="radio" value="{{ i.schwierigkeit_id }}">{{ i.beschreibung }}</label><br>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Längengrad</label>
+            <input class="form-control" name="laengengrad" required>
+        </div>
+        <div class="form-group">
+            <label>Breitengrad</label>
+            <input class="form-control" name="breitengrad" required>
+        </div>
+        <div class="form-group">
+            <label>Postleitzahl</label>
+            <input class="form-control" name="plz" id="plz" onkeyup="get_orte()" required>
+        </div>
+        <div class="form-group">
+            <label>Ort</label>
+            <div id="auswahl"></div>
+        </div>
+        <input type="hidden" name="code" id="sendcode" required>
+        <button class="btn btn-default">Speichern</button>
+    </form>
+</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Spot löschen</a>
+        </h3>
+      </div>
+      <div id="collapse2" class="panel-collapse collapse">
+          <div class="panel-body">
+          <p>Im folgenden Bereich kann ein Spot durch Angabe des Ortes und optional dem Name gesucht und danch gelöscht werden.</p>
+            <div class="row delete-spot">
+              <div class="form-group">
+                <label>Ort</label>
+                <input name="ortname" type="text" required id="ortname">
+            </div>
+            <div class="form-group">
+                <label>Name des Spots</label>
+                <input name="bezeichnung" type="text" id="bezeichnung">
+            </div>
+            <button onclick="get_spot_delete()" class="btn btn-default">Spots anzeigen</button>
+            </div>
+          <form method="POST" action="/spot-loeschen/">
+              {% csrf_token %}
+            <div id="spot_delete"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Spieler sperren/löschen</a>
+        </h3>
+      </div>
+      <div id="collapse3" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="row form-group delete-spot">
+            <label>Username</label>
+            <input id="username">
+            <button onclick="get_user()" class="btn btn-default">User anzeigen</button>
+            </div>
+            <div id="user"></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Team löschen</a>
+        </h3>
+      </div>
+      <div id="collapse4" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="row form-group delete-spot">
+            <label>Teamname</label>
+            <input id="teamname">
+            <button onclick="get_team()" class="btn btn-default">Team anzeigen</button>
+            </div>
+            <div id="team"></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">User aus Team entfernen</a>
+      </h3>
+      </div>
+      <div id="collapse5" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="row form-group delete-spot">
+            <label>Username</label>
+            <input id="delete_user_team">
+            <button onclick="delete_user_team()" class="btn btn-default">User</button>
+            </div>
+            <div id="team"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endif %}
+{% endblock %}
+{% block script%}
+<script>
+function get_orte() {
+var feld = document.getElementById('plz').value;
+var link = "/api/get-ort/" + feld;
+output = "";
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        for (x in myObj) {
+            output += '<label><input type="radio" name="ort_id" value="'+ myObj[x].ort_id +'">' + myObj[x].name + '</label><br>';
+        }
+        document.getElementById('auswahl').innerHTML = output;
+    }
+}
+xmlhttp.open("GET", link , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
+
+function get_code() {
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        document.getElementById('code').innerText = myObj.code;
+        document.getElementById('sendcode').value = myObj.code;
+    }
+}
+xmlhttp.open("GET", "/api/get-code/" , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
+
+function get_spot_delete() {
+var parameter = "?ort="+ document.getElementById('ortname').value+"&bezeichnung="+document.getElementById('bezeichnung').value;
+var link = "/api/get-spot/" + parameter;
+output = "<div class=\"table-responsive\">\n" +
+    "    <table class=\"table\" id=\"ergebnis\">\n" +
+    "        <tr>\n" +
+    "            <th>Bezeichnung</th>\n" +
+    "            <th><div class=\"table-header\">Ort</div></th>\n" +
+    "            <th><div class=\"table-header\">Schwierigkeit</div></th>\n" +
+    "            <th><div class=\"table-header\"></div></th>\n" +
+    "        </tr>\n";
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        for (x in myObj) {
+            output +=
+                    "<tr>\n"+
+        "            <td><a href=\"/spot/" + myObj[x].spot_id +"\">"+ myObj[x].bezeichnung +"</a></td>\n"+
+        "            <td>"+ myObj[x].ortname +"</td>\n"+
+        "            <td>"+  myObj[x].schwierigkeit  +"</td>\n"+
+        "            <td><button type='submit' value='"+ myObj[x].spot_id +"' name='spotid' class='btn btn-default'>Spot löschen<button</td>\n"+
+        "        </tr>\n";
+        }
+     output +=
+    "    </table>\n" +
+    "        </div>";
+        document.getElementById('spot_delete').innerHTML = output;
+    }
+}
+xmlhttp.open("GET", link , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
+
+function get_user() {
+var parameter = "?username="+ document.getElementById('username').value;
+var link = "/api/get-user/" + parameter;
+var active = "";
+output = "<div class=\"table-responsive\">\n" +
+    "    <table class=\"table\" id=\"ergebnis\">\n" +
+    "        <tr>\n" +
+    "            <th><div class=\"table-header\">Username</div></th>\n" +
+    "            <th><div class=\"table-header\">Vorname</div></th>\n" +
+    "            <th><div class=\"table-header\">Nachname</div></th>\n" +
+                "<th><div class=\"table-header\">E-Mail</div></th>\n" +
+         "<th><div class=\"table-header\"></div></th>\n" +
+        "<th><div class=\"table-header\"></div></th>\n" +
+    "        </tr>\n";
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        for (x in myObj) {
+            if (myObj[x].is_active == false) {
+                active = "User entsperren";
+            }
+            else {
+                active = "User sperren";
+            }
+            output +=
+                    "<tr>\n"+
+        "            <td>"+ myObj[x].username +"</a></td>\n"+
+        "            <td>"+ myObj[x].first_name +"</td>\n"+
+        "            <td>"+  myObj[x].last_name  +"</td>\n"+
+        "            <td>"+  myObj[x].email  +"</td>\n"+
+        "            <td><form action='/user-sperren/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>" + active + "</button></form></td>\n"+
+       "             <td><form action='/user-loeschen/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>User löschen</button></form></td>\n"+
+        "        </tr>\n";
+        }
+     output +=
+    "    </table>\n" +
+    "        </div>";
+        document.getElementById('user').innerHTML = output;
+    }
+}
+xmlhttp.open("GET", link , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
+
+function get_team() {
+var parameter = "?teamname="+ document.getElementById('teamname').value;
+var link = "/api/get-team/" + parameter;
+output = "<div class=\"table-responsive\">\n" +
+    "    <table class=\"table\" id=\"ergebnis\">\n" +
+    "        <tr>\n" +
+    "            <th><div class=\"table-header\">Team ID</div></th>\n" +
+    "            <th><div class=\"table-header\">Team Name</div></th>\n" +
+         "<th><div class=\"table-header\"></div></th>\n" +
+        "<th><div class=\"table-header\"></div></th>\n" +
+    "        </tr>\n";
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        for (x in myObj) {
+            output +=
+                    "<tr>\n"+
+        "            <td>"+ myObj[x].team_id +"</a></td>\n"+
+        "            <td>"+ myObj[x].name +"</td>\n"+
+       "             <td><form action='/team-loeschen/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].team_id +"' name='team_id' class='btn btn-default'>Team löschen</button></form></td>\n"+
+        "        </tr>\n";
+        }
+     output +=
+    "    </table>\n" +
+    "        </div>";
+        document.getElementById('team').innerHTML = output;
+    }
+}
+xmlhttp.open("GET", link , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
+
+function delete_user_team() {
+var parameter = "?username="+ document.getElementById('delete_user_team').value;
+var link = "/api/get-user/" + parameter;
+var active = "";
+output = "<div class=\"table-responsive\">\n" +
+    "    <table class=\"table\" id=\"ergebnis\">\n" +
+    "        <tr>\n" +
+    "            <th><div class=\"table-header\">Username</div></th>\n" +
+    "            <th><div class=\"table-header\">Vorname</div></th>\n" +
+    "            <th><div class=\"table-header\">Nachname</div></th>\n" +
+                "<th><div class=\"table-header\">Team ID</div></th>\n" +
+         "<th><div class=\"table-header\"></div></th>\n" +
+    "        </tr>\n";
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        for (x in myObj) {
+            alert(myObj[x]);
+            output +=
+                    "<tr>\n"+
+        "            <td>"+ myObj[x].username +"</a></td>\n"+
+        "            <td>"+ myObj[x].first_name +"</td>\n"+
+        "            <td>"+  myObj[x].last_name  +"</td>\n"+
+          "            <td>"+  myObj[x].team_id  +"</td>\n"+
+        "            <td><form action='/user-team-entfernen/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>Spieler aus Team entfernen</button></form></td>\n"+
+        "        </tr>\n";
+        }
+     output +=
+    "    </table>\n" +
+    "        </div>";
+        document.getElementById('user').innerHTML = output;
+    }}
+}
+</script>
+{% endblock %}

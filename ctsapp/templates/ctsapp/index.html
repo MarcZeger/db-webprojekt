@@ -12,7 +12,7 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner" role="listbox">
       <div class="item active">
-        <img src="{% static 'Bilder/la.jpg' %}" alt="New York" width="1200" height="700">
+        <img src="{% static 'Bilder/la.jpg' %}" alt="New York" class="slider-picture">
         <div class="carousel-caption">
           <h3>Heidenheim</h3>
           <p>Die neuesten Spots in Heidenheim gibt es <a href="#">hier!</a></p>
@@ -20,7 +20,7 @@
       </div>
 
       <div class="item">
-        <img src="{% static 'Bilder/chicago.jpg' %}" alt="Chicago" width="1200" height="700">
+        <img src="{% static 'Bilder/chicago.jpg' %}" alt="Chicago" class="slider-picture">
         <div class="carousel-caption">
           <h3>Ulm</h3>
           <p>Auch in Ulm gibt es welche</p>
@@ -28,7 +28,7 @@
       </div>
 
       <div class="item">
-        <img src="{% static 'Bilder/ny.jpg' %}" alt="Los Angeles" width="1200" height="700">
+        <img src="{% static 'Bilder/ny.jpg' %}" alt="Los Angeles" class="slider-picture">
         <div class="carousel-caption">
           <h3>Aalen</h3>
           <p>Und auch in Aalen kann man Parcous machen</p>
@@ -47,15 +47,16 @@
     </a>
 </div>
 
-<!-- Container (The Band Section) -->
+
 <div id="band" class="container text-center">
   <h3>Über uns</h3>
-  <p><em>We love music!</em></p>
-  <p>We have created a fictional band website. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-  <br>
+  <p><em>Parkour lässt dich neue Wege gehen, auf der Straße und im Leben!</em></p>
+    <p>Capture the Spot ist ein Startup-Unternehmen mit 6 Mitarbeiten, welches sich mit der Sportart Parkour auseinandersetzt. Wir möchten den Spielern mit unserem System das lange Suchen nach Spots abnehmen, somit bleibt mehr Zeit für das Training. Durch zusätzliche Funktionen wie zum Beispiel das Erhalten von Punkten, das Erreichen von neuen Levels, das Bewerten von Spots sowie das Bilden von Teams wird Parkour noch reizvoller.</p>
+</div>
+<div class="container container-small-padding text-center">
     <h3>Beste Spots</h3>
   <div class="row">
-    {% for spot in spots %}
+    {% for spot in best_spots %}
     <div class="col-sm-4">
       <p class="text-center"><strong>{{ spot.bezeichnung }}</strong></p><br>
       <a href="#demo{{ spot.spot_id }}" data-toggle="collapse">
@@ -65,14 +66,14 @@
         <p>{{ spot.ort_id.name }}</p>
         <p>{{ spot.schwierigkeit_id.beschreibung }}</p>
         <p>{% for i in spot.bewertung %}★{% endfor %}</p>
+        <a href="/spot/{{ spot.spot_id }}">Zum Spot</a>
       </div>
     </div>
    {%  endfor %}
   </div>
 </div>
 
-<!-- Container (Contact Section) -->
-<div id="contact" class="container">
+<div id="contact" class="container container-small-padding">
 
   <h3 class="text-center">Beste Spieler</h3>
   <ul class="nav nav-tabs">
@@ -84,13 +85,51 @@
   <div class="tab-content">
       {% for spieler in spielers %}
     <div id="home{{ spieler.spieler_id }}" class="tab-pane fade in {{ spieler.active }}">
+      <h3>{{ forloop.counter }}. Platz</h3>
       <p><b>Punktzahl: </b>{{ spieler.punktzahl }}</p>
       <p><b>Team: </b>{{ spieler.team_id.name }}</p>
     </div>
       {% endfor %}
   </div>
   </div>
+  <div class="container container-small-padding">
+    <h3>Alle markierten Spots</h3>
+    <div id="map"></div>
+  </div>
 
 <!-- Add Google Maps -->
 <div id="googleMap"></div>
+{% endblock %}
+{% block script %}
+<script>
+      var map;
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 5,
+          center: new google.maps.LatLng(50.656941, 10.238056),
+          mapTypeId: 'terrain'
+        });
+
+
+        var features = [
+            {% for spot in spots %}
+                {
+                position: new google.maps.LatLng({{ spot.breitengrad }}, {{ spot.laengengrad }}),
+                },
+            {% endfor %}
+            ];
+
+        // Create markers.
+        features.forEach(function(feature) {
+          var marker = new google.maps.Marker({
+            position: feature.position,
+            map: map
+          });
+        });
+
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt2fnvdE4Za0wT6b129B4yxN48SbxFXYE&callback=initMap">
+    </script>
 {% endblock %}
