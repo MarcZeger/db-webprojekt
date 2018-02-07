@@ -34,6 +34,7 @@ def profil(request):
         for spot in spots:
             spot.bewertung = range(int(spot.bewertung))
             spot_list.append(spot)
+        spot_list = add_img_url(spot_list)
         liste['spots'] = spot_list
         return (render(request, 'ctsapp/profil.html', liste))
     else:
