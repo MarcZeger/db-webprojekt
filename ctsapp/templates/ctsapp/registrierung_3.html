@@ -1,0 +1,87 @@
+{% extends 'ctsapp/main.html' %}
+{% block title %}CTS - Registrierung{% endblock %}
+{% block content %}
+{% load static %}
+    <div class="container">
+        <div class="text-center">
+            <h1>Registrierung</h1>
+        </div>
+        {% if message %}
+            {% if flag %}
+            <div class="alert alert-danger alert-dismissable">
+                {{ message }}
+                <a href="/registrierung">Zurück zur Registrierung</a>
+            </div>
+            {% else %}
+            <div class="alert alert-success alert-dismissable">
+                {{ message }}
+                <a href="/login">Zum Login</a>
+            </div>
+            {% endif %}
+        {% else %}
+        <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width:100%;height: 30px;line-height: 30px;">
+            Schritt 3 von 3
+        </div>
+        </div>
+    <form action="{% url 'registrierung' %}" method="POST">
+        {% csrf_token %}
+         <div class="form-group">
+            <label>Passwort</label>
+            <input type="password" name="password" class="form-control" id="passwort1" required>
+        </div>
+         <div class="form-group">
+            <label>Passwort bestätigen</label>
+            <input type="password" name="password_2" class="form-control" id="passwort2"  required>
+        </div>
+        <div class="alert alert-danger alert-dismissable" style="display: none" id="warnung">
+            <div id="meldung"></div>
+         </div>
+        <input type="hidden" value="3" name="seite">
+        <input type="hidden" value="{{ ort }}" name="ort">
+        <input type="hidden" value="{{ email }}" name="email">
+        <input type="hidden" name="username" value="{{ username }}">
+        <input type="hidden" name="first_name" value="{{ first_name }}">
+        <input type="hidden" name="last_name" value="{{ last_name }}">
+        <button type="submit" id="button-submit" class="btn btn-default" disabled>Registrierung abschließen</button>
+    </form>
+    </div>
+{% endif %}
+{% endblock %}
+{% block script %}
+<script>
+    var passwort1 = document.getElementById("passwort1");
+    var passwort2 = document.getElementById("passwort2");
+
+passwort1.onkeyup = function() {
+    // Get the value of the input field
+    var passwort1 = document.getElementById("passwort1").value;
+    var passwort2 = document.getElementById("passwort2").value;
+    document.getElementById("meldung").innerHTML = passwort2
+
+    if (passwort1 != passwort2) {
+        document.getElementById("button-submit").disabled = true;
+        document.getElementById("meldung").innerHTML = "Die Passwörter stimmen nicht überein!";
+        document.getElementById("warnung").style.display = "block";
+    } else {
+        document.getElementById("button-submit").disabled = false;
+        document.getElementById("warnung").style.display = "none";
+    }
+}
+passwort2.onkeyup = function() {
+    // Get the value of the input field
+    var passwort1 = document.getElementById("passwort1").value;
+    var passwort2 = document.getElementById("passwort2").value;
+    document.getElementById("meldung").innerHTML = passwort2
+
+    if (passwort1 != passwort2) {
+        document.getElementById("button-submit").disabled = true;
+        document.getElementById("meldung").innerHTML = "Die Passwörter stimmen nicht überein!";
+        document.getElementById("warnung").style.display = "block";
+    } else {
+        document.getElementById("button-submit").disabled = false;
+        document.getElementById("warnung").style.display = "none";
+    }
+}
+</script>
+{% endblock %}

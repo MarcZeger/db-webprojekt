@@ -2,18 +2,41 @@
 {% load static %}
 {% block title %}CTS - Login{% endblock %}
 {% block content %}
-
-<!-- Container (Contact Section) -->
-<div class="container">
-    <h3>
-        Team erstellen
-    </h3>
-    <hr>
-
-
+    <div class="container">
+        <div class="text-center">
+            <h1>Team erstellen</h1>
+        </div>
+        {% if message %}
+            {% if flag %}
+                <div class="alert alert-danger alert-dismissable">
+                    {{ message }}
+                </div>
+                <a href="/team_erstellen">Team erstellen</a>
+            {% else %}
+                <div class="alert alert-success alert-dismissable">
+                    {{ message }}
+                </div>
+                <a href="/teams">Zur Teamseite</a>
+            {% endif %}
+        {% else %}
+            <form action="{% url 'team_erstellen' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label>Teamname</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+                <div class="alert alert-danger alert-dismissable" style="display: none" id="warnung">
+                    <div id="meldung"></div>
+                </div>
+                <button type="submit" id="button-submit">Team erstellen</button>
+            </form>
+        {% endif %}
     </div>
-
-
-</div>
-
+{% endblock %}
+{% block script %}
+<script>
+$(document).ready(function(){
+    document.getElementById("warnung").style.display = "none";
+});
+</script>
 {% endblock %}
