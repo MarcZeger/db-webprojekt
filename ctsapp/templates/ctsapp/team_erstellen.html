@@ -2,7 +2,6 @@
 {% load static %}
 {% block title %}CTS - Login{% endblock %}
 {% block content %}
-
     <div class="container">
         <div class="text-center">
             <h1>Team erstellen</h1>
@@ -19,7 +18,6 @@
                 </div>
                 <a href="/teams">Zur Teamseite</a>
             {% endif %}
-
         {% else %}
             <form action="{% url 'team_erstellen' %}" method="POST">
                 {% csrf_token %}
@@ -30,26 +28,14 @@
                 <div class="alert alert-danger alert-dismissable" style="display: none" id="warnung">
                     <div id="meldung"></div>
                 </div>
-                <button type="submit" id="button-submit" disabled>Team erstellen</button>
+                <button type="submit" id="button-submit">Team erstellen</button>
             </form>
         {% endif %}
-        <hr size="3px">
-        <div class="text-center">
-            <h1>Team beitreten</h1>
-        </div>
-        <div>
-
-
-        </div>
-
-
-
     </div>
 {% endblock %}
 {% block script %}
 <script>
 $(document).ready(function(){
-    document.getElementById("button-submit").disabled = false;
     document.getElementById("warnung").style.display = "none";
 });
 </script>

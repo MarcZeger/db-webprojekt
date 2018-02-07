@@ -7,8 +7,6 @@ import math
 from .functions import *
 from .models import *
 
-from .teams import *
-
 from django.core.exceptions import ObjectDoesNotExist
 
 
