@@ -9,14 +9,14 @@ from .models import *
 
 from django.core.exceptions import ObjectDoesNotExist
 
-
 # Create your views here.
 def index(request):
     best_spots = get_best_spots()
     best_spieler = get_best_spieler()
+    best_teams = get_best_team()
     all_spots = Spot.objects.all()
     center = get_map_center(all_spots)
-    liste = {'spielers':best_spieler, 'best_spots':best_spots,'spots':all_spots,'center':center}
+    liste = {'spielers': best_spieler, 'best_spots': best_spots, 'spots': all_spots, 'center': center, 'teams': best_teams}
     return(render(request,'ctsapp/index.html', liste))
 
 def kontakt(request):
@@ -369,7 +369,22 @@ def team_loeschen(request):
     return (render(request, 'ctsapp/spot_geloescht.html'))
 
 def teams(request):
-    return (render(request, 'ctsapp/teams.html'))
+    try:
+        teams = get_team_list(request.GET['teamname'])
+    except:
+        teams = None
+    teams = {'teams': teams}
+    return render(request, 'ctsapp/teams.html', teams)
+
+def team_detail(request, team_id):
+    if (request.user.is_authenticated):
+        team = Team.objects.get(team_id=team_id)
+        mitglieder = get_team_members(team.team_id)
+        punkte = get_team_punkte(mitglieder)
+        werte = {'members': mitglieder, 'punkte': punkte, 'team': team}
+        return render(request, 'ctsapp/team_detail.html', werte)
+    else:
+        return redirect('/login')
 
 def user_team_entfernen(request):
     spieler_id = request.POST['spieler_id']
