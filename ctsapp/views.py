@@ -323,7 +323,7 @@ def spot_loeschen(request):
 def user_api(request):
     username = request.GET['username']
     users = get_spielers(username)
-    users = list(users.values('email','username','first_name','last_name','spieler_id'))
+    users = list(users.values('email','username','first_name','last_name','spieler_id','is_active','team_id'))
     return(JsonResponse(users, safe=False))
 
 def team_api(request):

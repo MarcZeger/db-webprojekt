@@ -52,8 +52,9 @@
     </div>
   </div>
 </nav>
+<main>
 {% block content %}{% endblock %}
-
+</main>
 <!-- Footer -->
 <footer class="footer footer-sticky footer-bottom">
         <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
@@ -73,8 +74,6 @@
             </div>
         </div>
 </footer>
-
-{% block script %}{% endblock %}
 <script>
 $(document).ready(function(){
   //Footer-Position
@@ -119,5 +118,6 @@ $(document).ready(function(){
   });
 })
 </script>
+{% block script %}{% endblock %}
 </body>
 </html>
