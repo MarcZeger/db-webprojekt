@@ -5,12 +5,42 @@
 
 <!-- Container (Contact Section) -->
 <div class="container">
-    <h1>Teams</h1>
+    <div class="text-center">
+        <h1>Team suchen</h1>
+    </div>
+    <div class="row">
+        <p>Du willst schauen wie gut die anderen Teams sind? Dann geb hier den Teamname ein</p>
+    <form method="GET">
+        <div class="form-group">
+            <input type="text" name="teamname" class="col-sm-10" style="height: 42px" placeholder="Teamname">
+            <button type="submit" class="btn-spot btn-default col-sm-2">Suchen</button>
+        </div>
+    </form>
+    </div>
+    {% if message %}
+        <h3>Suchergebnisse</h3>
+            <div class="alert alert-danger alert-dismissable">
+            <p>{{ message }}</p>
+        </div>
+    {% endif %}
+    {% if teams %}
+        <h3>Suchergebnisse</h3>
+        <div class="table-responsive">
+            <table class="table" id="ergebnis">
+                <tr>
+                    <th>Teamname</th>
+                </tr>
+                {% for team in teams %}
+                <tr>
+                    <td><a href="/team_detail/{{ team.team_id }}">{{ team.name }}</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
 </div>
-
 {% endblock %}
 {% block script%}
-
 <script>
 
 </script>

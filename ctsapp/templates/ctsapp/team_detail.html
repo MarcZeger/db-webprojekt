@@ -1,0 +1,36 @@
+{% extends 'ctsapp/main.html' %}
+{% load static %}
+{% block title %}CTS - Login{% endblock %}
+{% block content %}
+
+<!-- Container (Contact Section) -->
+<div class="container">
+    <h4>
+        {{ team.name }}
+    </h4>
+    <hr>
+    <div class="punkte"><h1>Punkte: {{ punkte }}</h1></div>
+    <div class="mitglieder">
+        <h3>Mitglieder</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Platz</th>
+                    <th>Username</th>
+                    <th>Punkte</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for member in members %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ member.username }}</td>
+                    <td>{{ member.punktzahl }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

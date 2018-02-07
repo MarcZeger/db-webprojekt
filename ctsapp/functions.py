@@ -3,6 +3,7 @@ import math
 import time
 from django.core.files.storage import default_storage
 from random import randint
+from operator import itemgetter
 
 def get_bild_link(spot_id):
     bilder = Medium.objects.filter(spot_id=spot_id)
@@ -93,7 +94,64 @@ def get_best_spieler():
             counter += 1
         else:
             return(liste)
-          
+
+def get_best_team():
+    teams = Team.objects.all()
+    liste2 = []
+    counter = 1
+    for team in teams:
+        team.punkte = get_teampunkte(team.team_id)
+    new_team = sort_team(teams)
+    print(new_team)
+    print(type(new_team))
+    for team in new_team:
+        print("''")
+        print(type(team))
+        if counter == 1:
+            team.is_active = "active"
+            liste2.append(team)
+            counter += 1
+        elif counter < 4:
+            team.is_active = ""
+            liste2.append(team)
+            counter += 1
+    return(liste2)
+
+def sort_team(teams):
+    p1 = 0
+    p2 = 0
+    p3 = 0
+    list_team = [p1, p2, p3]
+    for team in teams:
+        par = int(team.punkte)
+        if par > p1:
+            p3 = p2
+            p2 = p1
+            p1 = par
+            list_team[2] = list_team[1]
+            list_team[1] = list_team[0]
+            list_team[0] = team
+        elif par <= p1 and par > p2:
+            p3 = p2
+            p2 = par
+            list_team[2] = list_team[1]
+            list_team[1] = team
+        elif par <= p3:
+            p3 = par
+            list_team[2] = team
+    return list_team
+
+def get_teampunkte(team_id):
+    liste = []
+    for member_id in Spieler.objects.raw(
+            "SELECT * FROM spieler WHERE team_id_id = " + str(team_id) + " ORDER BY punktzahl DESC"):
+        liste.append(member_id)
+    punkte = 0
+    for member in liste:
+        punkte_int = int(member.punktzahl)
+        punkte += punkte_int
+    return (punkte)
+ 
 def get_level(punktzahl):
     punktzahl = float(punktzahl)
     if (punktzahl < 1):
@@ -155,6 +213,10 @@ def get_spot_list(ortname):
     if spots == []:
         return("Leider konnten keine Ergebnisse gefunden werden!")
     return(spots)
+
+def get_team_list(teamname):
+    team = Team.objects.filter(name__icontains=teamname)
+    return(team)
 
 def save_file(file,spot_id,user_id):
     path = str(time.strftime("%Y-%m-%d-%H%M%S"))+str(user_id)+"_Spot_"+str(spot_id)+"_"+str(file.name)
@@ -248,6 +310,10 @@ def get_spielers(username):
     spielers = Spieler.objects.filter(username__icontains=username)
     return(spielers)
 
+def get_teamname_by_id(team_id):
+    team = Team.objects.get(team_id=team_id)
+    return team.name
+
 def get_besuchte_spots(user_id):
     user = Spieler.objects.get(spieler_id = user_id)
     visited = SpielerEntdecktSpot.objects.filter(spieler_id = user)
@@ -267,3 +333,4 @@ def update_bewertung(spot_id):
     bewertung_neu = round((summe/len(bewertungen)))
     spot.bewertung = bewertung_neu
     spot.save()
+
