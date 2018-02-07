@@ -141,10 +141,10 @@
         <div class="panel-body">
             <div class="row form-group delete-spot">
             <label>Username</label>
-            <input id="delete_user_team">
+            <input id="delete_user_team_input">
             <button onclick="delete_user_team()" class="btn btn-default">User</button>
             </div>
-            <div id="team"></div>
+            <div id="delete_user_team"></div>
         </div>
       </div>
     </div>
@@ -304,7 +304,7 @@ xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 xmlhttp.send(); }
 
 function delete_user_team() {
-var parameter = "?username="+ document.getElementById('delete_user_team').value;
+var parameter = "?username="+ document.getElementById('delete_user_team_input').value;
 var link = "/api/get-user/" + parameter;
 var active = "";
 output = "<div class=\"table-responsive\">\n" +
@@ -314,7 +314,7 @@ output = "<div class=\"table-responsive\">\n" +
     "            <th><div class=\"table-header\">Vorname</div></th>\n" +
     "            <th><div class=\"table-header\">Nachname</div></th>\n" +
                 "<th><div class=\"table-header\">Team ID</div></th>\n" +
-         "<th><div class=\"table-header\"></div></th>\n" +
+        "<th><div class=\"table-header\"></div></th>\n" +
     "        </tr>\n";
 
 xmlhttp = new XMLHttpRequest();
@@ -322,21 +322,23 @@ xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
         myObj = JSON.parse(this.responseText);
         for (x in myObj) {
-            alert(myObj[x]);
             output +=
                     "<tr>\n"+
         "            <td>"+ myObj[x].username +"</a></td>\n"+
         "            <td>"+ myObj[x].first_name +"</td>\n"+
         "            <td>"+  myObj[x].last_name  +"</td>\n"+
-          "            <td>"+  myObj[x].team_id  +"</td>\n"+
+        "            <td>"+  myObj[x].team_id  +"</td>\n"+
         "            <td><form action='/user-team-entfernen/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>Spieler aus Team entfernen</button></form></td>\n"+
         "        </tr>\n";
         }
      output +=
     "    </table>\n" +
     "        </div>";
-        document.getElementById('user').innerHTML = output;
-    }}
+        document.getElementById('delete_user_team').innerHTML = output;
+    }
 }
+xmlhttp.open("GET", link , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
 </script>
 {% endblock %}
