@@ -375,9 +375,15 @@ def team_verlassen(request):
     if (request.user.is_authenticated):
         if request.method == "POST":
             spieler = Spieler.objects.get(spieler_id=request.user.spieler_id)
+            team = spieler.team_id
+            mitglieder = get_team_members(request.user.team_id.team_id)
             spieler.team_id = None;
             spieler.save()
-            return render(request, 'ctsapp/team_wurde_verlassen.html')
+            if len(mitglieder) == 1:
+                team.delete()
+                return render(request, 'ctsapp/team_wurde_verlassen.html')
+            else:
+                return render(request, 'ctsapp/team_wurde_verlassen.html')
     else:
         return redirect('ctsapp/index.html')
 
