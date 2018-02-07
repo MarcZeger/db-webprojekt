@@ -62,7 +62,14 @@
       color: #555;
   }
   .btn {
-      padding: 10px 20px;
+      background-color: #333;
+      color: #f1f1f1;
+      border-radius: 0;
+      transition: .2s;
+  }
+
+  .btn-spot {
+      padding: 5.5px 20px;
       background-color: #333;
       color: #f1f1f1;
       border-radius: 0;

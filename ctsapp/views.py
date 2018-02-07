@@ -7,8 +7,6 @@ import math
 from .functions import *
 from .models import *
 
-from .teams import *
-
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -43,7 +41,6 @@ def profil(request):
     ProUG = UG/ges *100
     ProOG = OG/ges *100
     liste = {'level': level, 'UG': UG, 'OG': OG, 'levelUG':levelUG, 'levelOG':levelOG, 'ProOG':ProOG, 'ProUG':ProUG}
-
     return(render(request,'ctsapp/profil.html',liste))
 
 def login_custom(request):
@@ -147,15 +144,13 @@ def registrierung(request):
     else:
         return render(request, "ctsapp/registrierung_1.html")
 
-
-
 def teams(request):
     if (request.user.is_authenticated):
         if (request.user.team_id):
             mitglieder = get_team_members(request.user.team_id.team_id)
-            members = {'members': mitglieder}
-            return render(request, 'ctsapp/teams.html', members)
-            print(members)
+            punkte = get_team_punkte(mitglieder)
+            werte = {'members' : mitglieder, 'punkte' : punkte}
+            return render(request, 'ctsapp/teams.html', werte)
         else:
             return redirect('team_erstellen')
     else:

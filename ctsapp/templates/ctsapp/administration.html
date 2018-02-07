@@ -88,7 +88,7 @@
                 <label>Name des Spots</label>
                 <input name="bezeichnung" type="text" id="bezeichnung">
             </div>
-            <button onclick="get_spot_delete()">Spots anzeigen</button>
+            <button onclick="get_spot_delete()" class="btn btn-default">Spots anzeigen</button>
             </div>
           <form method="POST" action="/spot-loeschen/">
               {% csrf_token %}

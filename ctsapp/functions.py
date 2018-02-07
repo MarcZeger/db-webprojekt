@@ -40,6 +40,13 @@ def create_new_team(name):
     team = Team(name=name)
     team.save()
 
+def get_team_punkte(mitglieder):
+    punkte = 0
+    for member in mitglieder:
+        punkte_int = int(member.punktzahl)
+        punkte += punkte_int
+    return(punkte)
+
 def get_bewertungen(spot_id):
     bewertungen = SpielerBewertetSpot.objects.filter(spot_id=spot_id)
     for bewertung in bewertungen:
