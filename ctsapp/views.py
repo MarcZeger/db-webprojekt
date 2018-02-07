@@ -146,6 +146,13 @@ def teams(request):
     else:
         return redirect('index')
 
+def team_verlassen(request):
+    if (request.user.is_authenticated):
+        if request.method == "POST":
+            return redirect ('index')
+    else:
+        return redirect('index')
+
 def team_erstellen(request):
     if (request.user.is_authenticated):
         if (request.user.team_id):
@@ -340,6 +347,14 @@ def user_sperren(request):
         spieler.is_active = 0
     spieler.save()
     return(render(request,'ctsapp/spot_geloescht.html'))
+
+def user_team_add(request):
+    if (request.user.is_authenticated):
+        spieler_id = request.POST['spieler_id']
+        add_user_to_team(spieler_id, request.user.team_id)
+        return redirect('teams')
+    else:
+        return redirect('index')
 
 def user_loeschen(request):
     spieler_id = request.POST['spieler_id']

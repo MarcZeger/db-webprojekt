@@ -37,6 +37,11 @@ def set_teamid_to_user(name, user):
     spieler.team_id_id = int(t_id[0])
     spieler.save()
 
+def add_user_to_team(spieler_id,team_id):
+    spieler = Spieler.objects.get(spieler_id=spieler_id)
+    spieler.team_id = team_id
+    spieler.save()
+
 def create_new_team(name):
     team = Team(name=name)
     team.save()

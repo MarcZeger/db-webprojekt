@@ -50,8 +50,13 @@
       </div>
 
     </div>
-</div>
 
+    <form action="{% url 'team_verlassen' %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-default">Team verlassen!</button>
+    </form>
+
+    </div>
 
 {% endblock %}
 {% block script%}
@@ -84,7 +89,7 @@ xmlhttp.onreadystatechange = function() {
         "            <td>"+ myObj[x].first_name +"</td>\n"+
         "            <td>"+  myObj[x].last_name  +"</td>\n"+
         "            <td>"+  myObj[x].email  +"</td>\n"+
-        "            <td><form action='/user-sperren/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>User sperren</button></form></td>\n"+
+        "            <td><form action='/user-team-add/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>Hinzufügen</button></form></td>\n"+
         "        </tr>\n";
             }
         }
