@@ -257,3 +257,13 @@ def get_besuchte_spots(user_id):
         spots.append(spot)
     print(spots)
     return(spots)
+
+def update_bewertung(spot_id):
+    spot = Spot.objects.get(spot_id=spot_id)
+    bewertungen = SpielerBewertetSpot.objects.filter(spot_id=spot)
+    summe = 0
+    for bewertung in bewertungen:
+        summe += bewertung.bewertung
+    bewertung_neu = round((summe/len(bewertungen)))
+    spot.bewertung = bewertung_neu
+    spot.save()

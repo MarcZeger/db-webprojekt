@@ -396,6 +396,7 @@ def make_bewertung(request, spot_id):
             bewertung_text = request.POST['bewertung_text']
             bewertung = SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
             bewertung.save()
+            update_bewertung(spot_id)
             return(redirect('/profil/'))
         else:
             spot = {'spot_id':spot_id}
