@@ -146,13 +146,6 @@ def mein_team(request):
     else:
         return redirect('index')
 
-def team_verlassen(request):
-    if (request.user.is_authenticated):
-        if request.method == "POST":
-            return redirect('index')
-    else:
-        return redirect('index')
-
 def team_erstellen(request):
     if (request.user.is_authenticated):
         if (request.user.team_id):
@@ -377,6 +370,16 @@ def user_team_entfernen(request):
     spieler.team_id = None;
     spieler.save()
     return (render(request, 'ctsapp/spot_geloescht.html'))
+
+def team_verlassen(request):
+    if (request.user.is_authenticated):
+        if request.method == "POST":
+            spieler = Spieler.objects.get(spieler_id=request.user.spieler_id)
+            spieler.team_id = None;
+            spieler.save()
+            return render(request, 'ctsapp/team_wurde_verlassen.html')
+    else:
+        return redirect('ctsapp/index.html')
 
 def make_bewertung(request, spot_id):
     if request.user.is_authenticated:
