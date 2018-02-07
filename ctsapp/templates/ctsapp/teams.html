@@ -90,6 +90,7 @@ xmlhttp.onreadystatechange = function() {
         "            <td>"+  myObj[x].last_name  +"</td>\n"+
         "            <td>"+  myObj[x].email  +"</td>\n"+
         "            <td><form action='/user-team-add/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>Hinzufügen</button></form></td>\n"+
+
         "        </tr>\n";
             }
         }
