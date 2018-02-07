@@ -1,60 +1,38 @@
 {% extends 'ctsapp/main.html' %}
-{% block content %}
 {% load static %}
+{% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'cts/profil.css' %}" />
 <div class="container">
-
+    <h1 class="text-center">Profil</h1>
     <div class="row">
-        <div class="col-sm-5" style="background: green;">
+        <div class="col-sm-4" style="background: green;">
             <img class="rund" src={% static 'Bilder/goat.png' %} alt="Testbild" width="70%"/>
         </div>
-        <div class="col-sm-7">
-            <h1>
-                {{ user.username }}
-            </h1>
-            <table>
-                <tr>
-                    <td>
-                        <h3>Vorname:</h3>
-                    </td>
-                    <td>
-                        <h3>{{ user.first_name }}</h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h3>Nachname:</h3>
-                    </td>
-                    <td>
-                        <h3>{{ user.last_name }}</h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h3>Wohnort:</h3>
-                    </td>
-                    <td>
-                        <h3>{{ user.ort_id.name }}</h3>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h3>E-Mail:</h3>
-                    </td>
-                    <td>
-                        <h3>{{ user.email }}</h3>
-                    </td>
-                </tr>
-            </table>
+        <div class="col-sm-8">
+            <h3>Meine Daten</h3>
+            <div class="row underline">
+                <div class="col-sm-4"><b>Username:</b></div><div class="col-sm-8">{{ user.username }}</div>
+            </div>
+            <div class="row underline">
+                <div class="col-sm-4"><b>Vorname:</b></div><div class="col-sm-8">{{ user.first_name }}</div>
+            </div>
+            <div class="row underline">
+                <div class="col-sm-4"><b>Nachname:</b></div><div class="col-sm-8">{{ user.last_name }}</div>
+            </div>
+            <div class="row underline">
+                <div class="col-sm-4"><b>Wohnort:</b></div><div class="col-sm-8">{{ user.ort_id.name }}</div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4"><b>E-Mail:</b></div><div class="col-sm-8">{{ user.email }}</div>
+            </div>
         </div>
     </div>
     <div>
-        <h3>
-                Punktzahl: {{ user.punktzahl }}
-            </h3>
-            <h3>
-                Level: {{ level }}
-            </h3>
+        <div class="row">
+            <h3>Mein Level</h3>
+
+        <p><b>Punktzahl: {{ user.punktzahl }}</b></p>
+         <p><b>Level: {{ level }}</b></p>
             <div class="progress">
                 <div class="progress-bar progress-bar-info" role="progressbar" style="width: {{ ProUG }}%">
                     {{ UG }} Punkte
@@ -63,12 +41,34 @@
                     {{ OG }} Punkte
                 </div>
             </div>
-    </div>
-    <h2 style="padding-top: 2em">
-        Besuchte Spots
-    </h2>
-    <div>
-
+        </div>
     </div>
 </div>
+    <div class=" container container-small-padding">
+        <h3>Meine besuchten Spots</h3>
+         {% if spots %}
+    <div class="table-responsive">
+    <table class="table" id="ergebnis">
+        <tr>
+            <th>Bild</th>
+            <th>Bezeichnung</th>
+            <th><div class="table-header">Ort</div><span><div class="sort-buttons"><i onclick="sortORT_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortORT_ab()" class="fas fa-angle-down"></i></div></span></th>
+            <th><div class="table-header">Schwierigkeit</div><span><div class="sort-buttons"><i onclick="sortSchwierigkeit_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortSchwierigkeit_ab()" class="fas fa-angle-down"></i></div></span></th>
+            <th><div class="table-header">Bewertung</div><span><div class="sort-buttons"><i onclick="sortBewertung_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortBewertung_ab()" class="fas fa-angle-down"></i></div></span></th>
+        </tr>
+        {% for spot in spots %}
+        <tr>
+            <td><img class="search-picture" src="{{ spot.bild_url }}"></td>
+            <td><a href="/spot/{{ spot.spot_id }}">{{ spot.bezeichnung }}</a></td>
+            <td>{{ spot.ort_id.name }}</td>
+            <td>{{ spot.schwierigkeit_id.beschreibung }}</td>
+            <td style="display: none">{{ spot.schwierigkeit_id.punkte }}</td>
+            <td>{% for i in spot.bewertung %}★{% endfor %}</td>
+        </tr>
+        {% endfor %}
+    </table>
+        </div>
+
+    {% endif %}
+    </div>
 {% endblock %}

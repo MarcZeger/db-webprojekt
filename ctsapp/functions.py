@@ -247,3 +247,13 @@ def create_spot_code():
 def get_spielers(username):
     spielers = Spieler.objects.filter(username__icontains=username)
     return(spielers)
+
+def get_besuchte_spots(user_id):
+    user = Spieler.objects.get(spieler_id = user_id)
+    visited = SpielerEntdecktSpot.objects.filter(spieler_id = user)
+    spots = []
+    for visit in visited:
+        spot = Spot.objects.get(spot_id=visit.spot_id.spot_id)
+        spots.append(spot)
+    print(spots)
+    return(spots)

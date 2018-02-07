@@ -29,6 +29,12 @@ def zahl(request, zahl):
 def profil(request):
     if request.user.is_authenticated:
         liste = get_level(request.user.punktzahl)
+        spots = get_besuchte_spots(request.user.spieler_id)
+        spot_list = []
+        for spot in spots:
+            spot.bewertung = range(int(spot.bewertung))
+            spot_list.append(spot)
+        liste['spots'] = spot_list
         return (render(request, 'ctsapp/profil.html', liste))
     else:
         return (redirect('login'))
@@ -211,7 +217,6 @@ def spot_suche(request):
                 for spot in spots:
                     spot.bewertung = range(int(spot.bewertung))
                     spot_list.append(spot)
-                print(spot_list)
             else:
                 message = spots
             liste = {'spots':spot_list,'message':message}
