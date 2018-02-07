@@ -27,21 +27,11 @@ def zahl(request, zahl):
     return(render(request,'ctsapp/index.html', zahl))
 
 def profil(request):
-    punktzahl = request.user.punktzahl
-    punktzahl = float(punktzahl)
-    if (punktzahl == 0):
-        level = 1
+    if request.user.is_authenticated:
+        liste = get_level(request.user.punktzahl)
+        return (render(request, 'ctsapp/profil.html', liste))
     else:
-        level = math.floor( math.log10(punktzahl+20) / math.log10(1.25) - math.log10(20) / math.log10(1.25) ) +1
-    levelUG = 20 * 1.25 ** level
-    OG = math.ceil(punktzahl - levelUG)
-    levelOG = 20 * 1.25 ** (level+1)
-    UG = math.ceil(levelOG - punktzahl)
-    ges = OG + UG
-    ProUG = UG/ges *100
-    ProOG = OG/ges *100
-    liste = {'level': level, 'UG': UG, 'OG': OG, 'levelUG':levelUG, 'levelOG':levelOG, 'ProOG':ProOG, 'ProUG':ProUG}
-    return(render(request,'ctsapp/profil.html',liste))
+        return (redirect('login'))
 
 def login_custom(request):
     if request.user.is_authenticated:
@@ -153,6 +143,13 @@ def teams(request):
             return render(request, 'ctsapp/teams.html', werte)
         else:
             return redirect('team_erstellen')
+    else:
+        return redirect('index')
+
+def team_verlassen(request):
+    if (request.user.is_authenticated):
+        if request.method == "POST":
+            return redirect ('index')
     else:
         return redirect('index')
 
@@ -350,6 +347,14 @@ def user_sperren(request):
         spieler.is_active = 0
     spieler.save()
     return(render(request,'ctsapp/spot_geloescht.html'))
+
+def user_team_add(request):
+    if (request.user.is_authenticated):
+        spieler_id = request.POST['spieler_id']
+        add_user_to_team(spieler_id, request.user.team_id)
+        return redirect('teams')
+    else:
+        return redirect('index')
 
 def user_loeschen(request):
     spieler_id = request.POST['spieler_id']

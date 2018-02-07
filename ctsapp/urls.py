@@ -30,4 +30,6 @@ urlpatterns = [
     path('team-loeschen/', views.team_loeschen, name='team_loeschen'),
     path('user-team-entfernen/', views.user_team_entfernen, name='user_team_entfernen'),
     path('bewertung/<int:spot_id>', views.make_bewertung, name='make_bewertung'),
+    path('user-team-add/', views.user_team_add, name='user_team_add'),
+    path('team_verlassen/', views.team_verlassen, name='team_verlassen')
 ]
