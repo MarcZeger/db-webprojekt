@@ -1,4 +1,5 @@
 from .models import *
+import math
 import time
 from django.core.files.storage import default_storage
 from random import randint
@@ -87,7 +88,29 @@ def get_best_spieler():
             counter += 1
         else:
             return(liste)
-
+          
+def get_level(punktzahl):
+    punktzahl = float(punktzahl)
+    if (punktzahl < 1):
+        level = 1
+        UG = 0
+        OG = 5
+        levelUG = 0
+        levelOG = 5
+        ProUG = 0
+        ProOG = 100
+    else:
+        level = math.floor(math.log10(punktzahl + 20) / math.log10(1.25) - math.log10(20) / math.log10(1.25)) + 1
+        levelUG = 20 * 1.25 ** (level - 1) - 20
+        UG = math.ceil(punktzahl - levelUG)
+        levelOG = 20 * 1.25 ** (level) - 20
+        OG = math.ceil(levelOG - punktzahl)
+        ges = OG + UG
+        ProUG = UG / ges * 100
+        ProOG = OG / ges * 100
+    liste = {'level': level, 'UG': UG, 'OG': OG, 'levelUG': levelUG, 'levelOG': levelOG, 'ProOG': ProOG, 'ProUG': ProUG}
+    return liste
+  
 def check_spieler_spot(spot_id, spieler_id):
     try:
         check = SpielerEntdecktSpot.objects.get(spot_id=spot_id,spieler_id=spieler_id)

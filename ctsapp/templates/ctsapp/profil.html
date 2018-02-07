@@ -9,8 +9,47 @@
             <img class="rund" src={% static 'Bilder/goat.png' %} alt="Testbild" width="70%"/>
         </div>
         <div class="col-sm-7">
-            <h3>Name: {{ user.username }} </h3>
-            <h3>
+            <h1>
+                {{ user.username }}
+            </h1>
+            <table>
+                <tr>
+                    <td>
+                        <h3>Vorname:</h3>
+                    </td>
+                    <td>
+                        <h3>{{ user.first_name }}</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h3>Nachname:</h3>
+                    </td>
+                    <td>
+                        <h3>{{ user.last_name }}</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h3>Wohnort:</h3>
+                    </td>
+                    <td>
+                        <h3>{{ user.ort_id.name }}</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h3>E-Mail:</h3>
+                    </td>
+                    <td>
+                        <h3>{{ user.email }}</h3>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div>
+        <h3>
                 Punktzahl: {{ user.punktzahl }}
             </h3>
             <h3>
@@ -24,8 +63,12 @@
                     {{ OG }} Punkte
                 </div>
             </div>
-        </div>
     </div>
+    <h2 style="padding-top: 2em">
+        Besuchte Spots
+    </h2>
+    <div>
 
+    </div>
 </div>
 {% endblock %}
