@@ -33,6 +33,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/">START</a></li>
         <li><a href="/suche">SPOTS</a></li>
+        <li><a href="/teams">TEAMS</a></li>
         <li><a href="/kontakt">KONTAKT</a></li>
           {% if user.is_authenticated %}
         <li class="dropdown">
@@ -40,7 +41,7 @@
           <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="/profil">PROFIL</a></li>
-            <li><a href="/teams">TEAM</a></li>
+            <li><a href="/mein_team">TEAM</a></li>
             <li><a href="/administration">VERWALTUNG</a></li>
             <li><a href="/logout">LOGOUT</a></li>
           </ul>
@@ -116,7 +117,7 @@ $(document).ready(function(){
       });
     } // End if
   });
-})
+});
 </script>
 {% block script %}{% endblock %}
 </body>

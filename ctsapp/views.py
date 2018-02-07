@@ -134,13 +134,13 @@ def registrierung(request):
     else:
         return render(request, "ctsapp/registrierung_1.html")
 
-def teams(request):
+def mein_team(request):
     if (request.user.is_authenticated):
         if (request.user.team_id):
             mitglieder = get_team_members(request.user.team_id.team_id)
             punkte = get_team_punkte(mitglieder)
             werte = {'members' : mitglieder, 'punkte' : punkte}
-            return render(request, 'ctsapp/teams.html', werte)
+            return render(request, 'ctsapp/mein_team.html', werte)
         else:
             return redirect('team_erstellen')
     else:
@@ -149,7 +149,7 @@ def teams(request):
 def team_verlassen(request):
     if (request.user.is_authenticated):
         if request.method == "POST":
-            return redirect ('index')
+            return redirect('index')
     else:
         return redirect('index')
 
@@ -352,7 +352,7 @@ def user_team_add(request):
     if (request.user.is_authenticated):
         spieler_id = request.POST['spieler_id']
         add_user_to_team(spieler_id, request.user.team_id)
-        return redirect('teams')
+        return redirect('mein_team')
     else:
         return redirect('index')
 
@@ -367,6 +367,9 @@ def team_loeschen(request):
     team = Team.objects.get(team_id=team_id)
     team.delete()
     return (render(request, 'ctsapp/spot_geloescht.html'))
+
+def teams(request):
+    return (render(request, 'ctsapp/teams.html'))
 
 def user_team_entfernen(request):
     spieler_id = request.POST['spieler_id']
@@ -390,3 +393,4 @@ def make_bewertung(request, spot_id):
             return(render(request,'ctsapp/bewertung.html',spot))
     else:
         return (redirect('/login'))
+
