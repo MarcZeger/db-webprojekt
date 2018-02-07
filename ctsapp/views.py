@@ -29,6 +29,13 @@ def zahl(request, zahl):
 def profil(request):
     if request.user.is_authenticated:
         liste = get_level(request.user.punktzahl)
+        spots = get_besuchte_spots(request.user.spieler_id)
+        spot_list = []
+        for spot in spots:
+            spot.bewertung = range(int(spot.bewertung))
+            spot_list.append(spot)
+        spot_list = add_img_url(spot_list)
+        liste['spots'] = spot_list
         return (render(request, 'ctsapp/profil.html', liste))
     else:
         return (redirect('login'))
@@ -146,13 +153,6 @@ def mein_team(request):
     else:
         return redirect('index')
 
-def team_verlassen(request):
-    if (request.user.is_authenticated):
-        if request.method == "POST":
-            return redirect('index')
-    else:
-        return redirect('index')
-
 def team_erstellen(request):
     if (request.user.is_authenticated):
         if (request.user.team_id):
@@ -218,7 +218,6 @@ def spot_suche(request):
                 for spot in spots:
                     spot.bewertung = range(int(spot.bewertung))
                     spot_list.append(spot)
-                print(spot_list)
             else:
                 message = spots
             liste = {'spots':spot_list,'message':message}
@@ -393,6 +392,22 @@ def user_team_entfernen(request):
     spieler.save()
     return (render(request, 'ctsapp/spot_geloescht.html'))
 
+def team_verlassen(request):
+    if (request.user.is_authenticated):
+        if request.method == "POST":
+            spieler = Spieler.objects.get(spieler_id=request.user.spieler_id)
+            team = spieler.team_id
+            mitglieder = get_team_members(request.user.team_id.team_id)
+            spieler.team_id = None;
+            spieler.save()
+            if len(mitglieder) == 1:
+                team.delete()
+                return render(request, 'ctsapp/team_wurde_verlassen.html')
+            else:
+                return render(request, 'ctsapp/team_wurde_verlassen.html')
+    else:
+        return redirect('ctsapp/index.html')
+
 def make_bewertung(request, spot_id):
     if request.user.is_authenticated:
         if request.method == "POST":
@@ -402,6 +417,7 @@ def make_bewertung(request, spot_id):
             bewertung_text = request.POST['bewertung_text']
             bewertung = SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
             bewertung.save()
+            update_bewertung(spot_id)
             return(redirect('/profil/'))
         else:
             spot = {'spot_id':spot_id}

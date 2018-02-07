@@ -141,7 +141,6 @@ def sort_team(teams):
             list_team[2] = team
     return list_team
 
-
 def get_teampunkte(team_id):
     liste = []
     for member_id in Spieler.objects.raw(
@@ -152,11 +151,7 @@ def get_teampunkte(team_id):
         punkte_int = int(member.punktzahl)
         punkte += punkte_int
     return (punkte)
-
-
-
-
-          
+ 
 def get_level(punktzahl):
     punktzahl = float(punktzahl)
     if (punktzahl < 1):
@@ -318,3 +313,24 @@ def get_spielers(username):
 def get_teamname_by_id(team_id):
     team = Team.objects.get(team_id=team_id)
     return team.name
+
+def get_besuchte_spots(user_id):
+    user = Spieler.objects.get(spieler_id = user_id)
+    visited = SpielerEntdecktSpot.objects.filter(spieler_id = user)
+    spots = []
+    for visit in visited:
+        spot = Spot.objects.get(spot_id=visit.spot_id.spot_id)
+        spots.append(spot)
+    print(spots)
+    return(spots)
+
+def update_bewertung(spot_id):
+    spot = Spot.objects.get(spot_id=spot_id)
+    bewertungen = SpielerBewertetSpot.objects.filter(spot_id=spot)
+    summe = 0
+    for bewertung in bewertungen:
+        summe += bewertung.bewertung
+    bewertung_neu = round((summe/len(bewertungen)))
+    spot.bewertung = bewertung_neu
+    spot.save()
+

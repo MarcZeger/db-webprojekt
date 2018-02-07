@@ -48,7 +48,6 @@
             <div id="user"></div>
         </div>
       </div>
-
     </div>
 
     <form action="{% url 'team_verlassen' %}" method="POST">
@@ -62,7 +61,6 @@
 {% block script%}
 
 <script>
-$(document).ready(function(){
     function get_user() {
     var parameter = "?username="+ document.getElementById('username').value;
     var link = "/api/get-user/" + parameter;
@@ -101,7 +99,7 @@ $(document).ready(function(){
     }
     xmlhttp.open("GET", link , true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(); }
-});
+    xmlhttp.send();
+};
 </script>
 {% endblock %}
