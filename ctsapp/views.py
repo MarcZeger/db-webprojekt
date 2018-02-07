@@ -370,3 +370,27 @@ def team_loeschen(request):
 
 def teams(request):
     return (render(request, 'ctsapp/teams.html'))
+
+def user_team_entfernen(request):
+    spieler_id = request.POST['spieler_id']
+    spieler = Spieler.objects.get(spieler_id=spieler_id)
+    spieler.team_id = None;
+    spieler.save()
+    return (render(request, 'ctsapp/spot_geloescht.html'))
+
+def make_bewertung(request, spot_id):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            spot = Spot.objects.get(spot_id=spot_id)
+            user = Spieler.objects.get(spieler_id=request.user.spieler_id)
+            bewertung_zahl = request.POST['bewertung_zahl']
+            bewertung_text = request.POST['bewertung_text']
+            bewertung = SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
+            bewertung.save()
+            return(redirect('/profil/'))
+        else:
+            spot = {'spot_id':spot_id}
+            return(render(request,'ctsapp/bewertung.html',spot))
+    else:
+        return (redirect('/login'))
+
