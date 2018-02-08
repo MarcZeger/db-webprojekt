@@ -9,14 +9,14 @@ from .models import *
 
 from django.core.exceptions import ObjectDoesNotExist
 
-
 # Create your views here.
 def index(request):
     best_spots = get_best_spots()
     best_spieler = get_best_spieler()
+    best_teams = get_best_team()
     all_spots = Spot.objects.all()
     center = get_map_center(all_spots)
-    liste = {'spielers':best_spieler, 'best_spots':best_spots,'spots':all_spots,'center':center}
+    liste = {'spielers': best_spieler, 'best_spots': best_spots, 'spots': all_spots, 'center': center, 'teams': best_teams}
     return(render(request,'ctsapp/index.html', liste))
 
 def kontakt(request):
@@ -29,6 +29,13 @@ def zahl(request, zahl):
 def profil(request):
     if request.user.is_authenticated:
         liste = get_level(request.user.punktzahl)
+        spots = get_besuchte_spots(request.user.spieler_id)
+        spot_list = []
+        for spot in spots:
+            spot.bewertung = range(int(spot.bewertung))
+            spot_list.append(spot)
+        spot_list = add_img_url(spot_list)
+        liste['spots'] = spot_list
         return (render(request, 'ctsapp/profil.html', liste))
     else:
 <<<<<<< HEAD
@@ -147,13 +154,13 @@ def registrierung(request):
     else:
         return render(request, "ctsapp/registrierung_1.html")
 
-def teams(request):
+def mein_team(request):
     if (request.user.is_authenticated):
         if (request.user.team_id):
             mitglieder = get_team_members(request.user.team_id.team_id)
             punkte = get_team_punkte(mitglieder)
             werte = {'members' : mitglieder, 'punkte' : punkte}
-            return render(request, 'ctsapp/teams.html', werte)
+            return render(request, 'ctsapp/mein_team.html', werte)
         else:
             return redirect('team_erstellen')
     else:
@@ -224,7 +231,6 @@ def spot_suche(request):
                 for spot in spots:
                     spot.bewertung = range(int(spot.bewertung))
                     spot_list.append(spot)
-                print(spot_list)
             else:
                 message = spots
             liste = {'spots':spot_list,'message':message}
@@ -354,6 +360,14 @@ def user_sperren(request):
     spieler.save()
     return(render(request,'ctsapp/spot_geloescht.html'))
 
+def user_team_add(request):
+    if (request.user.is_authenticated):
+        spieler_id = request.POST['spieler_id']
+        add_user_to_team(spieler_id, request.user.team_id)
+        return redirect('mein_team')
+    else:
+        return redirect('index')
+
 def user_loeschen(request):
     spieler_id = request.POST['spieler_id']
     spieler = Spieler.objects.get(spieler_id=spieler_id)
@@ -365,3 +379,62 @@ def team_loeschen(request):
     team = Team.objects.get(team_id=team_id)
     team.delete()
     return (render(request, 'ctsapp/spot_geloescht.html'))
+
+def teams(request):
+    try:
+        teams = get_team_list(request.GET['teamname'])
+    except:
+        teams = None
+    teams = {'teams': teams}
+    return render(request, 'ctsapp/teams.html', teams)
+
+def team_detail(request, team_id):
+    if (request.user.is_authenticated):
+        team = Team.objects.get(team_id=team_id)
+        mitglieder = get_team_members(team.team_id)
+        punkte = get_team_punkte(mitglieder)
+        werte = {'members': mitglieder, 'punkte': punkte, 'team': team}
+        return render(request, 'ctsapp/team_detail.html', werte)
+    else:
+        return redirect('/login')
+
+def user_team_entfernen(request):
+    spieler_id = request.POST['spieler_id']
+    spieler = Spieler.objects.get(spieler_id=spieler_id)
+    spieler.team_id = None;
+    spieler.save()
+    return (render(request, 'ctsapp/spot_geloescht.html'))
+
+def team_verlassen(request):
+    if (request.user.is_authenticated):
+        if request.method == "POST":
+            spieler = Spieler.objects.get(spieler_id=request.user.spieler_id)
+            team = spieler.team_id
+            mitglieder = get_team_members(request.user.team_id.team_id)
+            spieler.team_id = None;
+            spieler.save()
+            if len(mitglieder) == 1:
+                team.delete()
+                return render(request, 'ctsapp/team_wurde_verlassen.html')
+            else:
+                return render(request, 'ctsapp/team_wurde_verlassen.html')
+    else:
+        return redirect('ctsapp/index.html')
+
+def make_bewertung(request, spot_id):
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            spot = Spot.objects.get(spot_id=spot_id)
+            user = Spieler.objects.get(spieler_id=request.user.spieler_id)
+            bewertung_zahl = request.POST['bewertung_zahl']
+            bewertung_text = request.POST['bewertung_text']
+            bewertung = SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
+            bewertung.save()
+            update_bewertung(spot_id)
+            return(redirect('/profil/'))
+        else:
+            spot = {'spot_id':spot_id}
+            return(render(request,'ctsapp/bewertung.html',spot))
+    else:
+        return (redirect('/login'))
+

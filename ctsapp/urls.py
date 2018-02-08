@@ -12,7 +12,7 @@ urlpatterns = [
     path('profil/', views.profil, name='profil'),
     path('registrierung/', views.registrierung, name='registrierung'),
     path('kontakt/', views.kontakt, name='kontakt'),
-    path('teams/', views.teams, name='teams'),
+    path('mein_team/', views.mein_team, name='mein_team'),
     path('team_erstellen/', views.team_erstellen, name='team_erstellen'),
     path('suche/', views.spot_suche, name="suche"),
     path('spot/<int:spot_id>', views.spot_detail, name='spot_detail'),
@@ -27,5 +27,12 @@ urlpatterns = [
     path('spot-loeschen/',views.spot_loeschen, name='spot_loeschen'),
     path('user-sperren/', views.user_sperren, name='user_sperren'),
     path('user-loeschen/', views.user_loeschen, name='user_loeschen'),
-    path('team-loeschen/', views.team_loeschen, name='team_loeschen')
+    path('team-loeschen/', views.team_loeschen, name='team_loeschen'),
+    path('user-team-entfernen/', views.user_team_entfernen, name='user_team_entfernen'),
+    path('bewertung/<int:spot_id>', views.make_bewertung, name='make_bewertung'),
+    path('user-team-add/', views.user_team_add, name='user_team_add'),
+    path('team_verlassen/', views.team_verlassen, name='team_verlassen'),
+    path('teams/', views.teams, name='teams'),
+    path('team_detail/<int:team_id>', views.team_detail, name='team_detail')
+
 ]

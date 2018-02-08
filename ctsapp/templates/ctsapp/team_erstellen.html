@@ -16,19 +16,19 @@
                 <div class="alert alert-success alert-dismissable">
                     {{ message }}
                 </div>
-                <a href="/teams">Zur Teamseite</a>
+                <a href="/mein_team">Zur Teamseite</a>
             {% endif %}
         {% else %}
+            <p> Du hast noch kein Team, dann kannst du dir hier durch Eingabe eines Teamnamen ein Team erstellen. Auf der Team-Seite kannst du dann weitere Spieler hinzufügen. Alternativ kann dich ein anderer Spieler in ein bestehendes Team einladen. </p>
             <form action="{% url 'team_erstellen' %}" method="POST">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label>Teamname</label>
-                    <input type="text" name="name" class="form-control" required>
-                </div>
-                <div class="alert alert-danger alert-dismissable" style="display: none" id="warnung">
+            <input type="text" name="name" class="col-sm-10" style="height: 42px" placeholder="Teamname" required>
+                    <div class="alert alert-danger alert-dismissable" class="col-sm-10" style="height: 42px" id="warnung" placeholder="Teamname">
                     <div id="meldung"></div>
                 </div>
-                <button type="submit" id="button-submit">Team erstellen</button>
+            <button type="submit" class="btn-spot btn-default col-sm-2" id="button-submit">Erstellen</button>
+                </div>
             </form>
         {% endif %}
     </div>

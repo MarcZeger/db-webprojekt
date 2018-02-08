@@ -5,98 +5,43 @@
 
 <!-- Container (Contact Section) -->
 <div class="container">
-    <h4>
-        {{ user.team_id.name }}
-    </h4>
-    <hr>
-    <div class="punkte"><h1>Punkte: {{ punkte }}</h1></div>
-    <div class="mitglieder">
-        <h3>Mitglieder</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Platz</th>
-                    <th>Username</th>
-                    <th>Punkte</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for member in members %}
-                <tr>
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ member.username }}</td>
-                    <td>{{ member.punktzahl }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    <div class="text-center">
+        <h1>Team suchen</h1>
     </div>
-
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Spieler hinzufügen</a>
-        </h3>
-      </div>
-      <div id="collapse3" class="panel-collapse collapse">
-        <div class="panel-body">
-            <div class="row form-group delete-spot">
-            <label>Username</label>
-            <input id="username">
-            <button onclick="get_user()" class="btn btn-default">User anzeigen</button>
-            </div>
-            <div id="user"></div>
+    <div class="row">
+        <p>Du willst schauen wie gut die anderen Teams sind? Dann geb hier den Teamname ein</p>
+    <form method="GET">
+        <div class="form-group">
+            <input type="text" name="teamname" class="col-sm-10" style="height: 42px" placeholder="Teamname">
+            <button type="submit" class="btn-spot btn-default col-sm-2">Suchen</button>
         </div>
-      </div>
-
+    </form>
     </div>
+    {% if message %}
+        <h3>Suchergebnisse</h3>
+            <div class="alert alert-danger alert-dismissable">
+            <p>{{ message }}</p>
+        </div>
+    {% endif %}
+    {% if teams %}
+        <h3>Suchergebnisse</h3>
+        <div class="table-responsive">
+            <table class="table" id="ergebnis">
+                <tr>
+                    <th>Teamname</th>
+                </tr>
+                {% for team in teams %}
+                <tr>
+                    <td><a href="/team_detail/{{ team.team_id }}">{{ team.name }}</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
 </div>
-
-
 {% endblock %}
 {% block script%}
-
 <script>
-
-function get_user() {
-var parameter = "?username="+ document.getElementById('username').value;
-var link = "/api/get-user/" + parameter;
-output = "<div class=\"table-responsive\">\n" +
-    "    <table class=\"table\" id=\"ergebnis\">\n" +
-    "        <tr>\n" +
-    "            <th><div class=\"table-header\">Username</div></th>\n" +
-    "            <th><div class=\"table-header\">Vorname</div></th>\n" +
-    "            <th><div class=\"table-header\">Nachname</div></th>\n" +
-                "<th><div class=\"table-header\">E-Mail</div></th>\n" +
-         "<th><div class=\"table-header\"></div></th>\n" +
-        "<th><div class=\"table-header\"></div></th>\n" +
-    "        </tr>\n";
-
-xmlhttp = new XMLHttpRequest();
-xmlhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-        myObj = JSON.parse(this.responseText);
-        for (x in myObj) {
-            if (myObj[x].team_id == null){
-            output +=
-                    "<tr>\n"+
-        "            <td>"+ myObj[x].username +"</a></td>\n"+
-        "            <td>"+ myObj[x].first_name +"</td>\n"+
-        "            <td>"+  myObj[x].last_name  +"</td>\n"+
-        "            <td>"+  myObj[x].email  +"</td>\n"+
-        "            <td><form action='/user-sperren/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>User sperren</button></form></td>\n"+
-        "        </tr>\n";
-            }
-        }
-     output +=
-    "    </table>\n" +
-    "        </div>";
-        document.getElementById('user').innerHTML = output;
-    }
-}
-xmlhttp.open("GET", link , true);
-xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-xmlhttp.send(); }
 
 </script>
 {% endblock %}
