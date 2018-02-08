@@ -32,6 +32,7 @@ urlpatterns = [
     path('bewertung/<int:spot_id>', views.make_bewertung, name='make_bewertung'),
     path('user-team-add/', views.user_team_add, name='user_team_add'),
     path('team_verlassen/', views.team_verlassen, name='team_verlassen'),
-    path('teams/', views.teams, name='teams')
+    path('teams/', views.teams, name='teams'),
+    path('team_detail/<int:team_id>', views.team_detail, name='team_detail')
 
 ]
