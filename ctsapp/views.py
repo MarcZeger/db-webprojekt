@@ -38,20 +38,7 @@ def profil(request):
         liste['spots'] = spot_list
         return (render(request, 'ctsapp/profil.html', liste))
     else:
-<<<<<<< HEAD
         return (redirect('login'))
-=======
-        level = math.floor( math.log10(punktzahl+20) / math.log10(1.25) - math.log10(20) / math.log10(1.25) ) +1
-    levelUG = 20 * 1.25 ** level
-    OG = math.ceil(punktzahl - levelUG)
-    levelOG = 20 * 1.25 ** (level+1)
-    UG = math.ceil(levelOG - punktzahl)
-    ges = OG + UG
-    ProUG = UG/ges *100
-    ProOG = OG/ges *100
-    liste = {'level': level, 'UG': UG, 'OG': OG, 'levelUG':levelUG, 'levelOG':levelOG, 'ProOG':ProOG, 'ProUG':ProUG}
-    return(render(request,'ctsapp/profil.html',liste))
->>>>>>> master
 
 def login_custom(request):
     if request.user.is_authenticated:
