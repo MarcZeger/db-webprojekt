@@ -90,6 +90,7 @@
           {% for spieler in spielers %}
         <div id="home{{ spieler.spieler_id }}" class="tab-pane fade in {{ spieler.active }}">
           <h3>{{ forloop.counter }}. Platz</h3>
+          <img src="{{ spieler.profilbild_url }}" id="index-profilbild" class="img-rounded">
           <p><b>Punktzahl: </b>{{ spieler.punktzahl }}</p>
           <p><b>Team: </b>{{ spieler.team_id.name }}</p>
         </div>
