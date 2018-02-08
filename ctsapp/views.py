@@ -76,7 +76,7 @@ def profil(request):
                 spieler.save()
                 #Webseite wieder zurückgeben
                 liste ['message'] = "Die Daten wurden erfolgreich geändert!"
-                return (render(request, 'ctsapp/profil.html', liste))
+                return (redirect('/login'))
     else:
         return (redirect('login'))
 
@@ -455,10 +455,23 @@ def make_bewertung(request, spot_id):
             user = Spieler.objects.get(spieler_id=request.user.spieler_id)
             bewertung_zahl = request.POST['bewertung_zahl']
             bewertung_text = request.POST['bewertung_text']
-            bewertung = SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
-            bewertung.save()
-            update_bewertung(spot_id)
-            return(redirect('/profil/'))
+            try:
+                bewertung = SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
+                bewertung.save()
+                update_bewertung(spot_id)
+                return(redirect('/profil/'))
+            except:
+                liste = get_level(request.user.punktzahl)
+                spots = get_besuchte_spots(request.user.spieler_id)
+                spot_list = []
+                for spot in spots:
+                    spot.bewertung = range(int(spot.bewertung))
+                    spot_list.append(spot)
+                spot_list = add_img_url(spot_list)
+                liste['spots'] = spot_list
+                liste['profilbild_url'] = get_profilbild_url(request.user.spieler_id)
+                liste['message'] = 'Pro Spieler ist nur eine Bewertung für einen Spot erlaubt.'
+                return(render(request,'ctsapp/profil.html',liste))
         else:
             spot = {'spot_id':spot_id}
             return(render(request,'ctsapp/bewertung.html',spot))
