@@ -62,7 +62,7 @@ def profil(request):
 
                 #Daten des Formulars annehmen und User updaten
                 try:
-                    ort_id = Ort.objects.get(ort_id=request.POST['ort_id'])
+                    ort_id = request.POST['ort_id']
                     email = request.POST['email']
                     last_name = request.POST['last_name']
                 except:
