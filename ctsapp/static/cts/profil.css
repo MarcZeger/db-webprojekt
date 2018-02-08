@@ -1,18 +1,10 @@
-.container {
-    padding: 80px 120px;
-}
-
-.rund {
-    border-radius: 200px;
-	-moz-border-radius: 200px;
-	-webkit-border-radius: 200px;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
 
 .row {
     display: block;
     margin-left: auto;
     margin-right: auto;
+}
+
+#profil-header {
+    margin-bottom: 1em;
 }

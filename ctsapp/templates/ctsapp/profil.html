@@ -4,11 +4,26 @@
     <link rel="stylesheet" type="text/css" href="{% static 'cts/profil.css' %}" />
 <div class="container">
     <h1 class="text-center">Profil</h1>
-    <div class="row">
-        <div class="col-sm-4" style="background: green;">
-            <img class="rund" src={% static 'Bilder/goat.png' %} alt="Testbild" width="70%"/>
+    <div class="row" id="profil-header">
+        <div class="col-sm-4">
+            <div class="col-sm-12">
+                <img class="rund img-rounded" src={{ profilbild_url }} alt="Testbild" id="profilbild"/>
+            </div>
         </div>
         <div class="col-sm-8">
+        <p><b>Punktzahl: {{ user.punktzahl }}</b></p>
+         <p><b>Level: {{ level }}</b></p>
+            <div class="progress">
+                <div class="progress-bar progress-bar-info" role="progressbar" style="width: {{ ProUG }}%">
+                    {{ UG }} Punkte
+                </div>
+                <div class="progress-bar progress-bar-warning" role="progressbar" style="width: {{ ProOG }}%">
+                    {{ OG }} Punkte
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="col-sm-12">
             <h3>Meine Daten</h3>
             <div class="row underline">
                 <div class="col-sm-4"><b>Username:</b></div><div class="col-sm-8">{{ user.username }}</div>
@@ -26,23 +41,29 @@
                 <div class="col-sm-4"><b>E-Mail:</b></div><div class="col-sm-8">{{ user.email }}</div>
             </div>
         </div>
-    </div>
-    <div>
-        <div class="row">
-            <h3>Mein Level</h3>
-
-        <p><b>Punktzahl: {{ user.punktzahl }}</b></p>
-         <p><b>Level: {{ level }}</b></p>
-            <div class="progress">
-                <div class="progress-bar progress-bar-info" role="progressbar" style="width: {{ ProUG }}%">
-                    {{ UG }} Punkte
-                </div>
-                <div class="progress-bar progress-bar-warning" role="progressbar" style="width: {{ ProOG }}%">
-                    {{ OG }} Punkte
+        <div class="col-sm-12">
+            <div class="panel-group" style="display: block;">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                        <a data-toggle="collapse" href="#collapse1">Profilbild ändern</a>
+                        </h3>
+                    </div>
+                    <div id="collapse1" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="file" name="file" accept="image/jpg, image/jpeg">
+                                </div>
+                                <input type="hidden" name="aktion" value="bild">
+                                <button type="submit" class="btn btn-default">Hochladen</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+            </div>
 </div>
     <div class=" container container-small-padding">
         <h3>Meine besuchten Spots</h3>

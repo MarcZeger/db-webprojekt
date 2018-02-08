@@ -84,6 +84,7 @@ def get_best_spieler():
     liste = []
     counter = 1
     for spieler in spielers:
+        spieler.profilbild_url = get_profilbild_url(spieler.spieler_id)
         if counter == 1:
             spieler.active = "active"
             liste.append(spieler)
@@ -225,15 +226,24 @@ def save_file(file,spot_id,user_id):
             destination.write(chunk)
     return("/media/"+str(path))
 
-def create_medium(path,user_id,spot_id,dateityp,profilbild=None):
+def save_profilbild(file,user_id):
+    path = str(time.strftime("%Y-%m-%d-%H%M%S"))+str(user_id)+"_profilbild_"+str(file.name)
+    with default_storage.open(path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    return("/media/"+str(path))
+
+def create_medium(path,user_id,spot_id,dateityp):
     spieler = Spieler.objects.get(spieler_id = user_id)
     spot = Spot.objects.get(spot_id=spot_id)
     datum = get_time()
-    if profilbild == None:
-        profilbild = 0
-    else:
-        profilbild = 1
-    medium = Medium.objects.create(dateityp=dateityp,link=path,spieler_id=spieler,spot_id=spot,erstelldatum=datum,profilbild_flag=profilbild)
+    medium = Medium.objects.create(dateityp=dateityp,link=path,spieler_id=spieler,spot_id=spot,erstelldatum=datum,profilbild_flag=0)
+    medium.save()
+
+def create_profilbild(path,user_id,dateityp):
+    spieler = Spieler.objects.get(spieler_id = user_id)
+    datum = get_time()
+    medium = Medium.objects.create(dateityp=dateityp,link=path,spieler_id=spieler,erstelldatum=datum,profilbild_flag=1)
     medium.save()
 
 def get_bilder(spot_id):
@@ -334,3 +344,9 @@ def update_bewertung(spot_id):
     spot.bewertung = bewertung_neu
     spot.save()
 
+def get_profilbild_url(user_id):
+    try:
+        medium = Medium.objects.get(spieler_id=user_id, profilbild_flag=1)
+        return(medium.link)
+    except:
+        return("/static/Bilder/goat.png")

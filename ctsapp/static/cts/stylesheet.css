@@ -238,3 +238,16 @@
       -webkit-filter: None !important;
       filter: None !important;
   }
+
+  #profilbild {
+      float: left;
+      height: 150px;
+  }
+
+  #index-profilbild {
+      height: 100px;
+  }
+
+  #index-profilbild:before {
+      float: left;
+  }

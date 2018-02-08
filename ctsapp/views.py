@@ -28,15 +28,29 @@ def zahl(request, zahl):
 
 def profil(request):
     if request.user.is_authenticated:
-        liste = get_level(request.user.punktzahl)
-        spots = get_besuchte_spots(request.user.spieler_id)
-        spot_list = []
-        for spot in spots:
-            spot.bewertung = range(int(spot.bewertung))
-            spot_list.append(spot)
-        spot_list = add_img_url(spot_list)
-        liste['spots'] = spot_list
-        return (render(request, 'ctsapp/profil.html', liste))
+        if request.method == "GET":
+            liste = get_level(request.user.punktzahl)
+            spots = get_besuchte_spots(request.user.spieler_id)
+            spot_list = []
+            for spot in spots:
+                spot.bewertung = range(int(spot.bewertung))
+                spot_list.append(spot)
+            spot_list = add_img_url(spot_list)
+            liste['spots'] = spot_list
+            liste['profilbild_url'] = get_profilbild_url(request.user.spieler_id)
+            return (render(request, 'ctsapp/profil.html', liste))
+        else:
+            choice = request.POST['aktion']
+            if choice == 'bild':
+                # Bild speichern
+                file = request.FILES['file']
+                type = "bild"
+                path = save_profilbild(file,request.user.spieler_id)
+                create_profilbild(path,request.user.spieler_id,type)
+                return(redirect('/profil'))
+            else:
+                pass
+
     else:
         return (redirect('login'))
 
