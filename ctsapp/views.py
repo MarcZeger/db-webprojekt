@@ -49,8 +49,34 @@ def profil(request):
                 create_profilbild(path,request.user.spieler_id,type)
                 return(redirect('/profil'))
             else:
-                pass
+                #Daten für die Seite laden
+                liste = get_level(request.user.punktzahl)
+                spots = get_besuchte_spots(request.user.spieler_id)
+                spot_list = []
+                for spot in spots:
+                    spot.bewertung = range(int(spot.bewertung))
+                    spot_list.append(spot)
+                spot_list = add_img_url(spot_list)
+                liste['spots'] = spot_list
+                liste['profilbild_url'] = get_profilbild_url(request.user.spieler_id)
 
+                #Daten des Formulars annehmen und User updaten
+                try:
+                    ort_id = Ort.objects.get(ort_id=request.POST['ort_id'])
+                    email = request.POST['email']
+                    last_name = request.POST['last_name']
+                except:
+                    liste['message'] = "Bitte füllen sie alle Felder des Formulars aus!"
+                    return(render(request,'ctsapp/profil.html',liste))
+                ort = Ort.objects.get(ort_id=ort_id)
+                spieler = Spieler.objects.get(spieler_id=request.user.spieler_id)
+                spieler.ort_id = ort
+                spieler.email = email
+                spieler.last_name = last_name
+                spieler.save()
+                #Webseite wieder zurückgeben
+                liste ['message'] = "Die Daten wurden erfolgreich geändert!"
+                return (render(request, 'ctsapp/profil.html', liste))
     else:
         return (redirect('login'))
 

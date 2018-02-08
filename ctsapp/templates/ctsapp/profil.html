@@ -4,6 +4,14 @@
     <link rel="stylesheet" type="text/css" href="{% static 'cts/profil.css' %}" />
 <div class="container">
     <h1 class="text-center">Profil</h1>
+
+        {% if message %}
+        <div class="alert alert-danger alert-dismissable">
+            <p>{{ message }}</p>
+        </div>
+        {% endif %}
+
+
     <div class="row" id="profil-header">
         <div class="col-sm-4">
             <div class="col-sm-12">
@@ -62,6 +70,40 @@
                         </div>
                     </div>
                 </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <a data-toggle="collapse" href="#collapse2">Allgemeine Daten ändern</a>
+                        </h3>
+                    </div>
+                    <div id="collapse2" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label>Nachname</label>
+                                    <input name ="last_name" type="text" class="form-control" value="{{ user.last_name }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>E-Mail</label>
+                                    <input name="email" type="email" class="form-control" value="{{ user.email }}" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Plz</label>
+                                    <input type="text" id="plz" class="form-control" value="{{ user.ort_id.plz }}" required onkeyup="get_orte()">
+                                </div>
+                                <div class="form-group">
+                                    <label>Wohnort</label>
+                                    <div id="wohnort">
+                                        <label><input type="radio" name="ort_id" value="{{ user.ort_id.ort_id }}">{{ user.ort_id.name }}</label>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="aktion" value="daten">
+                                <button type="submit" class="btn btn-default">Speichern</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
             </div>
 </div>
@@ -96,6 +138,40 @@
     </div>
 {% endblock %}
 {% block script %}
+<script>
+function get_orte() {
+var feld = document.getElementById('plz').value;
+var link = "/api/get-ort/" + feld;
+output = "";
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        for (x in myObj) {
+            output += '<label><input type="radio" name="ort_id" value="'+ myObj[x].ort_id +'">' + myObj[x].name + '</label><br>';
+        }
+        document.getElementById('wohnort').innerHTML = output;
+    }
+}
+xmlhttp.open("GET", link , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
+
+function get_code() {
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        document.getElementById('code').innerText = myObj.code;
+        document.getElementById('sendcode').value = myObj.code;
+    }
+}
+xmlhttp.open("GET", "/api/get-code/" , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
+</script>
 <script>
 function sortORT_auf() {
   var table, rows, switching, i, x, y, shouldSwitch;
