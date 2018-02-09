@@ -216,8 +216,14 @@ xmlhttp.onreadystatechange = function() {
      output +=
     "    </table>\n" +
     "        </div>";
-        document.getElementById('spot_delete').innerHTML = output;
+        if (myObj.spots != "Keine Ergebnisse" ) {
+            document.getElementById('spot_delete').innerHTML = output;
+        }
+        else {
+            document.getElementById('spot_delete').innerHTML = "Es wurden keine Spots gefunden!";
+        }
     }
+
 }
 xmlhttp.open("GET", link , true);
 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

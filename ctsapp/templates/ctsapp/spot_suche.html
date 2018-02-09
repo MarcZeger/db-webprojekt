@@ -64,7 +64,7 @@
             <td>{{ spot.ort_id.name }}</td>
             <td>{{ spot.schwierigkeit_id.beschreibung }}</td>
             <td style="display: none">{{ spot.schwierigkeit_id.punkte }}</td>
-            <td>{% for i in spot.bewertung %}★{% endfor %}</td>
+            <td>{% for i in spot.bewertung %}★{% empty %}-{% endfor %}</td>
         </tr>
         {% endfor %}
     </table>

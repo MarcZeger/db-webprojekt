@@ -64,6 +64,7 @@
     </div>
     <div class="container spot_detail_container">
     <h3>Bewertungen</h3>
+    {% if bewertungen %}
     <div class="table-responsive">
     <table class="table">
         <tr>
@@ -76,12 +77,15 @@
             <tr>
                 <td>{{ bewertung.spieler_id.username }}</td>
                 <td>{{ bewertung.datum|date:"d. M, Y"}}</td>
-                <td>{% for i in bewertung.bewertung %}★{% endfor %}</td>
+                <td>{% for i in bewertung.bewertung %}★{% empty %}-{% endfor %}</td>
                 <td>{{ bewertung.bewertung_text }}</td>
             </tr>
-        {% endfor %}
+            {% endfor %}
     </table>
     </div>
+    {% else %}
+    <p>Dieser Spot wurde noch nicht bewertet. Falls du den Spot bewerten willst, klicke <a href="/profil/#ergebnis">hier</a></p>
+    {% endif %}
     </div>
 {% endblock %}
 {% block script %}

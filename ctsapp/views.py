@@ -478,3 +478,5 @@ def make_bewertung(request, spot_id):
     else:
         return (redirect('/login'))
 
+def notfound(request):
+    return(render(request,'error/404.html'))

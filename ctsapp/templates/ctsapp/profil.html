@@ -131,6 +131,9 @@
             <td>{% for i in spot.bewertung %}★{% endfor %}</td>
             <td><a href="/bewertung/{{ spot.spot_id }}">Zur Bewertung</a></td>
         </tr>
+
+        {% empty %}
+            <p>Du hast noch keine Spots besucht. Gebe den Code von Spots in unserem Portal ein, um Punkte zu bekommen.</p>
         {% endfor %}
     </table>
         </div>
