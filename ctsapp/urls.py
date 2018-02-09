@@ -34,5 +34,6 @@ urlpatterns = [
     path('team_verlassen/', views.team_verlassen, name='team_verlassen'),
     path('teams/', views.teams, name='teams'),
     path('team_detail/<int:team_id>', views.team_detail, name='team_detail')
-
 ]
+
+handler404 = 'ctsapp.views.notfound'
