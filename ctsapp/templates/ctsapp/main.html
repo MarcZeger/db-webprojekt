@@ -77,16 +77,33 @@
     </footer>
 </body>
 <script>
-$(document).ready(function(){
-  //Footer-Position
-  var body_height = $('body').height()+20; // +20 gives space between div and footer
+window.addEventListener('resize', make_footer);
+
+function make_footer() {
+    //Footer-Position
+  var body_height = $('body').height(); // +20 gives space between div and footer
   var window_height = $(window).height();
-    if ( body_height + 130 <= window_height ) {
+    if ( body_height <= window_height ) {
         $('footer').removeClass('footer-bottom');
         $('footer').addClass('footer-sticky');
         $('.up-arrow').css('display', 'none');
     }else{
-        $('.up-arrow').css('display', 'block')
+        $('.up-arrow').css('display', 'block');
+        $('footer').removeClass('footer-sticky');
+        $('footer').addClass('footer-bottom');
+    }
+}
+
+$(document).ready(function(){
+  //Footer-Position
+  var body_height = $('body').height(); // +20 gives space between div and footer
+  var window_height = $(window).height();
+    if ( body_height <= window_height ) {
+        $('footer').removeClass('footer-bottom');
+        $('footer').addClass('footer-sticky');
+        $('.up-arrow').css('display', 'none');
+    }else{
+        $('.up-arrow').css('display', 'block');
         $('footer').removeClass('footer-sticky');
         $('footer').addClass('footer-bottom');
     }
