@@ -62,6 +62,7 @@ class Spieler(AbstractUser):
     team_id = models.ForeignKey('Team',on_delete=models.CASCADE, null=True)
     email = models.CharField(max_length=254)
     ort_id = models.ForeignKey('Ort',on_delete=models.CASCADE)
+    gamemaster_flag = models.BooleanField(default=False)
 
 
     class Meta:
