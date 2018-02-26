@@ -33,7 +33,9 @@ urlpatterns = [
     path('user-team-add/', views.user_team_add, name='user_team_add'),
     path('team_verlassen/', views.team_verlassen, name='team_verlassen'),
     path('teams/', views.teams, name='teams'),
-    path('team_detail/<int:team_id>', views.team_detail, name='team_detail')
+    path('team_detail/<int:team_id>', views.team_detail, name='team_detail'),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.activate, name='activate'),
+
 ]
 
 handler404 = 'ctsapp.views.notfound'
