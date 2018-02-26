@@ -70,7 +70,6 @@
         "            <th><div class=\"table-header\">Username</div></th>\n" +
         "            <th><div class=\"table-header\">Vorname</div></th>\n" +
         "            <th><div class=\"table-header\">Nachname</div></th>\n" +
-                    "<th><div class=\"table-header\">E-Mail</div></th>\n" +
              "<th><div class=\"table-header\"></div></th>\n" +
             "<th><div class=\"table-header\"></div></th>\n" +
         "        </tr>\n";
@@ -86,7 +85,6 @@
             "            <td>"+ myObj[x].username +"</a></td>\n"+
             "            <td>"+ myObj[x].first_name +"</td>\n"+
             "            <td>"+  myObj[x].last_name  +"</td>\n"+
-            "            <td>"+  myObj[x].email  +"</td>\n"+
             "            <td><form action='/user-team-add/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>Hinzufügen</button></form></td>\n"+
             "        </tr>\n";
                 }
