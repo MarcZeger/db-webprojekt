@@ -147,10 +147,12 @@ def registrierung(request):
                 else:
                     print("Benutzer wird angelegt")
                     user = Spieler(username=username, first_name=first_name, last_name=last_name, ort_id=Ort(ort_id=ort_id),
-                                   email=email, punktzahl=0)
+                                   email=email, punktzahl=0, is_active=False)
                     user.set_password(password)
                     user.save()
                     message = {'message': "Sie haben sich erfolgreich registriert!"}
+                    # Aktivierungsemail
+                    send_actication_email(request, user)
                     # Eventuell direkter login von User?
                     # login(request, user)
                     return render(request, 'ctsapp/registrierung_1.html', message)
@@ -269,22 +271,25 @@ def spot_detail(request, spot_id):
     if request.user.is_authenticated:
         if request.method == "GET":
             spot = get_spot(spot_id)
-            bilder = get_bilder(spot_id)
+            medien = get_medium(spot_id)
             bewertungen = get_bewertungen(spot_id)
-            liste = {'spot':spot, 'bilder':bilder, 'bewertungen':bewertungen}
+            liste = {'spot':spot, 'medien':medien, 'bewertungen':bewertungen}
 
         else:
             #Bild speichern
             spot_id = request.POST['spot']
-            file = request.FILES['file']
-            type = "bild"
-            path = save_file(file,spot_id,request.user.spieler_id)
+            type = request.POST['typ']
+            if type == 'bild':
+                file = request.FILES['file']
+                path = save_file(file,spot_id,request.user.spieler_id)
+            else:
+                path = request.POST['url']
             create_medium(path,request.user.spieler_id,spot_id,type)
             #Webseite zurückgeben
             spot = get_spot(spot_id)
-            bilder = get_bilder(spot_id)
+            medien = get_medium(spot_id)
             bewertungen = get_bewertungen(spot_id)
-            liste = {'spot': spot, 'bilder': bilder, 'bewertungen': bewertungen,'meldung':"Bild wurde erfolgreich hochgeladen!"}
+            liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen,'meldung':"Bild wurde erfolgreich hochgeladen!"}
         return render(request, 'ctsapp/spot_detail.html', liste)
     else:
         return (redirect('/login'))
@@ -480,3 +485,18 @@ def make_bewertung(request, spot_id):
 
 def notfound(request):
     return(render(request,'error/404.html'))
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = Spieler.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, Spieler.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return redirect('/login')
+        # return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+    else:
+        return HttpResponse('Activation link is invalid!')

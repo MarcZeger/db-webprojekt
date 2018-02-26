@@ -4,6 +4,12 @@ import time
 from django.core.files.storage import default_storage
 from random import randint
 from operator import itemgetter
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+from django.core.mail import EmailMessage
 
 def get_bild_link(spot_id):
     bilder = Medium.objects.filter(spot_id=spot_id)
@@ -246,16 +252,18 @@ def create_profilbild(path,user_id,dateityp):
     medium = Medium.objects.create(dateityp=dateityp,link=path,spieler_id=spieler,erstelldatum=datum,profilbild_flag=1)
     medium.save()
 
-def get_bilder(spot_id):
-    bilder = Medium.objects.filter(spot_id=spot_id)
+def get_medium(spot_id):
+    medien = Medium.objects.filter(spot_id=spot_id)
     counter = 0
-    for bild in bilder:
+    for medium in medien:
+        print(medium.dateityp)
         if counter == 0:
-            bild.first = "active"
+            medium.first = "active"
             counter += 1
         else:
-            bild.first = ""
-    return(bilder)
+            medium.first = ""
+    print("Return: "+str(medien))
+    return(medien)
 
 def get_map_center(spots):
     min_lat = float
@@ -350,3 +358,19 @@ def get_profilbild_url(user_id):
         return(medium.link)
     except:
         return("/static/Bilder/goat.png")
+
+def send_actication_email(request, user):
+    current_site = get_current_site(request)
+    mail_subject = 'Aktivierung des CTS Account'
+    message = render_to_string('email/acc_active_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode('utf8'),
+        'token': account_activation_token.make_token(user),
+    })
+    to_email = user.email
+    email = EmailMessage(
+        mail_subject, message, to=[to_email]
+    )
+    email.content_subtype = "html"
+    email.send()
