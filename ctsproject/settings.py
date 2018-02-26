@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-from .db_secret import get_password, get_host, get_user, get_name, get_engine, get_Port
+from .db_secret import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -131,3 +131,10 @@ AUTH_USER_MODEL = 'ctsapp.Spieler'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media').replace('\\', '/')
+
+#Mail Einstellungen
+EMAIL_HOST = get_mail_host()
+EMAIL_HOST_USER = get_mail_host_user()
+EMAIL_HOST_PASSWORD = get_host_password()
+EMAIL_PORT = get_mail_port()
+EMAIL_USE_TLS = get_tls()
