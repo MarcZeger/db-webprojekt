@@ -110,3 +110,4 @@ db_secret.py
 
 #Media-Ordner
 media/
+.idea/workspace.xml

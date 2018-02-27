@@ -41,7 +41,9 @@
               <ul class="dropdown-menu">
                 <li><a href="/profil">PROFIL</a></li>
                 <li><a href="/mein_team">TEAM</a></li>
+                {% if user.gamemaster_flag %}
                 <li><a href="/administration">VERWALTUNG</a></li>
+                {% endif %}
                 <li><a href="/logout">LOGOUT</a></li>
               </ul>
             </li>

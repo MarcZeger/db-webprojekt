@@ -150,7 +150,7 @@ def registrierung(request):
                                    email=email, punktzahl=0, is_active=False)
                     user.set_password(password)
                     user.save()
-                    message = {'message': "Sie haben sich erfolgreich registriert!"}
+                    message = {'message': "Sie haben einen Aktivierungslink per E-Mail bekommen. Bitte bestätigen Sie diesen, um den Account zu aktivieren."}
                     # Aktivierungsemail
                     send_actication_email(request, user)
                     # Eventuell direkter login von User?
@@ -299,25 +299,28 @@ def impressum(request):
 
 def administration(request):
     if request.user.is_authenticated:
-        if request.method == "POST":
-            bezeichnung = request.POST['bezeichnung']
-            beschreibung = request.POST['beschreibung']
-            laengengrad = request.POST['laengengrad']
-            breitengrad = request.POST['breitengrad']
-            plz = request.POST['plz']
-            ort_id = request.POST['ort_id']
-            schwierigkeit = request.POST['schwierigkeit']
-            code = request.POST['code']
-            ort = Ort.objects.get(ort_id=ort_id)
-            schwierigkeit = Schwierigkeit.objects.get(schwierigkeit_id=schwierigkeit)
-            spot = Spot.objects.create(code=code,bezeichnung=bezeichnung,beschreibung=beschreibung,bewertung=0,ort_id=ort,schwierigkeit_id=schwierigkeit,laengengrad=laengengrad,breitengrad=breitengrad)
-            meldung = {'meldung':True}
-            return(render(request,'ctsapp/administration.html',meldung))
+        if request.user.gamemaster_flag:
+            if request.method == "POST":
+                bezeichnung = request.POST['bezeichnung']
+                beschreibung = request.POST['beschreibung']
+                laengengrad = request.POST['laengengrad']
+                breitengrad = request.POST['breitengrad']
+                plz = request.POST['plz']
+                ort_id = request.POST['ort_id']
+                schwierigkeit = request.POST['schwierigkeit']
+                code = request.POST['code']
+                ort = Ort.objects.get(ort_id=ort_id)
+                schwierigkeit = Schwierigkeit.objects.get(schwierigkeit_id=schwierigkeit)
+                spot = Spot.objects.create(code=code,bezeichnung=bezeichnung,beschreibung=beschreibung,bewertung=0,ort_id=ort,schwierigkeit_id=schwierigkeit,laengengrad=laengengrad,breitengrad=breitengrad)
+                meldung = {'meldung':True}
+                return(render(request,'ctsapp/administration.html',meldung))
 
+            else:
+                schwierigkeiten = Schwierigkeit.objects.all()
+                schwierigkeiten = {'schwierigkeiten':schwierigkeiten}
+                return(render(request,'ctsapp/administration.html',schwierigkeiten))
         else:
-            schwierigkeiten = Schwierigkeit.objects.all()
-            schwierigkeiten = {'schwierigkeiten':schwierigkeiten}
-            return(render(request,'ctsapp/administration.html',schwierigkeiten))
+            return(redirect('/'))
     else:
         return (redirect('/login'))
     
@@ -461,8 +464,9 @@ def make_bewertung(request, spot_id):
             bewertung_zahl = request.POST['bewertung_zahl']
             bewertung_text = request.POST['bewertung_text']
             try:
-                bewertung = SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
-                bewertung.save()
+                print(bewertung_text)
+                print(bewertung_zahl)
+                SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
                 update_bewertung(spot_id)
                 return(redirect('/profil/'))
             except:
@@ -499,4 +503,4 @@ def activate(request, uidb64, token):
         return redirect('/login')
         # return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
     else:
-        return HttpResponse('Activation link is invalid!')
+        return HttpResponse('Dieser Link ist ungültig!')
