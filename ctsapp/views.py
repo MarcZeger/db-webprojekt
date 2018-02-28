@@ -38,6 +38,8 @@ def profil(request):
             spot_list = add_img_url(spot_list)
             liste['spots'] = spot_list
             liste['profilbild_url'] = get_profilbild_url(request.user.spieler_id)
+            orte = get_ort_liste(request.user.ort_id.plz)
+            liste['orte'] = orte
             return (render(request, 'ctsapp/profil.html', liste))
         else:
             choice = request.POST['aktion']
@@ -126,7 +128,6 @@ def registrierung(request):
             return(render(request,'ctsapp/registrierung_3.html',werte))
 
         elif request.POST['seite'] == "3":
-            print("schritt 3")
             username = request.POST['username']
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
@@ -135,17 +136,13 @@ def registrierung(request):
             password = request.POST['password']
             werte = {}
             if Spieler.objects.filter(username=username).exists():
-                print("Benutzername bereits vergeben")
                 message = {'message': "Benutzername bereits vergeben!", 'flag': 'wrong'}
                 werte.update(message)
             else:
-                print("Benutzername nicht vergeben")
                 if Spieler.objects.filter(email=email).exists():
-                    print("Email vergeben!")
                     message = {'message': "E-Mail Addresse bereits hinterlegt!", 'flag': 'wrong'}
                     werte.update(message)
                 else:
-                    print("Benutzer wird angelegt")
                     user = Spieler(username=username, first_name=first_name, last_name=last_name, ort_id=Ort(ort_id=ort_id),
                                    email=email, punktzahl=0, is_active=False)
                     user.set_password(password)
@@ -326,7 +323,6 @@ def administration(request):
     
 def ort_api(request, plz):
     orte = get_ort_liste(plz)
-    print(orte)
     result_list = list(orte.values('name', 'ort_id'))
     return(JsonResponse(result_list, safe = False))
 
@@ -432,12 +428,15 @@ def team_loeschen(request):
         return redirect('/login')
 
 def teams(request):
-    try:
-        teams = get_team_list(request.GET['teamname'])
-    except:
-        teams = None
-    teams = {'teams': teams}
-    return render(request, 'ctsapp/teams.html', teams)
+    if request.user.is_authenticated:
+        try:
+            teams = get_team_list(request.GET['teamname'])
+        except:
+            teams = None
+        teams = {'teams': teams}
+        return render(request, 'ctsapp/teams.html', teams)
+    else:
+        return redirect('/login')
 
 def team_detail(request, team_id):
     if (request.user.is_authenticated):
@@ -483,8 +482,6 @@ def make_bewertung(request, spot_id):
             bewertung_zahl = request.POST['bewertung_zahl']
             bewertung_text = request.POST['bewertung_text']
             try:
-                print(bewertung_text)
-                print(bewertung_zahl)
                 SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
                 update_bewertung(spot_id)
                 return(redirect('/profil/'))
@@ -501,7 +498,7 @@ def make_bewertung(request, spot_id):
                 liste['message'] = 'Pro Spieler ist nur eine Bewertung für einen Spot erlaubt.'
                 return(render(request,'ctsapp/profil.html',liste))
         else:
-            spot = {'spot_id':spot_id}
+            spot = {'spot_id': spot_id}
             return(render(request,'ctsapp/bewertung.html',spot))
     else:
         return (redirect('/login'))

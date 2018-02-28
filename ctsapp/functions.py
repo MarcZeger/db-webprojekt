@@ -65,7 +65,6 @@ def get_bewertungen(spot_id):
     bewertungen = SpielerBewertetSpot.objects.filter(spot_id=spot_id)
     for bewertung in bewertungen:
         bewertung.bewertung = range(int(bewertung.bewertung))
-        print(bewertung.datum)
     return(bewertungen)
 
 def get_spot(spot_id):
@@ -109,12 +108,7 @@ def get_best_team():
     counter = 1
     for team in teams:
         team.punkte = get_teampunkte(team.team_id)
-    new_team = sort_team(teams)
-    print(new_team)
-    print(type(new_team))
     for team in new_team:
-        print("''")
-        print(type(team))
         if counter == 1:
             team.is_active = "active"
             liste2.append(team)
@@ -188,14 +182,11 @@ def check_spieler_spot(spot_id, spieler_id):
     except:
         check = None
     if check == None:
-        print("False")
         return(False)
     else:
-        print(check.datum)
         return(check.datum)
 
 def set_spieler_spot(spot_id, spieler_id):
-    print("Set spieler spot")
     wert = SpielerEntdecktSpot.objects.create(spieler_id=spieler_id,spot_id=spot_id, datum=get_time())
     wert.save()
 
@@ -257,13 +248,11 @@ def get_medium(spot_id):
     medien = Medium.objects.filter(spot_id=spot_id)
     counter = 0
     for medium in medien:
-        print(medium.dateityp)
         if counter == 0:
             medium.first = "active"
             counter += 1
         else:
             medium.first = ""
-    print("Return: "+str(medien))
     return(medien)
 
 def get_map_center(spots):
@@ -297,7 +286,6 @@ def get_map_center(spots):
 def add_img_url(spot_list):
     for spot in spot_list:
         bild = Medium.objects.filter(spot_id=spot.spot_id)
-        print(bild)
         try:
             spot.bild_url = bild[0].link
         except:
@@ -340,7 +328,6 @@ def get_besuchte_spots(user_id):
     for visit in visited:
         spot = Spot.objects.get(spot_id=visit.spot_id.spot_id)
         spots.append(spot)
-    print(spots)
     return(spots)
 
 def update_bewertung(spot_id):
