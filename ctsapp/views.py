@@ -365,35 +365,45 @@ def spot_loeschen(request):
     return(render(request,'ctsapp/spot_geloescht.html'))
 
 def user_api(request):
-    username = request.GET['username']
-    users = get_spielers(username)
-    users = list(users.values('email','username','first_name','last_name','spieler_id','is_active','team_id','gamemaster_flag'))
-    return(JsonResponse(users, safe=False))
+    if request.user.is_authenticated:
+        username = request.GET['username']
+        users = get_spielers(username)
+        users = list(users.values('email','username','first_name','last_name','spieler_id','is_active','team_id','gamemaster_flag'))
+        return(JsonResponse(users, safe=False))
+    else:
+        return (JsonResponse({'error':'Zugang nur für angemeldete User!'}, safe=False))
 
 def team_api(request):
-    teamname = request.GET['teamname']
-    teamid = get_teamid_by_name(teamname)
-    teams = []
-    for id in teamid:
-        teams.append(Team.objects.get(team_id=id))
-    dict={}
-    team_list = []
-    for team in teams:
-        dict['name'] = team.name
-        dict['team_id'] = team.team_id
-        team_list.append(dict)
-        dict = {}
-    return(JsonResponse(team_list,safe=False))
+    if request.user.is_authenticated:
+        teamname = request.GET['teamname']
+        teamid = get_teamid_by_name(teamname)
+        teams = []
+        for id in teamid:
+            teams.append(Team.objects.get(team_id=id))
+        dict={}
+        team_list = []
+        for team in teams:
+            dict['name'] = team.name
+            dict['team_id'] = team.team_id
+            team_list.append(dict)
+            dict = {}
+        return(JsonResponse(team_list,safe=False))
+    else:
+        return (JsonResponse({'error': 'Zugang nur für angemeldete User!'}, safe=False))
 
 def user_sperren(request):
-    spieler_id = request.POST['spieler_id']
-    spieler = Spieler.objects.get(spieler_id=spieler_id)
-    if spieler.is_active == 0:
-        spieler.is_active = 1
+    if request.user.is_authenticated:
+        spieler_id = request.POST['spieler_id']
+        spieler = Spieler.objects.get(spieler_id=spieler_id)
+        if spieler.is_active == 0:
+            spieler.is_active = 1
+        else:
+            spieler.is_active = 0
+        spieler.save()
+        mail_gesperrt(spieler)
+        return(render(request,'ctsapp/spot_geloescht.html'))
     else:
-        spieler.is_active = 0
-    spieler.save()
-    return(render(request,'ctsapp/spot_geloescht.html'))
+        return (JsonResponse({'error': 'Zugang nur für angemeldete User!'}, safe=False))
 
 def user_team_add(request):
     if (request.user.is_authenticated):
@@ -404,16 +414,22 @@ def user_team_add(request):
         return redirect('index')
 
 def user_loeschen(request):
-    spieler_id = request.POST['spieler_id']
-    spieler = Spieler.objects.get(spieler_id=spieler_id)
-    spieler.delete()
-    return (render(request, 'ctsapp/spot_geloescht.html'))
+    if request.user.is_authenticated:
+        spieler_id = request.POST['spieler_id']
+        spieler = Spieler.objects.get(spieler_id=spieler_id)
+        spieler.delete()
+        return (render(request, 'ctsapp/spot_geloescht.html'))
+    else:
+        return redirect('/login')
 
 def team_loeschen(request):
-    team_id = request.POST['team_id']
-    team = Team.objects.get(team_id=team_id)
-    team.delete()
-    return (render(request, 'ctsapp/spot_geloescht.html'))
+    if request.user.is_authenticated:
+        team_id = request.POST['team_id']
+        team = Team.objects.get(team_id=team_id)
+        team.delete()
+        return (render(request, 'ctsapp/spot_geloescht.html'))
+    else:
+        return redirect('/login')
 
 def teams(request):
     try:
@@ -434,11 +450,14 @@ def team_detail(request, team_id):
         return redirect('/login')
 
 def user_team_entfernen(request):
-    spieler_id = request.POST['spieler_id']
-    spieler = Spieler.objects.get(spieler_id=spieler_id)
-    spieler.team_id = None;
-    spieler.save()
-    return (render(request, 'ctsapp/spot_geloescht.html'))
+    if request.user.is_authenticated:
+        spieler_id = request.POST['spieler_id']
+        spieler = Spieler.objects.get(spieler_id=spieler_id)
+        spieler.team_id = None;
+        spieler.save()
+        return (render(request, 'ctsapp/spot_geloescht.html'))
+    else:
+        return redirect('/login')
 
 def team_verlassen(request):
     if (request.user.is_authenticated):
@@ -506,12 +525,17 @@ def activate(request, uidb64, token):
         return HttpResponse('Dieser Link ist ungültig!')
 
 def gamemaster_rechte (request):
-    request.user.is_admin
-    spielerid = request.POST['spieler_id']
-    spieler = Spieler.objects.get(spieler_id=spielerid)
-    if spieler.gamemaster_flag == False:
-        spieler.gamemaster_flag = True
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            spielerid = request.POST['spieler_id']
+            spieler = Spieler.objects.get(spieler_id=spielerid)
+            if spieler.gamemaster_flag == False:
+                spieler.gamemaster_flag = True
+            else:
+                spieler.gamemaster_flag = False
+            spieler.save()
+            return(render(request, 'ctsapp/spot_geloescht.html'))
+        else:
+            return(HttpResponse('Keine Berechtigung!'))
     else:
-        spieler.gamemaster_flag = False
-    spieler.save()
-    return(render(request, 'ctsapp/spot_geloescht.html'))
+        return redirect('/login')

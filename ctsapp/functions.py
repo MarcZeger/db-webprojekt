@@ -387,3 +387,14 @@ def check_file(filepath):
     else:
         return False
 
+def mail_gesperrt(spieler):
+    mail_subject = 'Sperrung des Accounts'
+    message = render_to_string('email/spieler_gesperrt.html', {
+
+    })
+    to_email = spieler.email
+    email = EmailMessage(
+        mail_subject, message, to=[to_email]
+    )
+    email.content_subtype = "html"
+    email.send()
