@@ -278,18 +278,18 @@ def spot_detail(request, spot_id):
         else:
             #Bild speichern
             spot_id = request.POST['spot']
-            type = request.POST['typ']
-            if type == 'bild':
-                file = request.FILES['file']
-                path = save_file(file,spot_id,request.user.spieler_id)
-            else:
-                path = request.POST['url']
-            create_medium(path,request.user.spieler_id,spot_id,type)
-            #Webseite zurückgeben
+            file = request.FILES['file']
+            # Webseite zurückgeben
             spot = get_spot(spot_id)
             medien = get_medium(spot_id)
             bewertungen = get_bewertungen(spot_id)
-            liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen,'meldung':"Bild wurde erfolgreich hochgeladen!"}
+            if check_file(file.name) != False:
+                type = check_file(file.name)
+                path = save_file(file,spot_id,request.user.spieler_id)
+                create_medium(path,request.user.spieler_id,spot_id,type)
+                liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen,'meldung':"Bild wurde erfolgreich hochgeladen!"}
+            else:
+                liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen,'meldung':"Leider ist das Dateiformat falsch.", 'error':True}
         return render(request, 'ctsapp/spot_detail.html', liste)
     else:
         return (redirect('/login'))
@@ -367,7 +367,7 @@ def spot_loeschen(request):
 def user_api(request):
     username = request.GET['username']
     users = get_spielers(username)
-    users = list(users.values('email','username','first_name','last_name','spieler_id','is_active','team_id'))
+    users = list(users.values('email','username','first_name','last_name','spieler_id','is_active','team_id','gamemaster_flag'))
     return(JsonResponse(users, safe=False))
 
 def team_api(request):
@@ -504,3 +504,14 @@ def activate(request, uidb64, token):
         # return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
     else:
         return HttpResponse('Dieser Link ist ungültig!')
+
+def gamemaster_rechte (request):
+    request.user.is_admin
+    spielerid = request.POST['spieler_id']
+    spieler = Spieler.objects.get(spieler_id=spielerid)
+    if spieler.gamemaster_flag == False:
+        spieler.gamemaster_flag = True
+    else:
+        spieler.gamemaster_flag = False
+    spieler.save()
+    return(render(request, 'ctsapp/spot_geloescht.html'))

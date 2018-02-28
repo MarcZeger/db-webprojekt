@@ -158,6 +158,25 @@
         </div>
       </div>
     </div>
+{% if user.is_superuser %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse6" onclick="make_footer()">Gamemaster Rechte vergeben/entziehen</a>
+        </h3>
+      </div>
+      <div id="collapse6" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="row form-group delete-spot">
+            <label>Username</label>
+            <input id="username_gamemaster">
+            <button onclick="get_user_gamemaster()" class="btn btn-default">User anzeigen</button>
+            </div>
+            <div id="user_gamemaster"></div>
+        </div>
+      </div>
+    </div>
+{% endif %}
   </div>
 
 
@@ -352,9 +371,55 @@ xmlhttp.onreadystatechange = function() {
     "        </div>";
         document.getElementById('delete_user_team').innerHTML = output;
     }
-}
+};
 xmlhttp.open("GET", link , true);
 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 xmlhttp.send(); }
+{% if user.is_superuser %}
+function get_user_gamemaster() {
+var parameter = "?username="+ document.getElementById('username_gamemaster').value;
+var link = "/api/get-user/" + parameter;
+var active = "";
+output = "<div class=\"table-responsive\">\n" +
+    "    <table class=\"table\" id=\"ergebnis\">\n" +
+    "        <tr>\n" +
+    "            <th><div class=\"table-header\">Username</div></th>\n" +
+    "            <th><div class=\"table-header\">Vorname</div></th>\n" +
+    "            <th><div class=\"table-header\">Nachname</div></th>\n" +
+                "<th><div class=\"table-header\">E-Mail</div></th>\n" +
+         "<th><div class=\"table-header\"></div></th>\n" +
+        "<th><div class=\"table-header\"></div></th>\n" +
+    "        </tr>\n";
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        for (x in myObj) {
+            if (myObj[x].gamemaster_flag == true) {
+                active = "Berechtigung entfernen";
+            }
+            else {
+                active = "Berechtigung hinzufügen";
+            }
+            output +=
+                    "<tr>\n"+
+        "            <td>"+ myObj[x].username +"</a></td>\n"+
+        "            <td>"+ myObj[x].first_name +"</td>\n"+
+        "            <td>"+  myObj[x].last_name  +"</td>\n"+
+        "            <td>"+  myObj[x].email  +"</td>\n"+
+        "            <td><form action='/user-gamemaster/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>" + active + "</button></form></td>\n"+
+        "        </tr>\n";
+        }
+     output +=
+    "    </table>\n" +
+    "        </div>";
+        document.getElementById('user_gamemaster').innerHTML = output;
+    }
+};
+xmlhttp.open("GET", link , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
+{% endif %}
 </script>
 {% endblock %}
