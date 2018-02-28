@@ -124,6 +124,25 @@
         </div>
       </div>
     </div>
+{% if user.is_superuser %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse6" onclick="make_footer()">Gamemaster Rechte vergeben/entziehen</a>
+        </h3>
+      </div>
+      <div id="collapse6" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="row form-group delete-spot">
+            <label>Username</label>
+            <input id="username_gamemaster">
+            <button onclick="get_user_gamemaster()" class="btn btn-default">User anzeigen</button>
+            </div>
+            <div id="user_gamemaster"></div>
+        </div>
+      </div>
+    </div>
+{% endif %}
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
@@ -158,25 +177,6 @@
         </div>
       </div>
     </div>
-{% if user.is_superuser %}
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse6" onclick="make_footer()">Gamemaster Rechte vergeben/entziehen</a>
-        </h3>
-      </div>
-      <div id="collapse6" class="panel-collapse collapse">
-        <div class="panel-body">
-            <div class="row form-group delete-spot">
-            <label>Username</label>
-            <input id="username_gamemaster">
-            <button onclick="get_user_gamemaster()" class="btn btn-default">User anzeigen</button>
-            </div>
-            <div id="user_gamemaster"></div>
-        </div>
-      </div>
-    </div>
-{% endif %}
   </div>
 
 
