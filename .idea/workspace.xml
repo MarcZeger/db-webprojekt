@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="58b43151-b10f-412d-8500-78bc4f7b848f" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/ctsapp/templates/email/acc_active_email.html" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/ctsapp/tokens.py" />
-      <change beforePath="$PROJECT_DIR$/.idea/db-webprojekt.iml" afterPath="$PROJECT_DIR$/.idea/db-webprojekt.iml" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/ctsapp/functions.py" afterPath="$PROJECT_DIR$/ctsapp/functions.py" />
-      <change beforePath="$PROJECT_DIR$/ctsapp/models.py" afterPath="$PROJECT_DIR$/ctsapp/models.py" />
       <change beforePath="$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html" afterPath="$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html" />
-      <change beforePath="$PROJECT_DIR$/ctsapp/templates/ctsapp/spot_detail.html" afterPath="$PROJECT_DIR$/ctsapp/templates/ctsapp/spot_detail.html" />
-      <change beforePath="$PROJECT_DIR$/ctsapp/urls.py" afterPath="$PROJECT_DIR$/ctsapp/urls.py" />
       <change beforePath="$PROJECT_DIR$/ctsapp/views.py" afterPath="$PROJECT_DIR$/ctsapp/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -41,36 +33,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ctsapp/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="371">
-              <caret line="498" column="33" lean-forward="true" selection-start-line="498" selection-start-column="33" selection-end-line="498" selection-end-column="33" />
+            <state relative-caret-position="554">
+              <caret line="470" column="44" lean-forward="true" selection-start-line="470" selection-start-column="44" selection-end-line="470" selection-end-column="44" />
               <folding>
                 <element signature="e#0#78#0" expanded="true" />
-                <marker date="1519660837702" expanded="true" signature="18752:18822" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ctsapp/urls.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="422">
-              <caret line="36" column="126" lean-forward="true" selection-start-line="36" selection-start-column="126" selection-end-line="36" selection-end-column="126" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tokens.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ctsapp/tokens.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="8" column="43" lean-forward="true" selection-start-line="8" selection-start-column="43" selection-end-line="8" selection-end-column="43" />
-              <folding>
-                <element signature="e#0#66#0" expanded="true" />
+                <marker date="1519746656403" expanded="true" signature="18986:19056" ph="..." />
               </folding>
             </state>
           </provider>
@@ -79,34 +49,14 @@
       <file leaf-file-name="functions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ctsapp/functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="374" column="34" lean-forward="true" selection-start-line="374" selection-start-column="34" selection-end-line="374" selection-end-column="34" />
+            <state relative-caret-position="270">
+              <caret line="352" column="5" lean-forward="true" selection-start-line="352" selection-start-column="5" selection-end-line="352" selection-end-column="5" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
                 <marker date="1519662416641" expanded="true" signature="1007:1092" ph="SELECT * FRO... spieler" />
                 <marker date="1519662416641" expanded="true" signature="1225:1280" ph="SELECT * FRO... team" />
                 <marker date="1519662416641" expanded="true" signature="4378:4463" ph="SELECT * FRO... spieler" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="acc_active_email.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ctsapp/templates/email/acc_active_email.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="administration.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/administration.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="32" lean-forward="true" selection-start-line="0" selection-start-column="32" selection-end-line="0" selection-end-column="32" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -136,6 +86,8 @@
       <find>logi</find>
       <find>login</find>
       <find>regis</find>
+      <find>reg</find>
+      <find>bewert</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -168,14 +120,14 @@
         <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/registrierung_1.html" />
         <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/administration.html" />
         <option value="$PROJECT_DIR$/ctsapp/static/cts/stylesheet.css" />
-        <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html" />
         <option value="$PROJECT_DIR$/ctsapp/models.py" />
         <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/spot_detail.html" />
         <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/tokens.py" />
-        <option value="$PROJECT_DIR$/ctsapp/views.py" />
         <option value="$PROJECT_DIR$/ctsapp/urls.py" />
         <option value="$PROJECT_DIR$/ctsapp/templates/email/acc_active_email.html" />
         <option value="$PROJECT_DIR$/ctsapp/functions.py" />
+        <option value="$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html" />
+        <option value="$PROJECT_DIR$/ctsapp/views.py" />
       </list>
     </option>
   </component>
@@ -185,9 +137,8 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
-    <option name="x" value="722" />
-    <option name="width" value="718" />
+  <component name="ProjectFrameBounds" fullScreen="true">
+    <option name="width" value="1440" />
     <option name="height" value="900" />
   </component>
   <component name="ProjectView">
@@ -205,7 +156,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -229,13 +179,6 @@
               <item name="db-webprojekt" type="462c0819:PsiDirectoryNode" />
               <item name="ctsapp" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
-              <item name="ctsapp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="db-webprojekt" type="b2602c69:ProjectViewProjectNode" />
-              <item name="db-webprojekt" type="462c0819:PsiDirectoryNode" />
-              <item name="ctsapp" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
               <item name="email" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -253,6 +196,7 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -329,7 +273,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -338,7 +282,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29262394" sideWeight="0.49713877" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18311875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1874106" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -607,7 +551,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" column="14" lean-forward="true" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -640,18 +583,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ctsapp/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="60" column="59" lean-forward="false" selection-start-line="60" selection-start-column="59" selection-end-line="60" selection-end-column="59" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ctsapp/templates/registration/login.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
           <caret line="21" column="77" lean-forward="false" selection-start-line="21" selection-start-column="77" selection-end-line="21" selection-end-column="77" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ctsapp/templates/email/acc_active_email.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ctsapp/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/administration.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="30" lean-forward="false" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
           <folding />
         </state>
       </provider>
@@ -666,45 +624,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ctsapp/urls.py">
+    <entry file="file://$PROJECT_DIR$/ctsapp/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="422">
-          <caret line="36" column="126" lean-forward="true" selection-start-line="36" selection-start-column="126" selection-end-line="36" selection-end-column="126" />
+        <state relative-caret-position="311">
+          <caret line="64" column="19" lean-forward="false" selection-start-line="64" selection-start-column="4" selection-end-line="64" selection-end-column="19" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/main.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="15" lean-forward="true" selection-start-line="0" selection-start-column="15" selection-end-line="0" selection-end-column="15" />
+        <state relative-caret-position="415">
+          <caret line="45" column="27" lean-forward="true" selection-start-line="45" selection-start-column="27" selection-end-line="45" selection-end-column="27" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ctsapp/templates/ctsapp/administration.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="32" lean-forward="true" selection-start-line="0" selection-start-column="32" selection-end-line="0" selection-end-column="32" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ctsapp/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="498" column="33" lean-forward="true" selection-start-line="498" selection-start-column="33" selection-end-line="498" selection-end-column="33" />
-          <folding>
-            <element signature="e#0#78#0" expanded="true" />
-            <marker date="1519660837702" expanded="true" signature="18752:18822" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ctsapp/functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="374" column="34" lean-forward="true" selection-start-line="374" selection-start-column="34" selection-end-line="374" selection-end-column="34" />
+        <state relative-caret-position="270">
+          <caret line="352" column="5" lean-forward="true" selection-start-line="352" selection-start-column="5" selection-end-line="352" selection-end-column="5" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
             <marker date="1519662416641" expanded="true" signature="1007:1092" ph="SELECT * FRO... spieler" />
@@ -714,11 +653,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ctsapp/templates/email/acc_active_email.html">
+    <entry file="file://$PROJECT_DIR$/ctsapp/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="7" lean-forward="true" selection-start-line="6" selection-start-column="7" selection-end-line="6" selection-end-column="7" />
-          <folding />
+        <state relative-caret-position="554">
+          <caret line="470" column="44" lean-forward="true" selection-start-line="470" selection-start-column="44" selection-end-line="470" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#78#0" expanded="true" />
+            <marker date="1519746656403" expanded="true" signature="18986:19056" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -150,7 +150,7 @@ def registrierung(request):
                                    email=email, punktzahl=0, is_active=False)
                     user.set_password(password)
                     user.save()
-                    message = {'message': "Sie haben sich erfolgreich registriert!"}
+                    message = {'message': "Sie haben einen Aktivierungslink per E-Mail bekommen. Bitte bestätigen Sie diesen, um den Account zu aktivieren."}
                     # Aktivierungsemail
                     send_actication_email(request, user)
                     # Eventuell direkter login von User?
@@ -278,18 +278,18 @@ def spot_detail(request, spot_id):
         else:
             #Bild speichern
             spot_id = request.POST['spot']
-            type = request.POST['typ']
-            if type == 'bild':
-                file = request.FILES['file']
-                path = save_file(file,spot_id,request.user.spieler_id)
-            else:
-                path = request.POST['url']
-            create_medium(path,request.user.spieler_id,spot_id,type)
-            #Webseite zurückgeben
+            file = request.FILES['file']
+            # Webseite zurückgeben
             spot = get_spot(spot_id)
             medien = get_medium(spot_id)
             bewertungen = get_bewertungen(spot_id)
-            liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen,'meldung':"Bild wurde erfolgreich hochgeladen!"}
+            if check_file(file.name) != False:
+                type = check_file(file.name)
+                path = save_file(file,spot_id,request.user.spieler_id)
+                create_medium(path,request.user.spieler_id,spot_id,type)
+                liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen,'meldung':"Bild wurde erfolgreich hochgeladen!"}
+            else:
+                liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen,'meldung':"Leider ist das Dateiformat falsch.", 'error':True}
         return render(request, 'ctsapp/spot_detail.html', liste)
     else:
         return (redirect('/login'))
@@ -299,25 +299,28 @@ def impressum(request):
 
 def administration(request):
     if request.user.is_authenticated:
-        if request.method == "POST":
-            bezeichnung = request.POST['bezeichnung']
-            beschreibung = request.POST['beschreibung']
-            laengengrad = request.POST['laengengrad']
-            breitengrad = request.POST['breitengrad']
-            plz = request.POST['plz']
-            ort_id = request.POST['ort_id']
-            schwierigkeit = request.POST['schwierigkeit']
-            code = request.POST['code']
-            ort = Ort.objects.get(ort_id=ort_id)
-            schwierigkeit = Schwierigkeit.objects.get(schwierigkeit_id=schwierigkeit)
-            spot = Spot.objects.create(code=code,bezeichnung=bezeichnung,beschreibung=beschreibung,bewertung=0,ort_id=ort,schwierigkeit_id=schwierigkeit,laengengrad=laengengrad,breitengrad=breitengrad)
-            meldung = {'meldung':True}
-            return(render(request,'ctsapp/administration.html',meldung))
+        if request.user.gamemaster_flag:
+            if request.method == "POST":
+                bezeichnung = request.POST['bezeichnung']
+                beschreibung = request.POST['beschreibung']
+                laengengrad = request.POST['laengengrad']
+                breitengrad = request.POST['breitengrad']
+                plz = request.POST['plz']
+                ort_id = request.POST['ort_id']
+                schwierigkeit = request.POST['schwierigkeit']
+                code = request.POST['code']
+                ort = Ort.objects.get(ort_id=ort_id)
+                schwierigkeit = Schwierigkeit.objects.get(schwierigkeit_id=schwierigkeit)
+                spot = Spot.objects.create(code=code,bezeichnung=bezeichnung,beschreibung=beschreibung,bewertung=0,ort_id=ort,schwierigkeit_id=schwierigkeit,laengengrad=laengengrad,breitengrad=breitengrad)
+                meldung = {'meldung':True}
+                return(render(request,'ctsapp/administration.html',meldung))
 
+            else:
+                schwierigkeiten = Schwierigkeit.objects.all()
+                schwierigkeiten = {'schwierigkeiten':schwierigkeiten}
+                return(render(request,'ctsapp/administration.html',schwierigkeiten))
         else:
-            schwierigkeiten = Schwierigkeit.objects.all()
-            schwierigkeiten = {'schwierigkeiten':schwierigkeiten}
-            return(render(request,'ctsapp/administration.html',schwierigkeiten))
+            return(redirect('/'))
     else:
         return (redirect('/login'))
     
@@ -364,7 +367,7 @@ def spot_loeschen(request):
 def user_api(request):
     username = request.GET['username']
     users = get_spielers(username)
-    users = list(users.values('email','username','first_name','last_name','spieler_id','is_active','team_id'))
+    users = list(users.values('email','username','first_name','last_name','spieler_id','is_active','team_id','gamemaster_flag'))
     return(JsonResponse(users, safe=False))
 
 def team_api(request):
@@ -461,8 +464,9 @@ def make_bewertung(request, spot_id):
             bewertung_zahl = request.POST['bewertung_zahl']
             bewertung_text = request.POST['bewertung_text']
             try:
-                bewertung = SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
-                bewertung.save()
+                print(bewertung_text)
+                print(bewertung_zahl)
+                SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
                 update_bewertung(spot_id)
                 return(redirect('/profil/'))
             except:
@@ -499,4 +503,15 @@ def activate(request, uidb64, token):
         return redirect('/login')
         # return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
     else:
-        return HttpResponse('Activation link is invalid!')
+        return HttpResponse('Dieser Link ist ungültig!')
+
+def gamemaster_rechte (request):
+    request.user.is_admin
+    spielerid = request.POST['spieler_id']
+    spieler = Spieler.objects.get(spieler_id=spielerid)
+    if spieler.gamemaster_flag == False:
+        spieler.gamemaster_flag = True
+    else:
+        spieler.gamemaster_flag = False
+    spieler.save()
+    return(render(request, 'ctsapp/spot_geloescht.html'))

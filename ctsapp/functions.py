@@ -10,6 +10,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
+import os
 
 def get_bild_link(spot_id):
     bilder = Medium.objects.filter(spot_id=spot_id)
@@ -374,3 +375,15 @@ def send_actication_email(request, user):
     )
     email.content_subtype = "html"
     email.send()
+
+def check_file(filepath):
+    extension = os.path.splitext(filepath)
+    bilder = ['.jpg','.tif','.png','.gif','.psd', '.jpeg']
+    videos = ['.mpg','.mpeg','.mp4']
+    if extension[1].lower() in bilder:
+        return('bild')
+    elif extension[1].lower() in videos:
+        return('video')
+    else:
+        return False
+
