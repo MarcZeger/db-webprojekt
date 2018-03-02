@@ -246,6 +246,8 @@ def spot_suche(request):
             umkreis = int(request.GET['umkreis'])
             if ort != "":
                 spots = get_spot_list(ort, umkreis)
+                print('Get_spot wurde ausgeführt')
+                print(spots)
                 if type(spots) == str:
                     message = spots
                 else:
