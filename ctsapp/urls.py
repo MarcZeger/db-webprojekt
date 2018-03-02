@@ -35,6 +35,7 @@ urlpatterns = [
     path('teams/', views.teams, name='teams'),
     path('team_detail/<int:team_id>', views.team_detail, name='team_detail'),
     path('user-gamemaster/', views.gamemaster_rechte, name='gamemaster_rechte'),
+    path('test/', views.test_entfernung, name='test_entfernung'),
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.activate, name='activate'),
 
 ]

@@ -35,7 +35,16 @@
         <p>Du bist auf der Suche nach einem Spot, an dem du trainieren kannst?<br>Dann kannst du hier durch Eingabe deines Wunschortes, die dazu bereits registrierten Spots anzeigen lassen. Lässt du das Feld leer, werden dir alle Spots angezeigt.</p>
     <form method="GET">
         <div class="form-group">
-            <input type="text" name="ort" class="col-sm-10" style="height: 42px" placeholder="Ort">
+            <div class="col-sm-10 spot-suche">
+            <input type="text" class="col-sm-10" name="ort" style="height: 42px" placeholder="Ort">
+            <select id="umkreis" class="form-control col-sm-2 spot-umkreis" required name="umkreis">
+                <option value="0">Kein Umkreis</option>
+                <option value="10">10 KM</option>
+                <option value="15">15 KM</option>
+                <option value="20">20 KM</option>
+                <option value="50">50 KM</option>
+            </select>
+            </div>
             <button type="submit" class="btn-spot btn-default col-sm-2">Suchen</button>
         </div>
     </form>

@@ -11,6 +11,9 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from django.core.mail import EmailMessage
 import os
+from geopy.distance import vincenty
+from geopy.geocoders import Nominatim
+import geopy
 
 def get_bild_link(spot_id):
     bilder = Medium.objects.filter(spot_id=spot_id)
@@ -108,6 +111,7 @@ def get_best_team():
     counter = 1
     for team in teams:
         team.punkte = get_teampunkte(team.team_id)
+    new_team = sort_team(teams)
     for team in new_team:
         if counter == 1:
             team.is_active = "active"
@@ -202,13 +206,19 @@ def new_ort(plz,name):
     ort.save()
     return(ort.ort_id)
 
-def get_spot_list(ortname):
+def get_spot_list(ortname, umkreis = 0):
     orte = Ort.objects.filter(name__icontains=ortname)
     spots = []
+    print('Umkreis: ' + str(umkreis))
     for ort in orte:
         ort_spots = Spot.objects.filter(ort_id=ort.ort_id)
         for spot in ort_spots:
             spots.append(spot)
+        if umkreis != 0:
+            umkreis_spots = get_spots_umkreis(ort, umkreis)
+            for spot in umkreis_spots:
+                print('Umkreis-spot: ' + str(spot.bezeichnung))
+                spots.append(spot)
     if spots == []:
         return("Leider konnten keine Ergebnisse gefunden werden!")
     return(spots)
@@ -385,3 +395,25 @@ def mail_gesperrt(spieler):
     )
     email.content_subtype = "html"
     email.send()
+
+def get_distance(spot, ort):
+    print(ort.name)
+    ort = geopy.geocoders.GoogleV3('AIzaSyBt2fnvdE4Za0wT6b129B4yxN48SbxFXYE').geocode(ort.name, True)
+    print(str(ort.longitude) + "    " + str(ort.latitude))
+    koordinate1 = (ort.latitude, ort.longitude)
+    koordinate2 = (spot.breitengrad, spot.laengengrad)
+    return(vincenty(koordinate1, koordinate2).kilometers)
+
+def get_koordinate(ort):
+    geolocator = Nominatim()
+    location = geolocator.geocode(str(ort.name))
+    result = (location.latitude, location.longitude)
+    return(result)
+
+def get_spots_umkreis(ort, umkreis):
+    spots = Spot.objects.all()
+    output = []
+    for spot in spots:
+        if get_distance(spot,ort) <= umkreis:
+            output.append(spot)
+    return(output)
