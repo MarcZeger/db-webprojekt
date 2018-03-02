@@ -243,8 +243,9 @@ def spot_suche(request):
                 ort = request.GET['ort']
             except:
                 return(render(request,'ctsapp/spot_suche.html'))
+            umkreis = int(request.GET['umkreis'])
             if ort != "":
-                spots = get_spot_list(ort)
+                spots = get_spot_list(ort, umkreis)
                 if type(spots) == str:
                     message = spots
                 else:
@@ -536,3 +537,8 @@ def gamemaster_rechte (request):
             return(HttpResponse('Keine Berechtigung!'))
     else:
         return redirect('/login')
+
+def test_entfernung(request):
+    spots = Spot.objects.all()
+    orte = Ort.objects.all()
+    return HttpResponse(get_distance(spots[0],orte[1]))

@@ -251,3 +251,12 @@
   #index-profilbild:before {
       float: left;
   }
+
+  .spot-suche {
+      padding: 0px;
+  }
+
+  .spot-umkreis {
+      height: 42px;
+      width: 16.66666667% !important;
+  }
