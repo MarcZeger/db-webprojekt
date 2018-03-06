@@ -7,6 +7,7 @@
 <div class="container">
   <div class="text-center">
       <h1 >Spot bewerten</h1>
+  </div>
       <form method="POST" action="/bewertung/{{ spot_id }}">
           {% csrf_token %}
           <div class="form-group">
@@ -14,12 +15,17 @@
               <input class="form-control" type="text" name="bewertung_text"required>
           </div>
           <div class="form-group">
-              <label>Bewertung von 1 (schlecht) bis 5 (sehr gut)</label>
-              <input class="form-control" type="number" name="bewertung_zahl" required>
+              <label for="bewertung_zahl">Bewertung von 1 (schlecht) bis 5 (sehr gut)</label>
+              <select name="bewertung_zahl" required id="bewertung_zahl" class="form-control">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+              </select>
           </div>
           <input type="submit">
       </form>
-  </div>
 </div>
 
 {% endblock %}

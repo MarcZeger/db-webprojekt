@@ -2,88 +2,80 @@
 {% block title %}CTS - Spot Suche{% endblock %}
 {% block content %}
 {% load static %}
-<div class="container">
-    <div class="text-center">
-        <h1>Spot-Code eingeben</h1>
-    </div>
-    <div class="row">
-    <form method="POST">
-        {% csrf_token %}
-        <p>Du bist das erste Mal an einem unserer Spots, dann gib hier den Code des Schlosses vor Ort ein.<br>Bei korrekter Eingabe des Codes, bekommst du die Punkte für diesen Spot gutgeschrieben.</p>
-        <div class="form-group" style="margin-top: 10px;">
-            <input type="text" name="code" class="col-sm-10" style="height: 42px" placeholder="Code">
-            <button type="submit" class="btn-spot btn-default col-sm-2">Bestätigen</button>
-        </div>
-    </form>
-    </div>
-    {% if message_code %}
-    <div class="alert alert-{{ flag }} alert-dismissable">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <p>{{ message_code }}</p>
-        {% if datum %}<p>Code eingegeben am: {{ datum|date:"d. M, Y" }}</p>{% endif %}
-        {% if flag == "success" %}
-            <p>Deine neue Punktzahl beträgt: {{ user.punktzahl|add:punktzahl}}</p>
-        {% endif %}
-    </div>
-    {% endif %}
-</div>
 <div class="container" id="spot-search">
     <div class="text-center">
-        <h1>Suche</h1>
+        <h1>Umkreis Suche</h1>
     </div>
     <div class="row">
-        <p>Du bist auf der Suche nach einem Spot, an dem du trainieren kannst?<br>Dann kannst du hier durch Eingabe deines Wunschortes, die dazu bereits registrierten Spots anzeigen lassen. Lässt du das Feld leer, werden dir alle Spots angezeigt.</p>
-    <form method="GET">
-        <div class="form-group">
-            <div class="col-sm-10 spot-suche">
-            <input type="text" class="col-sm-10" name="ort" style="height: 42px" placeholder="Ort" id="ortsuche">
-            <select id="umkreis" class="form-control col-sm-2 spot-umkreis" required name="umkreis">
-                <option value="0">Kein Umkreis</option>
+        <p>Du suchst nach einem Ort in deiner Umgebung? Dann klicke auf folgenden Button.</p>
+        <select id="umkreis" class="form-control">
+                <option value="5">5 KM</option>
                 <option value="10">10 KM</option>
                 <option value="15">15 KM</option>
                 <option value="20">20 KM</option>
                 <option value="50">50 KM</option>
             </select>
-            </div>
-            <button type="submit" class="btn-spot btn-default col-sm-2">Suchen</button>
-        </div>
-    </form>
+        <button class="btn btn-default" onclick="ermittlePosition()">Spots im Umkreis anzeigen</button>
     </div>
-    <a href="/umkreis-suche">Zur Umkreissuche</a>
     {% if message %}
         <h3>Suchergebnisse</h3>
             <div class="alert alert-danger alert-dismissable">
                 <p>{{ message }}</p>
             </div>
         {% endif %}
-    {% if spots %}
         <h3>Suchergebnisse</h3>
     <div class="table-responsive">
     <table class="table" id="ergebnis">
-        <tr>
-            <th>Bild</th>
-            <th>Bezeichnung</th>
-            <th><div class="table-header">Ort</div><span><div class="sort-buttons"><i onclick="sortORT_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortORT_ab()" class="fas fa-angle-down"></i></div></span></th>
-            <th><div class="table-header">Schwierigkeit</div><span><div class="sort-buttons"><i onclick="sortSchwierigkeit_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortSchwierigkeit_ab()" class="fas fa-angle-down"></i></div></span></th>
-            <th><div class="table-header">Bewertung</div><span><div class="sort-buttons"><i onclick="sortBewertung_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortBewertung_ab()" class="fas fa-angle-down"></i></div></span></th>
-        </tr>
-        {% for spot in spots %}
-        <tr>
-            <td><img class="search-picture" src="{{ spot.bild_url }}"></td>
-            <td><a href="/spot/{{ spot.spot_id }}">{{ spot.bezeichnung }}</a></td>
-            <td>{{ spot.ort_id.name }}</td>
-            <td>{{ spot.schwierigkeit_id.beschreibung }}</td>
-            <td style="display: none">{{ spot.schwierigkeit_id.punkte }}</td>
-            <td>{% for i in spot.bewertung %}<span class="fa fa-star checked"></span>{% empty %}-{% endfor %}</td>
-        </tr>
-        {% endfor %}
+
     </table>
         </div>
 
-    {% endif %}
 </div>
 {% endblock %}
 {% block script %}
+<script>
+    function ermittlePosition() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(get_spots_umkreis);
+        } else {
+            ausgabe.innerHTML = 'Ihr Browser unterstützt keine Geolocation.';
+        }
+    }
+    function get_spots_umkreis(position) {
+        var longitude = position.coords.longitude;
+        var latitude = position.coords.latitude;
+        var link = '/api/umkreis/?umkreis=' + document.getElementById('umkreis').value + '&longitude=' + longitude + '&latitude=' + latitude;
+        output = '<tr>\n' +
+            '            <th>Bild</th>\n' +
+            '            <th>Bezeichnung</th>\n' +
+            '            <th><div class="table-header">Ort</div><span><div class="sort-buttons"><i onclick="sortORT_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortORT_ab()" class="fas fa-angle-down"></i></div></span></th>\n' +
+            '            <th><div class="table-header">Schwierigkeit</div><span><div class="sort-buttons"><i onclick="sortSchwierigkeit_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortSchwierigkeit_ab()" class="fas fa-angle-down"></i></div></span></th>\n' +
+            '            <th><div class="table-header">Bewertung</div><span><div class="sort-buttons"><i onclick="sortBewertung_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortBewertung_ab()" class="fas fa-angle-down"></i></div></span></th>\n' +
+            '        </tr>'
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            myObj = JSON.parse(this.responseText);
+            for (x in myObj) {
+                output +=
+                        "<tr>\n"+
+            "            <td><img class=\"search-picture\" src='" + myObj[x].bild_url +"'></td>" +
+            "            <td><a href=\"/spot/" + myObj[x].spot_id + "\">"+ myObj[x].bezeichnung +"</a></td>\n" +
+            "            <td>"+ myObj[x].ort_id +"}</td>\n" +
+            "            </tr>\n";
+            }
+         output +=
+        "    </table>\n" +
+        "        </div>";
+            document.getElementById('ergebnis').innerHTML = output;
+        }
+    };
+    xmlhttp.open("GET", link , true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send();
+        }
+
+</script>
 <script>
 function sortORT_auf() {
   var table, rows, switching, i, x, y, shouldSwitch;
