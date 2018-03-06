@@ -14,6 +14,7 @@ import os
 from geopy.distance import vincenty
 from geopy.geocoders import Nominatim
 import geopy
+from django.forms.models import model_to_dict
 
 def get_bild_link(spot_id):
     bilder = Medium.objects.filter(spot_id=spot_id)
@@ -209,21 +210,12 @@ def new_ort(plz,name):
 def get_spot_list(ortname, umkreis = 0):
     orte = Ort.objects.filter(name__icontains=ortname)
     spots = []
-    print()
-    print()
-    print('Umkreis: ' + str(umkreis))
-    print()
-    print()
-    for ort in orte:
-        if umkreis != 0:
-            umkreis_spots = get_spots_umkreis(ort, umkreis)
-            for spot in umkreis_spots:
-                print('Umkreis-spot: ' + str(spot.bezeichnung))
-                spots.append(spot)
-            if spots == []:
-                return ("Leider konnten keine Ergebnisse gefunden werden!")
-            return (spots)
-        else:
+    if umkreis != 0:
+        umkreis_spots = get_spots_umkreis(orte, umkreis)
+        for spot in umkreis_spots:
+            spots.append(spot)
+    else:
+        for ort in orte:
             ort_spots = Spot.objects.filter(ort_id=ort.ort_id)
             for spot in ort_spots:
                 spots.append(spot)
@@ -405,8 +397,8 @@ def mail_gesperrt(spieler):
     email.send()
 
 def get_distance(spot, ort):
-    ort = geopy.geocoders.GoogleV3('AIzaSyBt2fnvdE4Za0wT6b129B4yxN48SbxFXYE').geocode(ort.name, True)
-    koordinate1 = (ort.latitude, ort.longitude)
+    # ort = geopy.geocoders.GoogleV3('AIzaSyBt2fnvdE4Za0wT6b129B4yxN48SbxFXYE').geocode(ort.name, True)
+    koordinate1 = ort
     koordinate2 = (spot.breitengrad, spot.laengengrad)
     return(vincenty(koordinate1, koordinate2).kilometers)
 
@@ -419,10 +411,9 @@ def get_koordinate(ort):
 def get_spots_umkreis(ort, umkreis):
     spots = Spot.objects.all()
     output = []
+    last_output = {}
+    count = 0
     for spot in spots:
-        print(get_distance(spot,ort) - umkreis)
-        print(spot)
-        print()
         if get_distance(spot,ort) <= umkreis:
-            output.append(spot)
+            output.append(model_to_dict(spot))
     return(output)

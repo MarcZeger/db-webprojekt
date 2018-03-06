@@ -246,8 +246,6 @@ def spot_suche(request):
             umkreis = int(request.GET['umkreis'])
             if ort != "":
                 spots = get_spot_list(ort, umkreis)
-                print('Get_spot wurde ausgeführt')
-                print(spots)
                 if type(spots) == str:
                     message = spots
                 else:
@@ -327,6 +325,11 @@ def administration(request):
 def ort_api(request, plz):
     orte = get_ort_liste(plz)
     result_list = list(orte.values('name', 'ort_id'))
+    return(JsonResponse(result_list, safe = False))
+
+def ort_api_vorschlag(request, ortname):
+    orte = Ort.objects.filter(name__icontains=ortname)
+    result_list = list(orte.values('name', 'plz'))
     return(JsonResponse(result_list, safe = False))
 
 def code_api(request):
@@ -544,3 +547,23 @@ def test_entfernung(request):
     spots = Spot.objects.all()
     orte = Ort.objects.all()
     return HttpResponse(get_distance(spots[0],orte[1]))
+
+def api_umkreis_suche(request):
+    #if request.user.is_authenticated:
+        umkreis = float(request.GET['umkreis'])
+        latitude = float(request.GET['latitude'])
+        longtitude = float(request.GET['longitude'])
+        ort = (latitude, longtitude)
+        geolocator = Nominatim()
+        # ort = geolocator.reverse(koordinaten)
+        spots = get_spots_umkreis(ort, umkreis)
+        return JsonResponse(spots, safe=False)
+
+    #else:
+        return redirect('/login')
+
+def umkreis_seite(request):
+    if request.user.is_authenticated:
+        return render(request,'ctsapp/umkreissuche.html')
+    else:
+        return redirect('/login')
