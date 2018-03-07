@@ -24,16 +24,6 @@
             Schritt 2 von 3
         </div>
         </div>
-            <form action="{% url 'registrierung' %}" method="POST" >
-                {% csrf_token %}
-                <input type="hidden" value="4" name="seite">
-                <input type="hidden" value="{{ plz }}" name="plz">
-                <input type="hidden" name="username" value="{{ username }}">
-                <input type="hidden" name="first_name" value="{{ first_name }}">
-                <input type="hidden" name="last_name" value="{{ last_name }}">
-                <input type="hidden" name="email" value="{{ email }}">
-                <button type="submit" id="button-submit">Mein Heimatort ist nicht in der Liste</button>
-            </form>
         <form action="{% url 'registrierung' %}" method="POST">
         {% csrf_token %}
          <div class="form-group">
@@ -53,6 +43,16 @@
         <input type="hidden" name="email" value="{{ email }}">
         <button type="submit" id="button-submit" class="btn btn-default">Weiter zu Schritt 3</button>
         </form>
+            <form action="{% url 'registrierung' %}" method="POST" >
+                {% csrf_token %}
+                <input type="hidden" value="4" name="seite">
+                <input type="hidden" value="{{ plz }}" name="plz">
+                <input type="hidden" name="username" value="{{ username }}">
+                <input type="hidden" name="first_name" value="{{ first_name }}">
+                <input type="hidden" name="last_name" value="{{ last_name }}">
+                <input type="hidden" name="email" value="{{ email }}">
+                <button type="submit" id="button-submit">Mein Heimatort ist nicht in der Liste</button>
+            </form>
         </div>
 {% endif %}
 {% endblock %}
