@@ -61,7 +61,6 @@
 {% block script%}
 
 <script>
-$(document).ready(function(){
     function get_user() {
     var parameter = "?username="+ document.getElementById('username').value;
     var link = "/api/get-user/" + parameter;
@@ -71,7 +70,6 @@ $(document).ready(function(){
         "            <th><div class=\"table-header\">Username</div></th>\n" +
         "            <th><div class=\"table-header\">Vorname</div></th>\n" +
         "            <th><div class=\"table-header\">Nachname</div></th>\n" +
-                    "<th><div class=\"table-header\">E-Mail</div></th>\n" +
              "<th><div class=\"table-header\"></div></th>\n" +
             "<th><div class=\"table-header\"></div></th>\n" +
         "        </tr>\n";
@@ -87,7 +85,6 @@ $(document).ready(function(){
             "            <td>"+ myObj[x].username +"</a></td>\n"+
             "            <td>"+ myObj[x].first_name +"</td>\n"+
             "            <td>"+  myObj[x].last_name  +"</td>\n"+
-            "            <td>"+  myObj[x].email  +"</td>\n"+
             "            <td><form action='/user-team-add/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>Hinzufügen</button></form></td>\n"+
             "        </tr>\n";
                 }
@@ -100,7 +97,7 @@ $(document).ready(function(){
     }
     xmlhttp.open("GET", link , true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xmlhttp.send(); }
-});
+    xmlhttp.send();
+};
 </script>
 {% endblock %}

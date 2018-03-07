@@ -19,17 +19,19 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" id="first-button">Spot anlegen</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" id="first-button" onclick="setTimeout(make_footer(), 3000);">Spot anlegen</a>
         </h3>
       </div>
       <div id="collapse1" class="panel-collapse collapse">
         <div class="panel-body">
-                <div class="form-group spot-anlegen-code">
-        <label>Code: </label>
-        <p id="code"></p>
-        <button onclick="get_code()" class="btn btn-default">Code generieren</button>
-    </div>
-    <form method="POST">
+        <div class="row">
+        <div class="col-sm-6">
+         <div class="form-group spot-anlegen-code">
+            <label>Code: </label>
+            <button onclick="get_code()" class="btn btn-default">Code generieren</button>
+             <p id="code" class="form-control"></p>
+        </div>
+        <form method="POST">
         {% csrf_token %}
         <div class="form-group">
             <label>Spotname</label>
@@ -39,6 +41,8 @@
             <label>Beschreibung</label>
             <input class="form-control" name="beschreibung" required>
         </div>
+        </div>
+        <div class="col-sm-6">
         <div class="form-group">
             <label>Schwierigkeitsgrad</label>
             <div class="radio">
@@ -47,21 +51,27 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="form-group">
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group col-sm-6">
             <label>Längengrad</label>
             <input class="form-control" name="laengengrad" required>
         </div>
-        <div class="form-group">
+        <div class="form-group col-sm-6">
             <label>Breitengrad</label>
             <input class="form-control" name="breitengrad" required>
         </div>
-        <div class="form-group">
+        </div>
+        <div class="row">
+        <div class="form-group col-sm-6">
             <label>Postleitzahl</label>
             <input class="form-control" name="plz" id="plz" onkeyup="get_orte()" required>
         </div>
-        <div class="form-group">
+        <div class="form-group col-sm-6">
             <label>Ort</label>
             <div id="auswahl"></div>
+        </div>
         </div>
         <input type="hidden" name="code" id="sendcode" required>
         <button class="btn btn-default">Speichern</button>
@@ -73,7 +83,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Spot löschen</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" onclick="make_footer()">Spot löschen</a>
         </h3>
       </div>
       <div id="collapse2" class="panel-collapse collapse">
@@ -100,7 +110,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Spieler sperren/löschen</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" onclick="make_footer()">Spieler sperren/löschen</a>
         </h3>
       </div>
       <div id="collapse3" class="panel-collapse collapse">
@@ -114,10 +124,29 @@
         </div>
       </div>
     </div>
+{% if user.is_superuser %}
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Team löschen</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse6" onclick="make_footer()">Gamemaster Rechte vergeben/entziehen</a>
+        </h3>
+      </div>
+      <div id="collapse6" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="row form-group delete-spot">
+            <label>Username</label>
+            <input id="username_gamemaster">
+            <button onclick="get_user_gamemaster()" class="btn btn-default">User anzeigen</button>
+            </div>
+            <div id="user_gamemaster"></div>
+        </div>
+      </div>
+    </div>
+{% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" onclick="make_footer()">Team löschen</a>
         </h3>
       </div>
       <div id="collapse4" class="panel-collapse collapse">
@@ -134,7 +163,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">User aus Team entfernen</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse5" onclick="make_footer()">User aus Team entfernen</a>
       </h3>
       </div>
       <div id="collapse5" class="panel-collapse collapse">
@@ -216,8 +245,14 @@ xmlhttp.onreadystatechange = function() {
      output +=
     "    </table>\n" +
     "        </div>";
-        document.getElementById('spot_delete').innerHTML = output;
+        if (myObj.spots != "Keine Ergebnisse" ) {
+            document.getElementById('spot_delete').innerHTML = output;
+        }
+        else {
+            document.getElementById('spot_delete').innerHTML = "Es wurden keine Spots gefunden!";
+        }
     }
+
 }
 xmlhttp.open("GET", link , true);
 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -336,9 +371,55 @@ xmlhttp.onreadystatechange = function() {
     "        </div>";
         document.getElementById('delete_user_team').innerHTML = output;
     }
-}
+};
 xmlhttp.open("GET", link , true);
 xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 xmlhttp.send(); }
+{% if user.is_superuser %}
+function get_user_gamemaster() {
+var parameter = "?username="+ document.getElementById('username_gamemaster').value;
+var link = "/api/get-user/" + parameter;
+var active = "";
+output = "<div class=\"table-responsive\">\n" +
+    "    <table class=\"table\" id=\"ergebnis\">\n" +
+    "        <tr>\n" +
+    "            <th><div class=\"table-header\">Username</div></th>\n" +
+    "            <th><div class=\"table-header\">Vorname</div></th>\n" +
+    "            <th><div class=\"table-header\">Nachname</div></th>\n" +
+                "<th><div class=\"table-header\">E-Mail</div></th>\n" +
+         "<th><div class=\"table-header\"></div></th>\n" +
+        "<th><div class=\"table-header\"></div></th>\n" +
+    "        </tr>\n";
+
+xmlhttp = new XMLHttpRequest();
+xmlhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+        myObj = JSON.parse(this.responseText);
+        for (x in myObj) {
+            if (myObj[x].gamemaster_flag == true) {
+                active = "Berechtigung entfernen";
+            }
+            else {
+                active = "Berechtigung hinzufügen";
+            }
+            output +=
+                    "<tr>\n"+
+        "            <td>"+ myObj[x].username +"</a></td>\n"+
+        "            <td>"+ myObj[x].first_name +"</td>\n"+
+        "            <td>"+  myObj[x].last_name  +"</td>\n"+
+        "            <td>"+  myObj[x].email  +"</td>\n"+
+        "            <td><form action='/user-gamemaster/' method='POST'>{% csrf_token %}<button type='submit' value='"+ myObj[x].spieler_id +"' name='spieler_id' class='btn btn-default'>" + active + "</button></form></td>\n"+
+        "        </tr>\n";
+        }
+     output +=
+    "    </table>\n" +
+    "        </div>";
+        document.getElementById('user_gamemaster').innerHTML = output;
+    }
+};
+xmlhttp.open("GET", link , true);
+xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+xmlhttp.send(); }
+{% endif %}
 </script>
 {% endblock %}

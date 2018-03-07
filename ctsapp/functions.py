@@ -3,6 +3,18 @@ import math
 import time
 from django.core.files.storage import default_storage
 from random import randint
+from operator import itemgetter
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+from django.core.mail import EmailMessage
+import os
+from geopy.distance import vincenty
+from geopy.geocoders import Nominatim
+import geopy
+from django.forms.models import model_to_dict
 
 def get_bild_link(spot_id):
     bilder = Medium.objects.filter(spot_id=spot_id)
@@ -57,7 +69,6 @@ def get_bewertungen(spot_id):
     bewertungen = SpielerBewertetSpot.objects.filter(spot_id=spot_id)
     for bewertung in bewertungen:
         bewertung.bewertung = range(int(bewertung.bewertung))
-        print(bewertung.datum)
     return(bewertungen)
 
 def get_spot(spot_id):
@@ -83,6 +94,7 @@ def get_best_spieler():
     liste = []
     counter = 1
     for spieler in spielers:
+        spieler.profilbild_url = get_profilbild_url(spieler.spieler_id)
         if counter == 1:
             spieler.active = "active"
             liste.append(spieler)
@@ -93,7 +105,60 @@ def get_best_spieler():
             counter += 1
         else:
             return(liste)
-          
+
+def get_best_team():
+    teams = Team.objects.all()
+    liste2 = []
+    counter = 1
+    for team in teams:
+        team.punkte = get_teampunkte(team.team_id)
+    new_team = sort_team(teams)
+    for team in new_team:
+        if counter == 1:
+            team.is_active = "active"
+            liste2.append(team)
+            counter += 1
+        elif counter < 4:
+            team.is_active = ""
+            liste2.append(team)
+            counter += 1
+    return(liste2)
+
+def sort_team(teams):
+    p1 = 0
+    p2 = 0
+    p3 = 0
+    list_team = [p1, p2, p3]
+    for team in teams:
+        par = int(team.punkte)
+        if par > p1:
+            p3 = p2
+            p2 = p1
+            p1 = par
+            list_team[2] = list_team[1]
+            list_team[1] = list_team[0]
+            list_team[0] = team
+        elif par <= p1 and par > p2:
+            p3 = p2
+            p2 = par
+            list_team[2] = list_team[1]
+            list_team[1] = team
+        elif par <= p3:
+            p3 = par
+            list_team[2] = team
+    return list_team
+
+def get_teampunkte(team_id):
+    liste = []
+    for member_id in Spieler.objects.raw(
+            "SELECT * FROM spieler WHERE team_id_id = " + str(team_id) + " ORDER BY punktzahl DESC"):
+        liste.append(member_id)
+    punkte = 0
+    for member in liste:
+        punkte_int = int(member.punktzahl)
+        punkte += punkte_int
+    return (punkte)
+ 
 def get_level(punktzahl):
     punktzahl = float(punktzahl)
     if (punktzahl < 1):
@@ -122,14 +187,11 @@ def check_spieler_spot(spot_id, spieler_id):
     except:
         check = None
     if check == None:
-        print("False")
         return(False)
     else:
-        print(check.datum)
         return(check.datum)
 
 def set_spieler_spot(spot_id, spieler_id):
-    print("Set spieler spot")
     wert = SpielerEntdecktSpot.objects.create(spieler_id=spieler_id,spot_id=spot_id, datum=get_time())
     wert.save()
 
@@ -145,16 +207,25 @@ def new_ort(plz,name):
     ort.save()
     return(ort.ort_id)
 
-def get_spot_list(ortname):
+def get_spot_list(ortname, umkreis = 0):
     orte = Ort.objects.filter(name__icontains=ortname)
     spots = []
-    for ort in orte:
-        ort_spots = Spot.objects.filter(ort_id=ort.ort_id)
-        for spot in ort_spots:
+    if umkreis != 0:
+        umkreis_spots = get_spots_umkreis(orte, umkreis)
+        for spot in umkreis_spots:
             spots.append(spot)
+    else:
+        for ort in orte:
+            ort_spots = Spot.objects.filter(ort_id=ort.ort_id)
+            for spot in ort_spots:
+                spots.append(spot)
     if spots == []:
         return("Leider konnten keine Ergebnisse gefunden werden!")
     return(spots)
+
+def get_team_list(teamname):
+    team = Team.objects.filter(name__icontains=teamname)
+    return(team)
 
 def save_file(file,spot_id,user_id):
     path = str(time.strftime("%Y-%m-%d-%H%M%S"))+str(user_id)+"_Spot_"+str(spot_id)+"_"+str(file.name)
@@ -163,27 +234,36 @@ def save_file(file,spot_id,user_id):
             destination.write(chunk)
     return("/media/"+str(path))
 
-def create_medium(path,user_id,spot_id,dateityp,profilbild=None):
+def save_profilbild(file,user_id):
+    path = str(time.strftime("%Y-%m-%d-%H%M%S"))+str(user_id)+"_profilbild_"+str(file.name)
+    with default_storage.open(path, 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+    return("/media/"+str(path))
+
+def create_medium(path,user_id,spot_id,dateityp):
     spieler = Spieler.objects.get(spieler_id = user_id)
     spot = Spot.objects.get(spot_id=spot_id)
     datum = get_time()
-    if profilbild == None:
-        profilbild = 0
-    else:
-        profilbild = 1
-    medium = Medium.objects.create(dateityp=dateityp,link=path,spieler_id=spieler,spot_id=spot,erstelldatum=datum,profilbild_flag=profilbild)
+    medium = Medium.objects.create(dateityp=dateityp,link=path,spieler_id=spieler,spot_id=spot,erstelldatum=datum,profilbild_flag=0)
     medium.save()
 
-def get_bilder(spot_id):
-    bilder = Medium.objects.filter(spot_id=spot_id)
+def create_profilbild(path,user_id,dateityp):
+    spieler = Spieler.objects.get(spieler_id = user_id)
+    datum = get_time()
+    medium = Medium.objects.create(dateityp=dateityp,link=path,spieler_id=spieler,erstelldatum=datum,profilbild_flag=1)
+    medium.save()
+
+def get_medium(spot_id):
+    medien = Medium.objects.filter(spot_id=spot_id)
     counter = 0
-    for bild in bilder:
+    for medium in medien:
         if counter == 0:
-            bild.first = "active"
+            medium.first = "active"
             counter += 1
         else:
-            bild.first = ""
-    return(bilder)
+            medium.first = ""
+    return(medien)
 
 def get_map_center(spots):
     min_lat = float
@@ -216,7 +296,6 @@ def get_map_center(spots):
 def add_img_url(spot_list):
     for spot in spot_list:
         bild = Medium.objects.filter(spot_id=spot.spot_id)
-        print(bild)
         try:
             spot.bild_url = bild[0].link
         except:
@@ -247,3 +326,94 @@ def create_spot_code():
 def get_spielers(username):
     spielers = Spieler.objects.filter(username__icontains=username)
     return(spielers)
+
+def get_teamname_by_id(team_id):
+    team = Team.objects.get(team_id=team_id)
+    return team.name
+
+def get_besuchte_spots(user_id):
+    user = Spieler.objects.get(spieler_id = user_id)
+    visited = SpielerEntdecktSpot.objects.filter(spieler_id = user)
+    spots = []
+    for visit in visited:
+        spot = Spot.objects.get(spot_id=visit.spot_id.spot_id)
+        spots.append(spot)
+    return(spots)
+
+def update_bewertung(spot_id):
+    spot = Spot.objects.get(spot_id=spot_id)
+    bewertungen = SpielerBewertetSpot.objects.filter(spot_id=spot)
+    summe = 0
+    for bewertung in bewertungen:
+        summe += bewertung.bewertung
+    bewertung_neu = round((summe/len(bewertungen)))
+    spot.bewertung = bewertung_neu
+    spot.save()
+
+def get_profilbild_url(user_id):
+    try:
+        medium = Medium.objects.get(spieler_id=user_id, profilbild_flag=1)
+        return(medium.link)
+    except:
+        return("/static/Bilder/goat.png")
+
+def send_actication_email(request, user):
+    current_site = get_current_site(request)
+    mail_subject = 'Aktivierung des CTS Account'
+    message = render_to_string('email/acc_active_email.html', {
+        'user': user,
+        'domain': current_site.domain,
+        'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode('utf8'),
+        'token': account_activation_token.make_token(user),
+    })
+    to_email = user.email
+    email = EmailMessage(
+        mail_subject, message, to=[to_email]
+    )
+    email.content_subtype = "html"
+    email.send()
+
+def check_file(filepath):
+    extension = os.path.splitext(filepath)
+    bilder = ['.jpg','.tif','.png','.gif','.psd', '.jpeg']
+    videos = ['.mpg','.mpeg','.mp4']
+    if extension[1].lower() in bilder:
+        return('bild')
+    elif extension[1].lower() in videos:
+        return('video')
+    else:
+        return False
+
+def mail_gesperrt(spieler):
+    mail_subject = 'Sperrung des Accounts'
+    message = render_to_string('email/spieler_gesperrt.html', {
+
+    })
+    to_email = spieler.email
+    email = EmailMessage(
+        mail_subject, message, to=[to_email]
+    )
+    email.content_subtype = "html"
+    email.send()
+
+def get_distance(spot, ort):
+    # ort = geopy.geocoders.GoogleV3('AIzaSyBt2fnvdE4Za0wT6b129B4yxN48SbxFXYE').geocode(ort.name, True)
+    koordinate1 = ort
+    koordinate2 = (spot.breitengrad, spot.laengengrad)
+    return(vincenty(koordinate1, koordinate2).kilometers)
+
+def get_koordinate(ort):
+    geolocator = Nominatim()
+    location = geolocator.geocode(str(ort.name))
+    result = (location.latitude, location.longitude)
+    return(result)
+
+def get_spots_umkreis(ort, umkreis):
+    spots = Spot.objects.all()
+    output = []
+    last_output = {}
+    count = 0
+    for spot in spots:
+        if get_distance(spot,ort) <= umkreis:
+            output.append(model_to_dict(spot))
+    return(output)

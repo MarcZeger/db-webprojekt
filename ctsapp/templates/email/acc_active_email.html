@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html>
+<h1>Hallo {{ user.username }},</h1>
+    <p>um die Registrierung abzuschließen klicke bitte auf folgenden Link:
+        <a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}">Registrierung abschließen</a>
+    </p>
+</html>

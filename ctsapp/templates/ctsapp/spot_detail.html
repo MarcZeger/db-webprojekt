@@ -4,7 +4,7 @@
 {% load static %}
 <div class="container">
     {% if meldung %}
-        <div class="alert alert-success alert-dismissable">
+        <div class="alert alert-{% if error %}danger{% else %}success{% endif %} alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             {{ meldung }}
         </div>
@@ -29,10 +29,16 @@
     <div id="myCarousel" class="carousel slide col-sm-6" data-ride="carousel">
        <div class="carousel-inner" role="listbox">
     <!-- Wrapper for slides -->
-    {% for  bild in bilder%}
-      <div class="item {{ bild.first }}">
-        <img src="{{ bild.link }}" style="width: 100%;height: 300px;" alt="{{ bild.spot_id.bezeichnung }}" class="img-spot-detail">
-      </div>
+    {% for  medium in medien %}
+        {% if  medium.dateityp == 'bild' %}
+        <div class="item {{ medium.first }}">
+            <img src="{{ medium.link }}" style="width: 100%;height: 300px;" alt="{{ medium.spot_id.bezeichnung }}" class="img-spot-detail">
+        </div>
+        {% else %}
+        <div class="item {{ medium.first }}">
+            <iframe src="{{ medium.link }}" style="width: 100%;height: 300px;" alt="{{ medium.spot_id.bezeichnung }}" class="img-spot-detail">Ihr Browser kann dieses Video nicht anzeigen.</iframe>
+        </div>
+        {% endif %}
     {% endfor %}
     <!-- Left and right controls -->
     <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
@@ -52,18 +58,32 @@
     <div id="map"></div>
     </div>
     <div class="container spot_detail_container">
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            <div class="form-group">
-                <label>Medium hochladen</label>
-                <input type="file" name="file" accept="image/jpg, image/jpeg">
-            </div>
-            <input type="hidden" name="spot" value="{{ spot.spot_id }}">
-            <button type="submit">Hochladen</button>
+    <h3>Bild oder Video hochladen</h3>
+        <form id="file-upload-form" class="uploader" id="file-upload-form" class="uploader" method="POST" enctype="multipart/form-data">
+          <input id="file-upload" type="file" name="file" accept="image/jpg, image/jpeg, image/png, image/gif, image/tif, image/psd, video/mp4, video/mpg, video/mpeg" required />
+          <label for="file-upload" id="file-drag">
+              <img id="file-image" src="#" alt="Preview" class="hidden">
+              <div id="start">
+                  <i class="fa fa-download" aria-hidden="true"></i>
+                  <div>Wählen sie eine Datei aus.</div>
+                  <div id="notimage" class="hidden">Please select an image</div>
+                  <span id="file-upload-btn" class="btn btn-primary">Datei auswählen</span>
+              </div>
+              <div id="response" class="hidden">
+                  <div id="messages"></div>
+                    <progress class="progress" id="file-progress" value="0">
+                        <span>0</span>%
+                    </progress>
+              </div>
+          </label>
+          {% csrf_token %}
+          <input type="hidden" name="spot" value="{{ spot.spot_id }}">
+          <button id="submit-button" type="submit" class="btn btn-default">Hochladen</button>
         </form>
     </div>
     <div class="container spot_detail_container">
     <h3>Bewertungen</h3>
+    {% if bewertungen %}
     <div class="table-responsive">
     <table class="table">
         <tr>
@@ -76,12 +96,15 @@
             <tr>
                 <td>{{ bewertung.spieler_id.username }}</td>
                 <td>{{ bewertung.datum|date:"d. M, Y"}}</td>
-                <td>{% for i in bewertung.bewertung %}★{% endfor %}</td>
+                <td>{% for i in bewertung.bewertung %}<span class="fa fa-star checked"></span>{% empty %}-{% endfor %}</td>
                 <td>{{ bewertung.bewertung_text }}</td>
             </tr>
-        {% endfor %}
+            {% endfor %}
     </table>
     </div>
+    {% else %}
+    <p>Dieser Spot wurde noch nicht bewertet. Falls du den Spot bewerten willst, klicke <a href="/profil/#ergebnis">hier</a></p>
+    {% endif %}
     </div>
 {% endblock %}
 {% block script %}
@@ -100,5 +123,149 @@
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBt2fnvdE4Za0wT6b129B4yxN48SbxFXYE&callback=initMap">
+    </script>
+    <script>
+    // File Upload
+//
+function ekUpload(){
+  function Init() {
+
+    console.log("Upload Initialised");
+
+    var fileSelect    = document.getElementById('file-upload'),
+        fileDrag      = document.getElementById('file-drag'),
+        submitButton  = document.getElementById('submit-button');
+
+    fileSelect.addEventListener('change', fileSelectHandler, false);
+
+    // Is XHR2 available?
+    var xhr = new XMLHttpRequest();
+    if (xhr.upload) {
+      // File Drop
+      fileDrag.addEventListener('dragover', fileDragHover, false);
+      fileDrag.addEventListener('dragleave', fileDragHover, false);
+      fileDrag.addEventListener('drop', fileSelectHandler, false);
+    }
+  }
+
+  function fileDragHover(e) {
+    var fileDrag = document.getElementById('file-drag');
+
+    e.stopPropagation();
+    e.preventDefault();
+
+    fileDrag.className = (e.type === 'dragover' ? 'hover' : 'modal-body file-upload');
+  }
+
+  function fileSelectHandler(e) {
+    // Fetch FileList object
+    var files = e.target.files || e.dataTransfer.files;
+
+    // Cancel event and hover styling
+    fileDragHover(e);
+
+    // Process all File objects
+    for (var i = 0, f; f = files[i]; i++) {
+      parseFile(f);
+      uploadFile(f);
+    }
+  }
+
+  // Output
+  function output(msg) {
+    // Response
+    var m = document.getElementById('messages');
+    m.innerHTML = msg;
+  }
+
+  function parseFile(file) {
+
+    console.log(file.name);
+    output(
+      '<strong>' + encodeURI(file.name) + '</strong>'
+    );
+
+    // var fileType = file.type;
+    // console.log(fileType);
+    var imageName = file.name;
+
+    var isGood = (/\.(?=gif|jpg|png|jpeg)/gi).test(imageName);
+    if (isGood) {
+      document.getElementById('start').classList.add("hidden");
+      document.getElementById('response').classList.remove("hidden");
+      document.getElementById('notimage').classList.add("hidden");
+      // Thumbnail Preview
+      document.getElementById('file-image').classList.remove("hidden");
+      document.getElementById('file-image').src = URL.createObjectURL(file);
+    }
+    else {
+      document.getElementById('file-image').classList.add("hidden");
+      document.getElementById('notimage').classList.remove("hidden");
+      document.getElementById('start').classList.remove("hidden");
+      document.getElementById('response').classList.add("hidden");
+      document.getElementById("file-upload-form").reset();
+    }
+  }
+
+  function setProgressMaxValue(e) {
+    var pBar = document.getElementById('file-progress');
+
+    if (e.lengthComputable) {
+      pBar.max = e.total;
+    }
+  }
+
+  function updateFileProgress(e) {
+    var pBar = document.getElementById('file-progress');
+
+    if (e.lengthComputable) {
+      pBar.value = e.loaded;
+    }
+  }
+
+  function uploadFile(file) {
+
+    var xhr = new XMLHttpRequest(),
+      fileInput = document.getElementById('class-roster-file'),
+      pBar = document.getElementById('file-progress'),
+      fileSizeLimit = 4096; // In MB
+    if (xhr.upload) {
+      // Check if file is less than x MB
+      if (file.size <= fileSizeLimit * 1024 * 1024) {
+        // Progress bar
+        pBar.style.display = 'inline';
+        xhr.upload.addEventListener('loadstart', setProgressMaxValue, false);
+        xhr.upload.addEventListener('progress', updateFileProgress, false);
+
+        // File received / failed
+        xhr.onreadystatechange = function(e) {
+          if (xhr.readyState == 4) {
+            // Everything is good!
+
+            // progress.className = (xhr.status == 200 ? "success" : "failure");
+            // document.location.reload(true);
+          }
+        };
+
+        // Start upload
+        xhr.open('POST', document.getElementById('file-upload-form').action, true);
+        //xhr.setRequestHeader('X-File-Name', file.name);
+        //xhr.setRequestHeader('X-File-Size', file.size);
+        xhr.setRequestHeader('Content-Type', 'multipart/form-data');
+        xhr.send(file);
+      } else {
+        output('Please upload a smaller file (< ' + fileSizeLimit + ' MB).');
+      }
+    }
+  }
+
+  // Check for the various File API support.
+  if (window.File && window.FileList && window.FileReader) {
+    Init();
+  } else {
+    document.getElementById('file-drag').style.display = 'none';
+  }
+}
+ekUpload();
     </script>
 {% endblock %}

@@ -42,6 +42,8 @@
             <div class="radio">
                 <label><input type="radio" name="ort" value="{{ ort.ort_id }}">{{ ort.name }}</label>
             </div>
+              {% empty %}
+            <p>Zu dieser Postleitzahl ist leider kein Ort bekannt.</p>
              {% endfor %}
         </div>
         <input type="hidden" value="2" name="seite">

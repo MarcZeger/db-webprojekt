@@ -1,6 +1,6 @@
 {% extends 'ctsapp/main.html' %}
-{% block content %}
 {% load static %}
+{% block content %}
 
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
@@ -73,32 +73,54 @@
   </div>
 </div>
 
-<div id="contact" class="container container-small-padding">
 
-  <h3 class="text-center">Beste Spieler</h3>
-  <ul class="nav nav-tabs">
-      {% for spieler in spielers %}
-        <li class="{{ spieler.active }}"><a data-toggle="tab" href="#home{{ spieler.spieler_id }}">{{ spieler.username }}</a></li>
-      {% endfor %}
-  </ul>
 
-  <div class="tab-content">
-      {% for spieler in spielers %}
-    <div id="home{{ spieler.spieler_id }}" class="tab-pane fade in {{ spieler.active }}">
-      <h3>{{ forloop.counter }}. Platz</h3>
-      <p><b>Punktzahl: </b>{{ spieler.punktzahl }}</p>
-      <p><b>Team: </b>{{ spieler.team_id.name }}</p>
+
+
+    <div id="contact" class="container container-small-padding">
+
+      <h3 class="text-center">Beste Spieler</h3>
+      <ul class="nav nav-tabs">
+          {% for spieler in spielers %}
+            <li class="{{ spieler.active }}"><a data-toggle="tab" href="#home{{ spieler.spieler_id }}">{{ spieler.username }}</a></li>
+          {% endfor %}
+      </ul>
+
+      <div class="tab-content">
+          {% for spieler in spielers %}
+        <div id="home{{ spieler.spieler_id }}" class="tab-pane fade in {{ spieler.active }}">
+          <h3>{{ forloop.counter }}. Platz</h3>
+          <img src="{{ spieler.profilbild_url }}" id="index-profilbild" class="img-rounded">
+          <p><b>Punktzahl: </b>{{ spieler.punktzahl }}</p>
+          <p><b>Team: </b>{{ spieler.team_id.name }}</p>
+        </div>
+          {% endfor %}
+      </div>
     </div>
-      {% endfor %}
-  </div>
-  </div>
+
+
+    <div id="contact" class="container container-small-padding">
+          <h3 class="text-center">Beste Teams</h3>
+            <ul class="nav nav-tabs">
+          {% for team in teams %}
+            <li class="{{ team.is_active }}"><a data-toggle="tab" href="#home1{{ team.team_id }}">{{ team.name }}</a></li>
+          {% endfor %}
+      </ul>
+            <div class="tab-content">
+          {% for team in teams %}
+        <div id="home1{{ team.team_id }}" class="tab-pane fade in {{ team.is_active }}">
+          <h3>{{ forloop.counter }}. Platz</h3>
+          <p><b>Punktzahl: </b>{{ team.punkte }}</p>
+          <p><b>Team: </b>{{ team.name }}</p>
+        </div>
+          {% endfor %}
+      </div>
+    </div>
+
   <div class="container container-small-padding">
     <h3>Alle markierten Spots</h3>
     <div id="map"></div>
   </div>
-
-<!-- Add Google Maps -->
-<div id="googleMap"></div>
 {% endblock %}
 {% block script %}
 <script>

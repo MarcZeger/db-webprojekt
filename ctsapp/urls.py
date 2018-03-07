@@ -20,6 +20,7 @@ urlpatterns = [
     path('impressum/', views.impressum, name="impressum"),
     path('administration/', views.administration, name="administration"),
     path('api/get-ort/<str:plz>', views.ort_api, name='ort_api'),
+    path('api/umkreis/', views.api_umkreis_suche, name='umkreissuche'),
     path('api/get-code/', views.code_api, name='code_api'),
     path('api/get-spot/',views.spot_api, name='spot_api'),
     path('api/get-user/',views.user_api, name='user_api'),
@@ -32,6 +33,13 @@ urlpatterns = [
     path('bewertung/<int:spot_id>', views.make_bewertung, name='make_bewertung'),
     path('user-team-add/', views.user_team_add, name='user_team_add'),
     path('team_verlassen/', views.team_verlassen, name='team_verlassen'),
-    path('teams/', views.teams, name='teams')
+    path('teams/', views.teams, name='teams'),
+    path('team_detail/<int:team_id>', views.team_detail, name='team_detail'),
+    path('user-gamemaster/', views.gamemaster_rechte, name='gamemaster_rechte'),
+    path('umkreis-suche/', views.umkreis_seite, name='umkreisseite'),
+    path('test/', views.test_entfernung, name='test_entfernung'),
+    url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', views.activate, name='activate'),
 
 ]
+
+handler404 = 'ctsapp.views.notfound'

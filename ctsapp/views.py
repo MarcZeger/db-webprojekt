@@ -9,14 +9,14 @@ from .models import *
 
 from django.core.exceptions import ObjectDoesNotExist
 
-
 # Create your views here.
 def index(request):
     best_spots = get_best_spots()
     best_spieler = get_best_spieler()
+    best_teams = get_best_team()
     all_spots = Spot.objects.all()
     center = get_map_center(all_spots)
-    liste = {'spielers':best_spieler, 'best_spots':best_spots,'spots':all_spots,'center':center}
+    liste = {'spielers': best_spieler, 'best_spots': best_spots, 'spots': all_spots, 'center': center, 'teams': best_teams}
     return(render(request,'ctsapp/index.html', liste))
 
 def kontakt(request):
@@ -28,8 +28,57 @@ def zahl(request, zahl):
 
 def profil(request):
     if request.user.is_authenticated:
-        liste = get_level(request.user.punktzahl)
-        return (render(request, 'ctsapp/profil.html', liste))
+        if request.method == "GET":
+            liste = get_level(request.user.punktzahl)
+            spots = get_besuchte_spots(request.user.spieler_id)
+            spot_list = []
+            for spot in spots:
+                spot.bewertung = range(int(spot.bewertung))
+                spot_list.append(spot)
+            spot_list = add_img_url(spot_list)
+            liste['spots'] = spot_list
+            liste['profilbild_url'] = get_profilbild_url(request.user.spieler_id)
+            orte = get_ort_liste(request.user.ort_id.plz)
+            liste['orte'] = orte
+            return (render(request, 'ctsapp/profil.html', liste))
+        else:
+            choice = request.POST['aktion']
+            if choice == 'bild':
+                # Bild speichern
+                file = request.FILES['file']
+                type = "bild"
+                path = save_profilbild(file,request.user.spieler_id)
+                create_profilbild(path,request.user.spieler_id,type)
+                return(redirect('/profil'))
+            else:
+                #Daten für die Seite laden
+                liste = get_level(request.user.punktzahl)
+                spots = get_besuchte_spots(request.user.spieler_id)
+                spot_list = []
+                for spot in spots:
+                    spot.bewertung = range(int(spot.bewertung))
+                    spot_list.append(spot)
+                spot_list = add_img_url(spot_list)
+                liste['spots'] = spot_list
+                liste['profilbild_url'] = get_profilbild_url(request.user.spieler_id)
+
+                #Daten des Formulars annehmen und User updaten
+                try:
+                    ort_id = request.POST['ort_id']
+                    email = request.POST['email']
+                    last_name = request.POST['last_name']
+                except:
+                    liste['message'] = "Bitte füllen sie alle Felder des Formulars aus!"
+                    return(render(request,'ctsapp/profil.html',liste))
+                ort = Ort.objects.get(ort_id=ort_id)
+                spieler = Spieler.objects.get(spieler_id=request.user.spieler_id)
+                spieler.ort_id = ort
+                spieler.email = email
+                spieler.last_name = last_name
+                spieler.save()
+                #Webseite wieder zurückgeben
+                liste ['message'] = "Die Daten wurden erfolgreich geändert!"
+                return (redirect('/login'))
     else:
         return (redirect('login'))
 
@@ -79,7 +128,6 @@ def registrierung(request):
             return(render(request,'ctsapp/registrierung_3.html',werte))
 
         elif request.POST['seite'] == "3":
-            print("schritt 3")
             username = request.POST['username']
             first_name = request.POST['first_name']
             last_name = request.POST['last_name']
@@ -88,22 +136,20 @@ def registrierung(request):
             password = request.POST['password']
             werte = {}
             if Spieler.objects.filter(username=username).exists():
-                print("Benutzername bereits vergeben")
                 message = {'message': "Benutzername bereits vergeben!", 'flag': 'wrong'}
                 werte.update(message)
             else:
-                print("Benutzername nicht vergeben")
                 if Spieler.objects.filter(email=email).exists():
-                    print("Email vergeben!")
                     message = {'message': "E-Mail Addresse bereits hinterlegt!", 'flag': 'wrong'}
                     werte.update(message)
                 else:
-                    print("Benutzer wird angelegt")
                     user = Spieler(username=username, first_name=first_name, last_name=last_name, ort_id=Ort(ort_id=ort_id),
-                                   email=email, punktzahl=0)
+                                   email=email, punktzahl=0, is_active=False)
                     user.set_password(password)
                     user.save()
-                    message = {'message': "Sie haben sich erfolgreich registriert!"}
+                    message = {'message': "Sie haben einen Aktivierungslink per E-Mail bekommen. Bitte bestätigen Sie diesen, um den Account zu aktivieren."}
+                    # Aktivierungsemail
+                    send_actication_email(request, user)
                     # Eventuell direkter login von User?
                     # login(request, user)
                     return render(request, 'ctsapp/registrierung_1.html', message)
@@ -197,8 +243,9 @@ def spot_suche(request):
                 ort = request.GET['ort']
             except:
                 return(render(request,'ctsapp/spot_suche.html'))
+            umkreis = int(request.GET['umkreis'])
             if ort != "":
-                spots = get_spot_list(ort)
+                spots = get_spot_list(ort, umkreis)
                 if type(spots) == str:
                     message = spots
                 else:
@@ -211,7 +258,6 @@ def spot_suche(request):
                 for spot in spots:
                     spot.bewertung = range(int(spot.bewertung))
                     spot_list.append(spot)
-                print(spot_list)
             else:
                 message = spots
             liste = {'spots':spot_list,'message':message}
@@ -223,22 +269,25 @@ def spot_detail(request, spot_id):
     if request.user.is_authenticated:
         if request.method == "GET":
             spot = get_spot(spot_id)
-            bilder = get_bilder(spot_id)
+            medien = get_medium(spot_id)
             bewertungen = get_bewertungen(spot_id)
-            liste = {'spot':spot, 'bilder':bilder, 'bewertungen':bewertungen}
+            liste = {'spot':spot, 'medien':medien, 'bewertungen':bewertungen}
 
         else:
             #Bild speichern
             spot_id = request.POST['spot']
             file = request.FILES['file']
-            type = "bild"
-            path = save_file(file,spot_id,request.user.spieler_id)
-            create_medium(path,request.user.spieler_id,spot_id,type)
-            #Webseite zurückgeben
+            # Webseite zurückgeben
             spot = get_spot(spot_id)
-            bilder = get_bilder(spot_id)
+            medien = get_medium(spot_id)
             bewertungen = get_bewertungen(spot_id)
-            liste = {'spot': spot, 'bilder': bilder, 'bewertungen': bewertungen,'meldung':"Bild wurde erfolgreich hochgeladen!"}
+            if check_file(file.name) != False:
+                type = check_file(file.name)
+                path = save_file(file,spot_id,request.user.spieler_id)
+                create_medium(path,request.user.spieler_id,spot_id,type)
+                liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen,'meldung':"Bild wurde erfolgreich hochgeladen!"}
+            else:
+                liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen,'meldung':"Leider ist das Dateiformat falsch.", 'error':True}
         return render(request, 'ctsapp/spot_detail.html', liste)
     else:
         return (redirect('/login'))
@@ -248,32 +297,39 @@ def impressum(request):
 
 def administration(request):
     if request.user.is_authenticated:
-        if request.method == "POST":
-            bezeichnung = request.POST['bezeichnung']
-            beschreibung = request.POST['beschreibung']
-            laengengrad = request.POST['laengengrad']
-            breitengrad = request.POST['breitengrad']
-            plz = request.POST['plz']
-            ort_id = request.POST['ort_id']
-            schwierigkeit = request.POST['schwierigkeit']
-            code = request.POST['code']
-            ort = Ort.objects.get(ort_id=ort_id)
-            schwierigkeit = Schwierigkeit.objects.get(schwierigkeit_id=schwierigkeit)
-            spot = Spot.objects.create(code=code,bezeichnung=bezeichnung,beschreibung=beschreibung,bewertung=0,ort_id=ort,schwierigkeit_id=schwierigkeit,laengengrad=laengengrad,breitengrad=breitengrad)
-            meldung = {'meldung':True}
-            return(render(request,'ctsapp/administration.html',meldung))
+        if request.user.gamemaster_flag:
+            if request.method == "POST":
+                bezeichnung = request.POST['bezeichnung']
+                beschreibung = request.POST['beschreibung']
+                laengengrad = request.POST['laengengrad']
+                breitengrad = request.POST['breitengrad']
+                plz = request.POST['plz']
+                ort_id = request.POST['ort_id']
+                schwierigkeit = request.POST['schwierigkeit']
+                code = request.POST['code']
+                ort = Ort.objects.get(ort_id=ort_id)
+                schwierigkeit = Schwierigkeit.objects.get(schwierigkeit_id=schwierigkeit)
+                spot = Spot.objects.create(code=code,bezeichnung=bezeichnung,beschreibung=beschreibung,bewertung=0,ort_id=ort,schwierigkeit_id=schwierigkeit,laengengrad=laengengrad,breitengrad=breitengrad)
+                meldung = {'meldung':True}
+                return(render(request,'ctsapp/administration.html',meldung))
 
+            else:
+                schwierigkeiten = Schwierigkeit.objects.all()
+                schwierigkeiten = {'schwierigkeiten':schwierigkeiten}
+                return(render(request,'ctsapp/administration.html',schwierigkeiten))
         else:
-            schwierigkeiten = Schwierigkeit.objects.all()
-            schwierigkeiten = {'schwierigkeiten':schwierigkeiten}
-            return(render(request,'ctsapp/administration.html',schwierigkeiten))
+            return(redirect('/'))
     else:
         return (redirect('/login'))
     
 def ort_api(request, plz):
     orte = get_ort_liste(plz)
-    print(orte)
     result_list = list(orte.values('name', 'ort_id'))
+    return(JsonResponse(result_list, safe = False))
+
+def ort_api_vorschlag(request, ortname):
+    orte = Ort.objects.filter(name__icontains=ortname)
+    result_list = list(orte.values('name', 'plz'))
     return(JsonResponse(result_list, safe = False))
 
 def code_api(request):
@@ -311,35 +367,45 @@ def spot_loeschen(request):
     return(render(request,'ctsapp/spot_geloescht.html'))
 
 def user_api(request):
-    username = request.GET['username']
-    users = get_spielers(username)
-    users = list(users.values('email','username','first_name','last_name','spieler_id','is_active','team_id'))
-    return(JsonResponse(users, safe=False))
+    if request.user.is_authenticated:
+        username = request.GET['username']
+        users = get_spielers(username)
+        users = list(users.values('email','username','first_name','last_name','spieler_id','is_active','team_id','gamemaster_flag'))
+        return(JsonResponse(users, safe=False))
+    else:
+        return (JsonResponse({'error':'Zugang nur für angemeldete User!'}, safe=False))
 
 def team_api(request):
-    teamname = request.GET['teamname']
-    teamid = get_teamid_by_name(teamname)
-    teams = []
-    for id in teamid:
-        teams.append(Team.objects.get(team_id=id))
-    dict={}
-    team_list = []
-    for team in teams:
-        dict['name'] = team.name
-        dict['team_id'] = team.team_id
-        team_list.append(dict)
-        dict = {}
-    return(JsonResponse(team_list,safe=False))
+    if request.user.is_authenticated:
+        teamname = request.GET['teamname']
+        teamid = get_teamid_by_name(teamname)
+        teams = []
+        for id in teamid:
+            teams.append(Team.objects.get(team_id=id))
+        dict={}
+        team_list = []
+        for team in teams:
+            dict['name'] = team.name
+            dict['team_id'] = team.team_id
+            team_list.append(dict)
+            dict = {}
+        return(JsonResponse(team_list,safe=False))
+    else:
+        return (JsonResponse({'error': 'Zugang nur für angemeldete User!'}, safe=False))
 
 def user_sperren(request):
-    spieler_id = request.POST['spieler_id']
-    spieler = Spieler.objects.get(spieler_id=spieler_id)
-    if spieler.is_active == 0:
-        spieler.is_active = 1
+    if request.user.is_authenticated:
+        spieler_id = request.POST['spieler_id']
+        spieler = Spieler.objects.get(spieler_id=spieler_id)
+        if spieler.is_active == 0:
+            spieler.is_active = 1
+        else:
+            spieler.is_active = 0
+        spieler.save()
+        mail_gesperrt(spieler)
+        return(render(request,'ctsapp/spot_geloescht.html'))
     else:
-        spieler.is_active = 0
-    spieler.save()
-    return(render(request,'ctsapp/spot_geloescht.html'))
+        return (JsonResponse({'error': 'Zugang nur für angemeldete User!'}, safe=False))
 
 def user_team_add(request):
     if (request.user.is_authenticated):
@@ -350,34 +416,67 @@ def user_team_add(request):
         return redirect('index')
 
 def user_loeschen(request):
-    spieler_id = request.POST['spieler_id']
-    spieler = Spieler.objects.get(spieler_id=spieler_id)
-    spieler.delete()
-    return (render(request, 'ctsapp/spot_geloescht.html'))
+    if request.user.is_authenticated:
+        spieler_id = request.POST['spieler_id']
+        spieler = Spieler.objects.get(spieler_id=spieler_id)
+        spieler.delete()
+        return (render(request, 'ctsapp/spot_geloescht.html'))
+    else:
+        return redirect('/login')
 
 def team_loeschen(request):
-    team_id = request.POST['team_id']
-    team = Team.objects.get(team_id=team_id)
-    team.delete()
-    return (render(request, 'ctsapp/spot_geloescht.html'))
+    if request.user.is_authenticated:
+        team_id = request.POST['team_id']
+        team = Team.objects.get(team_id=team_id)
+        team.delete()
+        return (render(request, 'ctsapp/spot_geloescht.html'))
+    else:
+        return redirect('/login')
 
 def teams(request):
-    return (render(request, 'ctsapp/teams.html'))
+    if request.user.is_authenticated:
+        try:
+            teams = get_team_list(request.GET['teamname'])
+        except:
+            teams = None
+        teams = {'teams': teams}
+        return render(request, 'ctsapp/teams.html', teams)
+    else:
+        return redirect('/login')
+
+def team_detail(request, team_id):
+    if (request.user.is_authenticated):
+        team = Team.objects.get(team_id=team_id)
+        mitglieder = get_team_members(team.team_id)
+        punkte = get_team_punkte(mitglieder)
+        werte = {'members': mitglieder, 'punkte': punkte, 'team': team}
+        return render(request, 'ctsapp/team_detail.html', werte)
+    else:
+        return redirect('/login')
 
 def user_team_entfernen(request):
-    spieler_id = request.POST['spieler_id']
-    spieler = Spieler.objects.get(spieler_id=spieler_id)
-    spieler.team_id = None;
-    spieler.save()
-    return (render(request, 'ctsapp/spot_geloescht.html'))
+    if request.user.is_authenticated:
+        spieler_id = request.POST['spieler_id']
+        spieler = Spieler.objects.get(spieler_id=spieler_id)
+        spieler.team_id = None;
+        spieler.save()
+        return (render(request, 'ctsapp/spot_geloescht.html'))
+    else:
+        return redirect('/login')
 
 def team_verlassen(request):
     if (request.user.is_authenticated):
         if request.method == "POST":
             spieler = Spieler.objects.get(spieler_id=request.user.spieler_id)
+            team = spieler.team_id
+            mitglieder = get_team_members(request.user.team_id.team_id)
             spieler.team_id = None;
             spieler.save()
-            return render(request, 'ctsapp/team_wurde_verlassen.html')
+            if len(mitglieder) == 1:
+                team.delete()
+                return render(request, 'ctsapp/team_wurde_verlassen.html')
+            else:
+                return render(request, 'ctsapp/team_wurde_verlassen.html')
     else:
         return redirect('ctsapp/index.html')
 
@@ -388,12 +487,83 @@ def make_bewertung(request, spot_id):
             user = Spieler.objects.get(spieler_id=request.user.spieler_id)
             bewertung_zahl = request.POST['bewertung_zahl']
             bewertung_text = request.POST['bewertung_text']
-            bewertung = SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
-            bewertung.save()
-            return(redirect('/profil/'))
+            try:
+                SpielerBewertetSpot.objects.create(bewertung = bewertung_zahl,bewertung_text=bewertung_text,spieler_id = user,spot_id=spot,datum=get_time())
+                update_bewertung(spot_id)
+                return(redirect('/profil/'))
+            except:
+                liste = get_level(request.user.punktzahl)
+                spots = get_besuchte_spots(request.user.spieler_id)
+                spot_list = []
+                for spot in spots:
+                    spot.bewertung = range(int(spot.bewertung))
+                    spot_list.append(spot)
+                spot_list = add_img_url(spot_list)
+                liste['spots'] = spot_list
+                liste['profilbild_url'] = get_profilbild_url(request.user.spieler_id)
+                liste['message'] = 'Pro Spieler ist nur eine Bewertung für einen Spot erlaubt.'
+                return(render(request,'ctsapp/profil.html',liste))
         else:
-            spot = {'spot_id':spot_id}
+            spot = {'spot_id': spot_id}
             return(render(request,'ctsapp/bewertung.html',spot))
     else:
         return (redirect('/login'))
 
+def notfound(request):
+    return(render(request,'error/404.html'))
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = Spieler.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, Spieler.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return redirect('/login')
+        # return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+    else:
+        return HttpResponse('Dieser Link ist ungültig!')
+
+def gamemaster_rechte (request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:
+            spielerid = request.POST['spieler_id']
+            spieler = Spieler.objects.get(spieler_id=spielerid)
+            if spieler.gamemaster_flag == False:
+                spieler.gamemaster_flag = True
+            else:
+                spieler.gamemaster_flag = False
+            spieler.save()
+            return(render(request, 'ctsapp/spot_geloescht.html'))
+        else:
+            return(HttpResponse('Keine Berechtigung!'))
+    else:
+        return redirect('/login')
+
+def test_entfernung(request):
+    spots = Spot.objects.all()
+    orte = Ort.objects.all()
+    return HttpResponse(get_distance(spots[0],orte[1]))
+
+def api_umkreis_suche(request):
+    #if request.user.is_authenticated:
+        umkreis = float(request.GET['umkreis'])
+        latitude = float(request.GET['latitude'])
+        longtitude = float(request.GET['longitude'])
+        ort = (latitude, longtitude)
+        geolocator = Nominatim()
+        # ort = geolocator.reverse(koordinaten)
+        spots = get_spots_umkreis(ort, umkreis)
+        return JsonResponse(spots, safe=False)
+
+    #else:
+        return redirect('/login')
+
+def umkreis_seite(request):
+    if request.user.is_authenticated:
+        return render(request,'ctsapp/umkreissuche.html')
+    else:
+        return redirect('/login')
