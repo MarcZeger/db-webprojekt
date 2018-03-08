@@ -243,9 +243,8 @@ def spot_suche(request):
                 ort = request.GET['ort']
             except:
                 return(render(request,'ctsapp/spot_suche.html'))
-            umkreis = int(request.GET['umkreis'])
             if ort != "":
-                spots = get_spot_list(ort, umkreis)
+                spots = get_spot_list(ort)
                 if type(spots) == str:
                     message = spots
                 else:
@@ -560,7 +559,10 @@ def api_umkreis_suche(request):
         geolocator = Nominatim()
         # ort = geolocator.reverse(koordinaten)
         spots = get_spots_umkreis(ort, umkreis)
-        return JsonResponse(spots, safe=False)
+        if spots != False:
+            return JsonResponse(spots, safe=False)
+        else:
+            return HttpResponse(status=204)
 
     #else:
         return redirect('/login')

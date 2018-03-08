@@ -17,7 +17,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" id="first-button" onclick="setTimeout(make_footer(), 3000);">Spot anlegen</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" id="first-button" onclick="set_footer()">Spot anlegen</a>
         </h3>
       </div>
       <div id="collapse1" class="panel-collapse collapse">
@@ -45,7 +45,7 @@
             <label>Schwierigkeitsgrad</label>
             <div class="radio">
                 {% for i in schwierigkeiten %}
-                <label><input name="schwierigkeit" type="radio" value="{{ i.schwierigkeit_id }}">{{ i.beschreibung }}</label><br>
+                <label><input name="schwierigkeit" type="radio" value="{{ i.schwierigkeit_id }}" required>{{ i.beschreibung }}</label><br>
                 {% endfor %}
             </div>
         </div>
@@ -68,7 +68,7 @@
         </div>
         <div class="form-group col-sm-6">
             <label>Ort</label>
-            <div id="auswahl"></div>
+            <div id="auswahl"><input type="radio" name="ort_id" style="display: none" required></div>
         </div>
         </div>
         <input type="hidden" name="code" id="sendcode" required>
@@ -81,7 +81,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" onclick="make_footer()">Spot löschen</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Spot löschen</a>
         </h3>
       </div>
       <div id="collapse2" class="panel-collapse collapse">
@@ -108,7 +108,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" onclick="make_footer()">Spieler sperren/löschen</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Spieler sperren/löschen</a>
         </h3>
       </div>
       <div id="collapse3" class="panel-collapse collapse">
@@ -126,7 +126,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse6" onclick="make_footer()">Gamemaster Rechte vergeben/entziehen</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse6">Gamemaster Rechte vergeben/entziehen</a>
         </h3>
       </div>
       <div id="collapse6" class="panel-collapse collapse">
@@ -144,7 +144,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" onclick="make_footer()">Team löschen</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Team löschen</a>
         </h3>
       </div>
       <div id="collapse4" class="panel-collapse collapse">
@@ -161,7 +161,7 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse5" onclick="make_footer()">User aus Team entfernen</a>
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">User aus Team entfernen</a>
       </h3>
       </div>
       <div id="collapse5" class="panel-collapse collapse">
@@ -169,7 +169,7 @@
             <div class="row form-group delete-spot">
             <label>Username</label>
             <input id="delete_user_team_input">
-            <button onclick="delete_user_team()" class="btn btn-default">User</button>
+            <button onclick="delete_user_team()" class="btn btn-default">User anzeigen</button>
             </div>
             <div id="delete_user_team"></div>
         </div>
@@ -192,9 +192,10 @@ xmlhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
         myObj = JSON.parse(this.responseText);
         for (x in myObj) {
-            output += '<label><input type="radio" name="ort_id" value="'+ myObj[x].ort_id +'">' + myObj[x].name + '</label><br>';
+            output += '<label><input type="radio" name="ort_id" value="'+ myObj[x].ort_id +'" required>' + myObj[x].name + '</label><br>';
         }
         document.getElementById('auswahl').innerHTML = output;
+        make_footer();
     }
 }
 xmlhttp.open("GET", link , true);
@@ -229,6 +230,13 @@ output = "<div class=\"table-responsive\">\n" +
 
 xmlhttp = new XMLHttpRequest();
 xmlhttp.onreadystatechange = function() {
+    if (this.readyState != 4) {
+        document.getElementById('spot_delete').innerHTML = '<div class="load-3">\n' +
+                '                <div class="text-center"><div class="line"></div>\n' +
+                '                <div class="line"></div>\n' +
+                '                <div class="line"></div></div>\n' +
+                '            </div>';
+    }
     if (this.readyState == 4 && this.status == 200) {
         myObj = JSON.parse(this.responseText);
         for (x in myObj) {
@@ -249,6 +257,7 @@ xmlhttp.onreadystatechange = function() {
         else {
             document.getElementById('spot_delete').innerHTML = "Es wurden keine Spots gefunden!";
         }
+        make_footer();
     }
 
 }
@@ -273,6 +282,13 @@ output = "<div class=\"table-responsive\">\n" +
 
 xmlhttp = new XMLHttpRequest();
 xmlhttp.onreadystatechange = function() {
+    if (this.readyState != 4) {
+        document.getElementById('user').innerHTML = '<div class="load-3">\n' +
+                '                <div class="text-center"><div class="line"></div>\n' +
+                '                <div class="line"></div>\n' +
+                '                <div class="line"></div></div>\n' +
+                '            </div>';
+    }
     if (this.readyState == 4 && this.status == 200) {
         myObj = JSON.parse(this.responseText);
         for (x in myObj) {
@@ -296,6 +312,7 @@ xmlhttp.onreadystatechange = function() {
     "    </table>\n" +
     "        </div>";
         document.getElementById('user').innerHTML = output;
+        make_footer();
     }
 }
 xmlhttp.open("GET", link , true);
@@ -316,6 +333,13 @@ output = "<div class=\"table-responsive\">\n" +
 
 xmlhttp = new XMLHttpRequest();
 xmlhttp.onreadystatechange = function() {
+    if (this.readyState != 4) {
+        document.getElementById('team').innerHTML = '<div class="load-3">\n' +
+                '                <div class="text-center"><div class="line"></div>\n' +
+                '                <div class="line"></div>\n' +
+                '                <div class="line"></div></div>\n' +
+                '            </div>';
+    }
     if (this.readyState == 4 && this.status == 200) {
         myObj = JSON.parse(this.responseText);
         for (x in myObj) {
@@ -330,6 +354,7 @@ xmlhttp.onreadystatechange = function() {
     "    </table>\n" +
     "        </div>";
         document.getElementById('team').innerHTML = output;
+        make_footer();
     }
 }
 xmlhttp.open("GET", link , true);
@@ -352,7 +377,21 @@ output = "<div class=\"table-responsive\">\n" +
 
 xmlhttp = new XMLHttpRequest();
 xmlhttp.onreadystatechange = function() {
+    if (this.readyState != 4) {
+        document.getElementById('delete_user_team').innerHTML = '<div class="load-3">\n' +
+                '                <div class="text-center"><div class="line"></div>\n' +
+                '                <div class="line"></div>\n' +
+                '                <div class="line"></div></div>\n' +
+                '            </div>';
+    }
     if (this.readyState == 4 && this.status == 200) {
+            if (this.readyState != 4) {
+        document.getElementById('delete_user_team').innerHTML = '<div class="load-3">\n' +
+                '                <div class="text-center"><div class="line"></div>\n' +
+                '                <div class="line"></div>\n' +
+                '                <div class="line"></div></div>\n' +
+                '            </div>';
+    }
         myObj = JSON.parse(this.responseText);
         for (x in myObj) {
             output +=
@@ -368,6 +407,7 @@ xmlhttp.onreadystatechange = function() {
     "    </table>\n" +
     "        </div>";
         document.getElementById('delete_user_team').innerHTML = output;
+        make_footer();
     }
 };
 xmlhttp.open("GET", link , true);
@@ -391,6 +431,13 @@ output = "<div class=\"table-responsive\">\n" +
 
 xmlhttp = new XMLHttpRequest();
 xmlhttp.onreadystatechange = function() {
+        if (this.readyState != 4) {
+        document.getElementById('user_gamemaster').innerHTML = '<div class="load-3">\n' +
+                '                <div class="text-center"><div class="line"></div>\n' +
+                '                <div class="line"></div>\n' +
+                '                <div class="line"></div></div>\n' +
+                '            </div>';
+    }
     if (this.readyState == 4 && this.status == 200) {
         myObj = JSON.parse(this.responseText);
         for (x in myObj) {
