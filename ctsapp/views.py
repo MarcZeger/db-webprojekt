@@ -271,7 +271,10 @@ def spot_detail(request, spot_id):
             spot = get_spot(spot_id)
             medien = get_medium(spot_id)
             bewertungen = get_bewertungen(spot_id)
-            liste = {'spot':spot, 'medien':medien, 'bewertungen':bewertungen}
+            if len(medien) > 1:
+                liste = {'spot':spot, 'medien':medien, 'bewertungen':bewertungen}
+            else:
+                liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen, 'kein_slider': True}
 
         else:
             #Bild speichern
