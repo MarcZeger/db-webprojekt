@@ -201,7 +201,7 @@
 
   .best-spot-picture {width: 210px; height: 140px}
 
-  .slider-picture {max-height: 500px !important;}
+  .slider-picture {max-height: 550px !important;}
 
   #spot-search {padding-top: 0px;}
 
@@ -471,3 +471,26 @@
   }
 
   /* Loader */
+
+  #umkreis-suche .row {
+      margin-left: 0px !important;
+  }
+
+@media (min-width: 768px) {
+  #umkreis-suche select {
+    width: 83.33333333% !important;
+}
+}
+
+  #container-profil {
+      padding-bottom: 10px;
+  }
+
+  .container-small-bottom {
+      padding-bottom:20px;
+  }
+  @media (max-width:400px ) {
+      .profil-level {
+          font-size: 9px;
+      }
+  }

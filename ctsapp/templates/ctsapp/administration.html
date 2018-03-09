@@ -18,15 +18,15 @@
           <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" id="first-button" onclick="set_footer()">Spot anlegen</a>
         </h3>
       </div>
-      <div id="collapse1" class="panel-collapse collapse">
+      <div id="collapse1" class="panel-collapse collapse in">
         <div class="panel-body">
         <div class="row">
         <div class="col-sm-6">
-         <div class="form-group spot-anlegen-code">
-            <label>Code: </label>
-            <button onclick="get_code()" class="btn btn-default">Code generieren</button>
+         <div class="form-group spot-anlegen-code" id="get-code-admin">
+            <label>Code</label>
              <p id="code" class="form-control"></p>
-        </div>
+                <button onclick="get_code()" class="btn btn-default">Code generieren</button>
+         </div>
         <form method="POST">
         {% csrf_token %}
         <div class="form-group">
