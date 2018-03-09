@@ -385,9 +385,10 @@ def user_api(request):
         return (JsonResponse({'error':'Zugang nur für angemeldete User!'}, safe=False))
 
 def team_api(request):
-    if request.user.is_authenticated:
+    #if request.user.is_authenticated:
         teamname = request.GET['teamname']
         teamid = get_teamid_by_name(teamname)
+        print(teamid)
         teams = []
         for id in teamid:
             teams.append(Team.objects.get(team_id=id))
@@ -399,7 +400,7 @@ def team_api(request):
             team_list.append(dict)
             dict = {}
         return(JsonResponse(team_list,safe=False))
-    else:
+    #else:
         return (JsonResponse({'error': 'Zugang nur für angemeldete User!'}, safe=False))
 
 def user_sperren(request):

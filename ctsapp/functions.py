@@ -39,7 +39,7 @@ def get_team_members(team_id):
 
 def get_teamid_by_name(teamname):
     liste=[]
-    for o in Team.objects.raw("SELECT * FROM team WHERE name = " + "'" + teamname + "'"):
+    for o in Team.objects.filter(name__icontains = teamname):
         liste.append(o.team_id)
     return (liste)
 
