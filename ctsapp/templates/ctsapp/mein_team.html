@@ -5,11 +5,10 @@
 
 <!-- Container (Contact Section) -->
 <div class="container">
-    <h4>
+    <h1>
         {{ user.team_id.name }}
-    </h4>
-    <hr>
-    <div class="punkte"><h1>Punkte: {{ punkte }}</h1></div>
+    </h1>
+    <div class="punkte"><h3>Teampunktzahl: {{ punkte }}</h3></div>
     <div class="mitglieder">
         <h3>Mitglieder</h3>
         <table class="table">
@@ -17,6 +16,7 @@
                 <tr>
                     <th>Platz</th>
                     <th>Username</th>
+                    <th>Level</th>
                     <th>Punkte</th>
                 </tr>
             </thead>
@@ -25,6 +25,7 @@
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
                     <td>{{ member.username }}</td>
+                    <td>{{ member.level }}</td>
                     <td>{{ member.punktzahl }}</td>
                 </tr>
             {% endfor %}
