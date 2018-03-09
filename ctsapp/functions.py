@@ -230,6 +230,9 @@ def save_file(file,spot_id,user_id):
     return("/media/"+str(path))
 
 def save_profilbild(file,user_id):
+    user = Spieler.objects.get(spieler_id=user_id)
+    if has_profilbild(user):
+        delete_profilbild(user)
     path = str(time.strftime("%Y-%m-%d-%H%M%S"))+str(user_id)+"_profilbild_"+str(file.name)
     with default_storage.open(path, 'wb+') as destination:
         for chunk in file.chunks():
@@ -417,3 +420,21 @@ def get_spots_umkreis(ort, umkreis):
         return False
     else:
         return(output)
+
+def delete_team(team):
+    users = Spieler.objects.filter(team_id=team.team_id)
+    for user in users:
+        user.team_id = None
+        user.save()
+    team.delete()
+
+def has_profilbild(user):
+    try:
+        medium = Medium.objects.filter(spieler_id=user.spieler_id, profilbild_flag=True)
+        return True
+    except:
+        return False
+
+def delete_profilbild(user):
+    medium = Medium.objects.filter(spieler_id=user.spieler_id, profilbild_flag=True)
+    medium.delete()
