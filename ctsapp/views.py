@@ -438,7 +438,7 @@ def team_loeschen(request):
     if request.user.is_authenticated:
         team_id = request.POST['team_id']
         team = Team.objects.get(team_id=team_id)
-        team.delete()
+        delete_team(team)
         return (render(request, 'ctsapp/spot_geloescht.html'))
     else:
         return redirect('/login')

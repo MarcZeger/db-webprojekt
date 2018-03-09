@@ -12,7 +12,7 @@
     <div class="row" id="profil-header">
         <div class="col-sm-4">
             <div class="col-sm-12">
-                <img class="rund img-rounded" src={{ profilbild_url }} alt="Testbild" id="profilbild"/>
+                <img class="rund img-rounded" src={{ profilbild_url }} alt="Profilbild" id="profilbild"/>
             </div>
         </div>
         <div class="col-sm-8">
@@ -77,12 +77,12 @@
         {% endfor %}
     </table>
         </div>
-
+    {% else %}
+             <p>Du hast noch keine Spots besucht. Gebe den Code von Spots <a href="/suche">hier</a> ein, um Punkte zu bekommen.</p>
     {% endif %}
     </div>
     <div class="container container-small-padding">
         <h3>Meine Daten ändern</h3>
-        <div class="col-sm-12">
             <div class="panel-group" style="display: block;">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -143,7 +143,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
 </div>
 {% endblock %}
