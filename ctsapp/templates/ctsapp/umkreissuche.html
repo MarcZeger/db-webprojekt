@@ -6,31 +6,29 @@
         <h1>Umkreis Suche</h1>
     <div class="row">
         <p>Du suchst nach einem Ort in deiner Umgebung? Dann klicke auf folgenden Button.</p>
-        <div class="form-group">
+        <div class="form-group" id="umkreis-suche">
             <label for="umkreis">Umkreis</label>
-            <select id="umkreis" class="form-control">
+            <div class="row">
+            <select id="umkreis" class="form-control col-sm-10">
                     <option value="5">5 KM</option>
                     <option value="10">10 KM</option>
                     <option value="15">15 KM</option>
                     <option value="20">20 KM</option>
                     <option value="50">50 KM</option>
                 </select>
-            <button class="btn btn-default col-sm-12" onclick="ermittlePosition()">Spots im Umkreis anzeigen</button>
+            <button class="btn btn-default col-sm-2" onclick="ermittlePosition()">Anzeigen</button>
+            </div>
         </div>
-    </div>
     {% if message %}
         <h3>Suchergebnisse</h3>
             <div class="alert alert-danger alert-dismissable">
                 <p>{{ message }}</p>
             </div>
         {% endif %}
-        <h3>Suchergebnisse</h3>
     <div class="table-responsive">
     <table class="table" id="ergebnis">
-
     </table>
         </div>
-
 </div>
 {% endblock %}
 {% block script %}
@@ -55,7 +53,8 @@
         var longitude = position.coords.longitude;
         var latitude = position.coords.latitude;
         var link = '/api/umkreis/?umkreis=' + document.getElementById('umkreis').value + '&longitude=' + longitude + '&latitude=' + latitude;
-        output = '<tr>\n' +
+        output = '<h3>Suchergebnisse</h3>' +
+            '<tr>\n' +
             '            <th>Bild</th>\n' +
             '            <th>Bezeichnung</th>\n' +
             '            <th><div class="table-header">Ort</div><span><div class="sort-buttons"><i onclick="sortORT_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortORT_ab()" class="fas fa-angle-down"></i></div></span></th>\n' +

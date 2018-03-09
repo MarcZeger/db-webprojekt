@@ -4,13 +4,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'cts/profil.css' %}" />
 <div class="container">
     <h1>Profil</h1>
-        {% if message %}
+  {% if message %}
         <div class="alert alert-danger alert-dismissable">
             <p>{{ message }}</p>
         </div>
         {% endif %}
-
-
     <div class="row" id="profil-header">
         <div class="col-sm-4">
             <div class="col-sm-12">
@@ -21,10 +19,10 @@
         <p><b>Punktzahl: {{ user.punktzahl }}</b></p>
          <p><b>Level: {{ level }}</b></p>
             <div class="progress">
-                <div class="progress-bar progress-bar-info" role="progressbar" style="width: {{ ProUG }}%">
+                <div class="progress-bar progress-bar-info profil-level" role="progressbar" style="width: {{ ProUG }}%" >
                     {{ UG }} Punkte
                 </div>
-                <div class="progress-bar progress-bar-warning" role="progressbar" style="width: {{ ProOG }}%">
+                <div class="progress-bar progress-bar-warning profil-level" role="progressbar" style="width: {{ ProOG }}%">
                     {{ OG }} Punkte
                 </div>
             </div>
@@ -48,6 +46,41 @@
                 <div class="col-sm-4"><b>E-Mail:</b></div><div class="col-sm-8">{{ user.email }}</div>
             </div>
         </div>
+</div>
+
+    <div class=" container container-small-padding" id="container-profil">
+        <h3>Meine besuchten Spots</h3>
+         {% if spots %}
+    <div class="table-responsive">
+    <table class="table" id="ergebnis">
+        <tr>
+            <th>Bild</th>
+            <th>Bezeichnung</th>
+            <th><div class="table-header">Ort</div><span><div class="sort-buttons"><i onclick="sortORT_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortORT_ab()" class="fas fa-angle-down"></i></div></span></th>
+            <th><div class="table-header">Schwierigkeit</div><span><div class="sort-buttons"><i onclick="sortSchwierigkeit_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortSchwierigkeit_ab()" class="fas fa-angle-down"></i></div></span></th>
+            <th><div class="table-header">Bewertung</div><span><div class="sort-buttons"><i onclick="sortBewertung_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortBewertung_ab()" class="fas fa-angle-down"></i></div></span></th>
+            <th><div class="table-header">Spot bewerten</div></th>
+        </tr>
+        {% for spot in spots %}
+        <tr>
+            <td><img class="search-picture" src="{{ spot.bild_url }}"></td>
+            <td><a href="/spot/{{ spot.spot_id }}">{{ spot.bezeichnung }}</a></td>
+            <td>{{ spot.ort_id.name }}</td>
+            <td>{{ spot.schwierigkeit_id.beschreibung }}</td>
+            <td style="display: none">{{ spot.schwierigkeit_id.punkte }}</td>
+            <td>{% for i in spot.bewertung %}★{% endfor %}</td>
+            <td><a href="/bewertung/{{ spot.spot_id }}">Zur Bewertung</a></td>
+        </tr>
+
+        {% empty %}
+            <p>Du hast noch keine Spots besucht. Gebe den Code von Spots in unserem Portal ein, um Punkte zu bekommen.</p>
+        {% endfor %}
+    </table>
+        </div>
+
+    {% endif %}
+    </div>
+    <div class="container container-small-padding">
         <h3>Meine Daten ändern</h3>
         <div class="col-sm-12">
             <div class="panel-group" style="display: block;">
@@ -113,38 +146,6 @@
             </div>
             </div>
 </div>
-    <div class=" container container-small-padding">
-        <h3>Meine besuchten Spots</h3>
-         {% if spots %}
-    <div class="table-responsive">
-    <table class="table" id="ergebnis">
-        <tr>
-            <th>Bild</th>
-            <th>Bezeichnung</th>
-            <th><div class="table-header">Ort</div><span><div class="sort-buttons"><i onclick="sortORT_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortORT_ab()" class="fas fa-angle-down"></i></div></span></th>
-            <th><div class="table-header">Schwierigkeit</div><span><div class="sort-buttons"><i onclick="sortSchwierigkeit_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortSchwierigkeit_ab()" class="fas fa-angle-down"></i></div></span></th>
-            <th><div class="table-header">Bewertung</div><span><div class="sort-buttons"><i onclick="sortBewertung_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortBewertung_ab()" class="fas fa-angle-down"></i></div></span></th>
-            <th><div class="table-header">Spot bewerten</div></th>
-        </tr>
-        {% for spot in spots %}
-        <tr>
-            <td><img class="search-picture" src="{{ spot.bild_url }}"></td>
-            <td><a href="/spot/{{ spot.spot_id }}">{{ spot.bezeichnung }}</a></td>
-            <td>{{ spot.ort_id.name }}</td>
-            <td>{{ spot.schwierigkeit_id.beschreibung }}</td>
-            <td style="display: none">{{ spot.schwierigkeit_id.punkte }}</td>
-            <td>{% for i in spot.bewertung %}★{% endfor %}</td>
-            <td><a href="/bewertung/{{ spot.spot_id }}">Zur Bewertung</a></td>
-        </tr>
-
-        {% empty %}
-            <p>Du hast noch keine Spots besucht. Gebe den Code von Spots in unserem Portal ein, um Punkte zu bekommen.</p>
-        {% endfor %}
-    </table>
-        </div>
-
-    {% endif %}
-    </div>
 {% endblock %}
 {% block script %}
 <script>

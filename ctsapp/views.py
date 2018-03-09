@@ -274,10 +274,13 @@ def spot_detail(request, spot_id):
             spot = get_spot(spot_id)
             medien = get_medium(spot_id)
             bewertungen = get_bewertungen(spot_id)
+            has_visited = check_spieler_spot(spot_id,request.user.spieler_id)
+            if has_visited != False:
+                has_visited = True
             if len(medien) > 1:
-                liste = {'spot':spot, 'medien':medien, 'bewertungen':bewertungen}
+                liste = {'spot':spot, 'medien':medien, 'bewertungen':bewertungen, 'has_visited':has_visited}
             else:
-                liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen, 'kein_slider': True}
+                liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen, 'kein_slider': True, 'has_visited':has_visited}
 
         else:
             #Bild speichern
