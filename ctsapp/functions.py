@@ -207,18 +207,13 @@ def new_ort(plz,name):
     ort.save()
     return(ort.ort_id)
 
-def get_spot_list(ortname, umkreis = 0):
+def get_spot_list(ortname):
     orte = Ort.objects.filter(name__icontains=ortname)
     spots = []
-    if umkreis != 0:
-        umkreis_spots = get_spots_umkreis(orte, umkreis)
-        for spot in umkreis_spots:
+    for ort in orte:
+        ort_spots = Spot.objects.filter(ort_id=ort.ort_id)
+        for spot in ort_spots:
             spots.append(spot)
-    else:
-        for ort in orte:
-            ort_spots = Spot.objects.filter(ort_id=ort.ort_id)
-            for spot in ort_spots:
-                spots.append(spot)
     if spots == []:
         return("Leider konnten keine Ergebnisse gefunden werden!")
     return(spots)
@@ -411,9 +406,14 @@ def get_koordinate(ort):
 def get_spots_umkreis(ort, umkreis):
     spots = Spot.objects.all()
     output = []
-    last_output = {}
-    count = 0
     for spot in spots:
         if get_distance(spot,ort) <= umkreis:
-            output.append(model_to_dict(spot))
-    return(output)
+            cache = model_to_dict(spot)
+            cache['schwierigkeit'] = spot.schwierigkeit_id.beschreibung
+            cache['ortname'] = spot.ort_id.name
+            del cache['code']
+            output.append(cache)
+    if output == []:
+        return False
+    else:
+        return(output)

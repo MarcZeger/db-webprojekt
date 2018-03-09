@@ -80,6 +80,25 @@
     </footer>
 </body>
 <script>
+        function may_set_footer() {
+    //Footer-Position
+        if ($(window).width() < 700){
+        if ($('footer').css('position') == 'absolute') {
+            $('footer').css('position', 'relative');
+        }
+        else {
+            $('footer').css('position', 'absolute');
+        }}
+}
+    function set_footer() {
+    //Footer-Position
+        if ($('footer').css('position') == 'absolute') {
+            $('footer').css('position', 'relative');
+        }
+        else {
+            $('footer').css('position', 'absolute');
+        }
+}
 window.addEventListener('resize', make_footer);
 function make_footer() {
     //Footer-Position

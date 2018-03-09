@@ -26,16 +26,9 @@
         <div class="col-sm-4"><b>Ort:</b></div><div class="col-sm-8">{{ spot.ort_id.name }}</div>
     </div>
     </div>
-    {% if kein_slider %}
-        {% for medium in medien %}
-        <div class="item {{ medium.first }}">
-            <img src="{{ medium.link }}" style="width: 100%;height: 300px;" alt="{{ medium.spot_id.bezeichnung }}" class="img-spot-detail">
-        </div>
-        {% endfor %}
-    {% else %}
     <div id="myCarousel" class="carousel slide col-sm-6" data-ride="carousel">
        <div class="carousel-inner" role="listbox">
-    <!-- Wrapper for slides -->
+           <!-- Wrapper for slides -->
     {% for  medium in medien %}
         {% if  medium.dateityp == 'bild' %}
         <div class="item {{ medium.first }}">
@@ -47,6 +40,7 @@
         </div>
         {% endif %}
     {% endfor %}
+    {% if not kein_slider %}
     <!-- Left and right controls -->
     <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
       <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
@@ -56,9 +50,9 @@
       <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
       <span class="sr-only">Next</span>
     </a>
+           {% endif %}
     </div>
     </div>
-    {% endif %}
     </div>
     </div>
     <div class="container spot_detail_container">

@@ -134,6 +134,12 @@
       text-transform: uppercase;
   }
 
+  @media (max-width: 767px) {
+      .dropdown-menu li a {
+      color: #fff !important;
+  }
+    }
+
   /*----FOOTER----*/
 
   footer {
@@ -440,3 +446,23 @@
   .team-suche-bild {
       width: 150px;
   }
+
+  /* Loader */
+    .load-3 .line:nth-last-child(1) {animation: loadingC .6s .1s linear infinite;}
+    .load-3 .line:nth-last-child(2) {animation: loadingC .6s .2s linear infinite;}
+    .load-3 .line:nth-last-child(3) {animation: loadingC .6s .3s linear infinite;}
+    .line {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 15px;
+    background-color: #000000;
+}
+
+  @keyframes loadingC {
+    0 {transform: translate(0,0);}
+    50% {transform: translate(0,15px);}
+    100% {transform: translate(0,0);}
+  }
+
+  /* Loader */
