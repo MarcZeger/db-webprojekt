@@ -36,12 +36,12 @@
 </div>
 
 
-<div id="band" class="container text-center">
+<div id="band" class="container text-center container-small-padding container-small-bottom">
   <h3>Über uns</h3>
   <p><em>Parkour lässt dich neue Wege gehen, auf der Straße und im Leben!</em></p>
     <p>Capture the Spot ist ein Startup-Unternehmen mit 6 Mitarbeiten, welches sich mit der Sportart Parkour auseinandersetzt. Wir möchten den Spielern mit unserem System das lange Suchen nach Spots abnehmen, somit bleibt mehr Zeit für das Training. Durch zusätzliche Funktionen wie zum Beispiel das Erhalten von Punkten, das Erreichen von neuen Levels, das Bewerten von Spots sowie das Bilden von Teams wird Parkour noch reizvoller.</p>
 </div>
-<div class="container container-small-padding text-center">
+<div class="container container-small-padding text-center container-small-bottom">
     <h3>Beste Spots</h3>
   <div class="row">
     {% for spot in best_spots %}
@@ -61,16 +61,11 @@
   </div>
 </div>
 
-
-
-
-
-    <div id="contact" class="container container-small-padding">
-
+    <div id="contact" class="container container-small-padding container-small-bottom">
       <h3 class="text-center">Beste Spieler</h3>
       <ul class="nav nav-tabs">
           {% for spieler in spielers %}
-            <li class="{{ spieler.active }}"><a data-toggle="tab" href="#home{{ spieler.spieler_id }}">{{ spieler.username }}</a></li>
+              <li class="{{ spieler.active }}"><a data-toggle="tab" href="#home{{ spieler.spieler_id }}">{{ spieler.username }}</a></li>
           {% endfor %}
       </ul>
 
@@ -79,7 +74,8 @@
         <div id="home{{ spieler.spieler_id }}" class="tab-pane fade in {{ spieler.active }}">
           <h3>{{ forloop.counter }}. Platz</h3>
           <img src="{{ spieler.profilbild_url }}" id="index-profilbild" class="img-rounded">
-          <p><b>Punktzahl: </b>{{ spieler.punktzahl }}</p>
+            <p><b>Level: </b>{{ spieler.level }}</p>
+            <p><b>Punktzahl: </b>{{ spieler.punktzahl }}</p>
           <p><b>Team: </b>{{ spieler.team_id.name }}</p>
         </div>
           {% endfor %}
@@ -87,7 +83,7 @@
     </div>
 
 
-    <div id="contact" class="container container-small-padding">
+    <div id="contact" class="container container-small-padding container-small-bottom">
           <h3 class="text-center">Beste Teams</h3>
             <ul class="nav nav-tabs">
           {% for team in teams %}

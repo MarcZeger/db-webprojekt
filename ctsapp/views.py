@@ -10,9 +10,12 @@ from .models import *
 from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
+
 def index(request):
     best_spots = get_best_spots()
     best_spieler = get_best_spieler()
+    for spieler in best_spieler:
+        spieler.level = get_level(spieler.punktzahl)['level']
     best_teams = get_best_team()
     all_spots = Spot.objects.all()
     center = get_map_center(all_spots)
@@ -274,10 +277,13 @@ def spot_detail(request, spot_id):
             spot = get_spot(spot_id)
             medien = get_medium(spot_id)
             bewertungen = get_bewertungen(spot_id)
+            has_visited = check_spieler_spot(spot_id,request.user.spieler_id)
+            if has_visited != False:
+                has_visited = True
             if len(medien) > 1:
-                liste = {'spot':spot, 'medien':medien, 'bewertungen':bewertungen}
+                liste = {'spot':spot, 'medien':medien, 'bewertungen':bewertungen, 'has_visited':has_visited}
             else:
-                liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen, 'kein_slider': True}
+                liste = {'spot': spot, 'medien': medien, 'bewertungen': bewertungen, 'kein_slider': True, 'has_visited':has_visited}
 
         else:
             #Bild speichern
@@ -382,9 +388,10 @@ def user_api(request):
         return (JsonResponse({'error':'Zugang nur für angemeldete User!'}, safe=False))
 
 def team_api(request):
-    if request.user.is_authenticated:
+    #if request.user.is_authenticated:
         teamname = request.GET['teamname']
         teamid = get_teamid_by_name(teamname)
+        print(teamid)
         teams = []
         for id in teamid:
             teams.append(Team.objects.get(team_id=id))
@@ -396,7 +403,7 @@ def team_api(request):
             team_list.append(dict)
             dict = {}
         return(JsonResponse(team_list,safe=False))
-    else:
+    #else:
         return (JsonResponse({'error': 'Zugang nur für angemeldete User!'}, safe=False))
 
 def user_sperren(request):

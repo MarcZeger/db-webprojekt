@@ -105,7 +105,12 @@
     </table>
     </div>
     {% else %}
-    <p>Dieser Spot wurde noch nicht bewertet. Falls du den Spot bewerten willst, klicke <a href="/profil/#ergebnis">hier</a></p>
+    <p>Dieser Spot wurde noch nicht bewertet. Falls du den Spot bewerten willst,
+        {% if has_visited %}
+        klicke <a href="/bewertung/{{ spot.spot_id }}">hier</a></p>
+        {% else %}
+        besuche den Spot und gebe den Code <a href="/suche">hier ein.</a>
+        {% endif %}
     {% endif %}
     </div>
 {% endblock %}
