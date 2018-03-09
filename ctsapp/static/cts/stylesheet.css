@@ -252,10 +252,15 @@
   #profilbild {
       float: left;
       height: 150px;
+      width: 150px;
+      border-radius: 50%;
   }
 
   #index-profilbild {
       height: 100px;
+      width: 100px;
+      border-radius: 50%;
+      margin-bottom: 1em;
   }
 
   #index-profilbild:before {

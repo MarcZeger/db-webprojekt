@@ -10,9 +10,12 @@ from .models import *
 from django.core.exceptions import ObjectDoesNotExist
 
 # Create your views here.
+
 def index(request):
     best_spots = get_best_spots()
     best_spieler = get_best_spieler()
+    for spieler in best_spieler:
+        spieler.level = get_level(spieler.punktzahl)['level']
     best_teams = get_best_team()
     all_spots = Spot.objects.all()
     center = get_map_center(all_spots)
