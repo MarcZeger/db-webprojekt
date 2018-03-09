@@ -3,7 +3,7 @@
 {% block content %}
 {% load static %}
 <div class="container">
-        <h1>Spot-Code eingeben</h1>
+        <h1 id="h1left">Spot-Code eingeben</h1>
     <div class="row">
     <form method="POST">
         {% csrf_token %}
@@ -26,7 +26,7 @@
     {% endif %}
 </div>
 <div class="container" id="spot-search">
-        <h1>Suche</h1>
+        <h1 id="h1left">Suche</h1>
     <div class="row">
         <p>Du bist auf der Suche nach einem Spot, an dem du trainieren kannst?<br>Dann kannst du hier durch Eingabe deines Wunschortes, die dazu bereits registrierten Spots anzeigen lassen. Lässt du das Feld leer, werden dir alle Spots angezeigt.</p>
     <form method="GET">

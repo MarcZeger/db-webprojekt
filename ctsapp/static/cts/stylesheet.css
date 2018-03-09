@@ -183,8 +183,11 @@
   }
 
   h1 {
-      margin-left: -15px;
       margin-bottom: 30px;
+  }
+
+  #h1left{
+      margin-left: -15px;
   }
 
   .underline {border-bottom: 1px solid darkgray;}
