@@ -134,6 +134,12 @@
       text-transform: uppercase;
   }
 
+  @media (max-width: 767px) {
+      .dropdown-menu li a {
+      color: #fff !important;
+  }
+    }
+
   /*----FOOTER----*/
 
   footer {
