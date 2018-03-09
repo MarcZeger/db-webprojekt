@@ -192,6 +192,10 @@
       margin-bottom: 30px;
   }
 
+  #h1left{
+      margin-left: -15px;
+  }
+
   .underline {border-bottom: 1px solid darkgray;}
   .container-small-padding {padding-top: 15px;}
 
