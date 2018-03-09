@@ -2,16 +2,13 @@
 {% load static %}
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'cts/profil.css' %}" />
-<div class="container" id="container-profil">
-    <h1 class="text-center">Profil</h1>
-
-        {% if message %}
+<div class="container">
+    <h1>Profil</h1>
+  {% if message %}
         <div class="alert alert-danger alert-dismissable">
             <p>{{ message }}</p>
         </div>
         {% endif %}
-
-
     <div class="row" id="profil-header">
         <div class="col-sm-4">
             <div class="col-sm-12">

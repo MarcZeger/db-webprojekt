@@ -134,6 +134,12 @@
       text-transform: uppercase;
   }
 
+  @media (max-width: 767px) {
+      .dropdown-menu li a {
+      color: #fff !important;
+  }
+    }
+
   /*----FOOTER----*/
 
   footer {
@@ -184,6 +190,10 @@
 
   h1 {
       margin-bottom: 30px;
+  }
+
+  #h1left{
+      margin-left: -15px;
   }
 
   .underline {border-bottom: 1px solid darkgray;}

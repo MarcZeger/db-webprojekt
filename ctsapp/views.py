@@ -185,7 +185,11 @@ def mein_team(request):
         if (request.user.team_id):
             mitglieder = get_team_members(request.user.team_id.team_id)
             punkte = get_team_punkte(mitglieder)
-            werte = {'members' : mitglieder, 'punkte' : punkte}
+
+            for mitglied in mitglieder:
+                mitglied.level = get_level(mitglied.punktzahl)['level']
+
+            werte = {'members': mitglieder, 'punkte': punkte}
             return render(request, 'ctsapp/mein_team.html', werte)
         else:
             return redirect('team_erstellen')
