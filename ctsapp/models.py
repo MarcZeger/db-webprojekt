@@ -1,26 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-class Gamemaster(models.Model):
-    spieler_id = models.ForeignKey('Spieler',on_delete=models.CASCADE)
-
-    class Meta:
-        managed = True
-        db_table = 'gamemaster'
-
-
-class GamemasterVerwaltetSpot(models.Model):
-    spieler_id = models.ForeignKey('Spieler',on_delete=models.CASCADE)
-    spot_id = models.ForeignKey('Spot',on_delete=models.CASCADE)
-    datum = models.DateTimeField()
-    aktion = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = True
-        db_table = 'gamemaster_verwaltet_spot'
-        unique_together = (('spieler_id', 'spot_id'),)
-
-
 class Medium(models.Model):
     medium_id = models.AutoField(primary_key=True)
     dateityp = models.CharField(max_length=5)
