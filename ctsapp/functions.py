@@ -414,6 +414,7 @@ def get_spots_umkreis(ort, umkreis):
             cache = model_to_dict(spot)
             cache['schwierigkeit'] = spot.schwierigkeit_id.beschreibung
             cache['ortname'] = spot.ort_id.name
+            cache['bildurl'] = get_bild_link(spot.spot_id)
             del cache['code']
             output.append(cache)
     if output == []:
