@@ -2,7 +2,7 @@
 {% block title %}CTS - Spot Suche{% endblock %}
 {% block content %}
 {% load static %}
-<div class="container" id="spot-search">
+<div class="container">
         <h1>Umkreis Suche</h1>
     <div class="row">
         <p>Du suchst nach einem Ort in deiner Umgebung? Dann klicke auf folgenden Button.</p>
@@ -60,7 +60,7 @@
             '            <th><div class="table-header">Ort</div><span><div class="sort-buttons"><i onclick="sortORT_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortORT_ab()" class="fas fa-angle-down"></i></div></span></th>\n' +
             '            <th><div class="table-header">Schwierigkeit</div><span><div class="sort-buttons"><i onclick="sortSchwierigkeit_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortSchwierigkeit_ab()" class="fas fa-angle-down"></i></div></span></th>\n' +
             '            <th><div class="table-header">Bewertung</div><span><div class="sort-buttons"><i onclick="sortBewertung_auf()" class="fas fa-angle-up"></i></div><div class="sort-buttons"><i onclick="sortBewertung_ab()" class="fas fa-angle-down"></i></div></span></th>\n' +
-            '        </tr>'
+            '        </tr>';
         xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -68,7 +68,7 @@
             for (x in myObj) {
                 output +=
                         "<tr>\n"+
-            "            <td><img class=\"search-picture\" src='" + myObj[x].bild_url +"'></td>" +
+            "            <td><img class=\"search-picture\" src='" + myObj[x].bildurl +"'></td>" +
             "            <td><a href=\"/spot/" + myObj[x].spot_id + "\">"+ myObj[x].bezeichnung +"</a></td>\n" +
             "            <td>"+ myObj[x].ortname +"</td>\n" +
             "            <td>"+ myObj[x].schwierigkeit +"</td>\n" +
