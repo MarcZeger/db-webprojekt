@@ -20,7 +20,29 @@ def index(request):
     return(render(request,'ctsapp/index.html', liste))
 
 def kontakt(request):
-    return(render(request,'ctsapp/kontakt.html'))
+    if request.method == 'GET':
+        return(render(request,'ctsapp/kontakt.html'))
+    else:
+        nachricht = request.POST['comments']
+        email = request.POST['email']
+        name = request.POST['name']
+        mail_subject = 'Neue Nachricht über Kontaktformular'
+        message = render_to_string('email/kontakt_email.html', {
+            'name': name,
+            'email': email,
+            'message': nachricht,
+        })
+        to_email = 'marc.zeger98@gmx.de'
+        email = EmailMessage(
+            mail_subject, message, to=[to_email]
+        )
+        email.content_subtype = "html"
+        try:
+            email.send()
+            messages = {'message':'Die Nachricht wurde erfolgreich gesendet!', 'flag':'success'}
+        except:
+            messages = {'message': 'Leider ist ein Fehler beim versenden der E-Mail aufgetreten!', 'flag': 'danger'}
+        return(render(request,'ctsapp/kontakt.html', messages))
 
 def zahl(request, zahl):
     zahl = {'zahl':zahl}
