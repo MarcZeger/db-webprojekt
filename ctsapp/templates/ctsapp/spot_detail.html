@@ -97,8 +97,8 @@
         {% for bewertung in bewertungen %}
             <tr>
                 <td>{{ bewertung.spieler_id.username }}</td>
-                <td>{{ bewertung.datum|date:"d. M, Y"}}</td>
-                <td>{% for i in bewertung.bewertung %}<span class="fa fa-star checked"></span>{% empty %}-{% endfor %}</td>
+                <td class="table-weit">{{ bewertung.datum|date:"d. M, Y"}}</td>
+                <td class="table-weit">{% for i in bewertung.bewertung %}<span class="fa fa-star checked"></span>{% empty %}-{% endfor %}</td>
                 <td>{{ bewertung.bewertung_text }}</td>
             </tr>
             {% endfor %}

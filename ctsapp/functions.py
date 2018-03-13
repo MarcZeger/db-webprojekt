@@ -143,7 +143,7 @@ def sort_team(teams):
             p2 = par
             list_team[2] = list_team[1]
             list_team[1] = team
-        elif par <= p3:
+        elif par >= p3 and par <= p2:
             p3 = par
             list_team[2] = team
     return list_team
