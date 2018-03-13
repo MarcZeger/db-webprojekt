@@ -97,8 +97,8 @@
         {% for bewertung in bewertungen %}
             <tr>
                 <td>{{ bewertung.spieler_id.username }}</td>
-                <td>{{ bewertung.datum|date:"d. M, Y"}}</td>
-                <td>{% for i in bewertung.bewertung %}<span class="fa fa-star checked"></span>{% empty %}-{% endfor %}</td>
+                <td class="table-weit">{{ bewertung.datum|date:"d. M, Y"}}</td>
+                <td class="table-weit">{% for i in bewertung.bewertung %}<span class="fa fa-star checked"></span>{% empty %}-{% endfor %}</td>
                 <td>{{ bewertung.bewertung_text }}</td>
             </tr>
             {% endfor %}
@@ -196,7 +196,7 @@ function ekUpload(){
     // console.log(fileType);
     var imageName = file.name;
 
-    var isGood = (/\.(?=gif|jpg|png|jpeg)/gi).test(imageName);
+    var isGood = (/\.(?=gif|jpg|png|jpeg|mpeg|mp4|mpg)/gi).test(imageName);
     if (isGood) {
       document.getElementById('start').classList.add("hidden");
       document.getElementById('response').classList.remove("hidden");
