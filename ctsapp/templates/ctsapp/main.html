@@ -78,85 +78,85 @@
                 </div>
             </div>
     </footer>
-</body>
-<script>
-        function may_set_footer() {
-    //Footer-Position
-        if ($(window).width() < 700){
-        if ($('footer').css('position') == 'absolute') {
-            $('footer').css('position', 'relative');
-        }
-        else {
-            $('footer').css('position', 'absolute');
-        }}
-}
-    function set_footer() {
-    //Footer-Position
-        if ($('footer').css('position') == 'absolute') {
-            $('footer').css('position', 'relative');
-        }
-        else {
-            $('footer').css('position', 'absolute');
-        }
-}
-window.addEventListener('resize', make_footer);
-function make_footer() {
-    //Footer-Position
-  var body_height = $('body').height();
-  var window_height = $(window).height();
-    if ( body_height <= window_height ) {
-        $('footer').removeClass('footer-bottom');
-        $('footer').addClass('footer-sticky');
-        $('.up-arrow').css('display', 'none');
-    }else{
-        $('.up-arrow').css('display', 'block');
-        $('footer').removeClass('footer-sticky');
-        $('footer').addClass('footer-bottom');
+    <script>
+            function may_set_footer() {
+        //Footer-Position
+            if ($(window).width() < 700){
+            if ($('footer').css('position') == 'absolute') {
+                $('footer').css('position', 'relative');
+            }
+            else {
+                $('footer').css('position', 'absolute');
+            }}
     }
-}
-
-$(document).ready(function(){
-  //Footer-Position
-  var body_height = $('body').height(); // +20 gives space between div and footer
-  var window_height = $(window).height();
-    if ( body_height <= window_height ) {
-        $('footer').removeClass('footer-bottom');
-        $('footer').addClass('footer-sticky');
-        $('.up-arrow').css('display', 'none');
-    }else{
-        $('.up-arrow').css('display', 'block');
-        $('footer').removeClass('footer-sticky');
-        $('footer').addClass('footer-bottom');
+        function set_footer() {
+        //Footer-Position
+            if ($('footer').css('position') == 'absolute') {
+                $('footer').css('position', 'relative');
+            }
+            else {
+                $('footer').css('position', 'absolute');
+            }
+    }
+    window.addEventListener('resize', make_footer);
+    function make_footer() {
+        //Footer-Position
+      var body_height = $('body').height();
+      var window_height = $(window).height();
+        if ( body_height <= window_height ) {
+            $('footer').removeClass('footer-bottom');
+            $('footer').addClass('footer-sticky');
+            $('.up-arrow').css('display', 'none');
+        }else{
+            $('.up-arrow').css('display', 'block');
+            $('footer').removeClass('footer-sticky');
+            $('footer').addClass('footer-bottom');
+        }
     }
 
+    $(document).ready(function(){
+      //Footer-Position
+      var body_height = $('body').height(); // +20 gives space between div and footer
+      var window_height = $(window).height();
+        if ( body_height <= window_height ) {
+            $('footer').removeClass('footer-bottom');
+            $('footer').addClass('footer-sticky');
+            $('.up-arrow').css('display', 'none');
+        }else{
+            $('.up-arrow').css('display', 'block');
+            $('footer').removeClass('footer-sticky');
+            $('footer').addClass('footer-bottom');
+        }
 
-  // Initialize Tooltip
-  $('[data-toggle="tooltip"]').tooltip();
 
-  // Add smooth scrolling to all links in navbar + footer link
-  $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
+      // Initialize Tooltip
+      $('[data-toggle="tooltip"]').tooltip();
 
-    // Make sure this.hash has a value before overriding default behavior
-    if (this.hash !== "") {
+      // Add smooth scrolling to all links in navbar + footer link
+      $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
 
-      // Prevent default anchor click behavior
-      event.preventDefault();
+        // Make sure this.hash has a value before overriding default behavior
+        if (this.hash !== "") {
 
-      // Store hash
-      var hash = this.hash;
+          // Prevent default anchor click behavior
+          event.preventDefault();
 
-      // Using jQuery's animate() method to add smooth page scroll
-      // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
-      $('html, body').animate({
-        scrollTop: $(hash).offset().top
-      }, 900, function(){
+          // Store hash
+          var hash = this.hash;
 
-        // Add hash (#) to URL when done scrolling (default click behavior)
-        window.location.hash = hash;
+          // Using jQuery's animate() method to add smooth page scroll
+          // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
+          $('html, body').animate({
+            scrollTop: $(hash).offset().top
+          }, 900, function(){
+
+            // Add hash (#) to URL when done scrolling (default click behavior)
+            window.location.hash = hash;
+          });
+        } // End if
       });
-    } // End if
-  });
-});
-</script>
-{% block script %}{% endblock %}
+    });
+    </script>
+    {% block script %}{% endblock %}
+</body>
 </html>
