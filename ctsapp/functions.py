@@ -94,17 +94,19 @@ def get_best_spieler():
     liste = []
     counter = 1
     for spieler in spielers:
-        spieler.profilbild_url = get_profilbild_url(spieler.spieler_id)
-        if counter == 1:
-            spieler.active = "active"
-            liste.append(spieler)
-            counter += 1
-        elif counter < 4:
-            liste.append(spieler)
-            spieler.active = ""
-            counter += 1
-        else:
-            return(liste)
+        try:
+            spieler.profilbild_url = get_profilbild_url(spieler.spieler_id)
+            if counter == 1:
+                spieler.active = "active"
+                liste.append(spieler)
+                counter += 1
+            elif counter < 4:
+                liste.append(spieler)
+                spieler.active = ""
+                counter += 1
+        except:
+            break
+    return(liste)
 
 def get_best_team():
     teams = Team.objects.all()
@@ -114,14 +116,17 @@ def get_best_team():
         team.punkte = get_teampunkte(team.team_id)
     new_team = sort_team(teams)
     for team in new_team:
-        if counter == 1:
-            team.is_active = "active"
-            liste2.append(team)
-            counter += 1
-        elif counter < 4:
-            team.is_active = ""
-            liste2.append(team)
-            counter += 1
+        try:
+            if counter == 1:
+                team.is_active = "active"
+                liste2.append(team)
+                counter += 1
+            elif counter < 4:
+                team.is_active = ""
+                liste2.append(team)
+                counter += 1
+        except:
+            break
     return(liste2)
 
 def sort_team(teams):
@@ -130,22 +135,31 @@ def sort_team(teams):
     p3 = 0
     list_team = [p1, p2, p3]
     for team in teams:
-        par = int(team.punkte)
-        if par > p1:
-            p3 = p2
-            p2 = p1
-            p1 = par
-            list_team[2] = list_team[1]
-            list_team[1] = list_team[0]
-            list_team[0] = team
-        elif par <= p1 and par > p2:
-            p3 = p2
-            p2 = par
-            list_team[2] = list_team[1]
-            list_team[1] = team
-        elif par >= p3 and par <= p2:
-            p3 = par
-            list_team[2] = team
+        try:
+            par = int(team.punkte)
+            if par > p1:
+                p3 = p2
+                p2 = p1
+                p1 = par
+                list_team[2] = list_team[1]
+                list_team[1] = list_team[0]
+                list_team[0] = team
+            elif par <= p1 and par > p2:
+                p3 = p2
+                p2 = par
+                list_team[2] = list_team[1]
+                list_team[1] = team
+            elif par >= p3 and par <= p2:
+                p3 = par
+                list_team[2] = team
+        except:
+            i = 0
+            for team in list_team:
+                if team == 0:
+                    del list_team[i]
+                    i += 1
+                else:
+                    i += 1
     return list_team
 
 def get_teampunkte(team_id):

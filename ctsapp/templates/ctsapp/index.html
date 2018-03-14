@@ -78,6 +78,8 @@
             <p><b>Punktzahl: </b>{{ spieler.punktzahl }}</p>
           <p><b>Team: </b>{{ spieler.team_id.name }}</p>
         </div>
+              {% empty %}
+              <p>Es sind keine Spieler vorhanden</p>
           {% endfor %}
       </div>
     </div>
@@ -97,12 +99,14 @@
           <p><b>Punktzahl: </b>{{ team.punkte }}</p>
           <p><b>Team: </b>{{ team.name }}</p>
         </div>
+              {% empty %}
+              <p>Es sind keine Teams vorhanden</p>
           {% endfor %}
       </div>
     </div>
 
   <div class="container container-small-padding">
-    <h3>Alle markierten Spots</h3>
+    <h3 class="text-center">Alle markierten Spots</h3>
     <div id="map"></div>
   </div>
 {% endblock %}
