@@ -79,26 +79,12 @@
             </div>
     </footer>
     <script>
-            function may_set_footer() {
-        //Footer-Position
-            if ($(window).width() < 700){
-            if ($('footer').css('position') == 'absolute') {
-                $('footer').css('position', 'relative');
-            }
-            else {
-                $('footer').css('position', 'absolute');
-            }}
-    }
-        function set_footer() {
-        //Footer-Position
-            if ($('footer').css('position') == 'absolute') {
-                $('footer').css('position', 'relative');
-            }
-            else {
-                $('footer').css('position', 'absolute');
-            }
-    }
+    $(document).ready(function(){
     window.addEventListener('resize', make_footer);
+    $(document).click(function () {
+        make_footer()
+    })
+
     function make_footer() {
         //Footer-Position
       var body_height = $('body').height();
@@ -113,8 +99,6 @@
             $('footer').addClass('footer-bottom');
         }
     }
-
-    $(document).ready(function(){
       //Footer-Position
       var body_height = $('body').height(); // +20 gives space between div and footer
       var window_height = $(window).height();
