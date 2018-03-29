@@ -81,6 +81,9 @@
             document.getElementById('ergebnis').innerHTML = output;
             make_footer();
         }
+        else if (this.readyState == 4 && this.status == 204){
+            document.getElementById('ergebnis').innerHTML = 'Leider wurden keine Ergebnisse gefunden!';
+        }
     };
     xmlhttp.open("GET", link , true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
